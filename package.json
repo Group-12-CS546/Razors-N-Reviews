@@ -1,0 +1,17 @@
+{
+    "name": "group_12_razors_n_reviews",
+    "version": "1.0.0",
+    "description": "Final Project of Group 12",
+    "main": "app.js",
+    "scripts": {
+        "seed": "node ./tasks/seed.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node app.js"
+    },
+    "author": "Group 12",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1",
+        "mongodb": "^3.7.3"
+    }
+}
