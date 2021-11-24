@@ -7,7 +7,7 @@ const salonsRoutes = require('./salons');
 const constructorMethod = (app) => {
     app.use('', commentsRoutes);
     app.use('', covidReviewsRoutes);
-    app.use('', customersRoutes);
+    app.use('/', customersRoutes);
     app.use('', reviewsRoutes);
     app.use('', salonsRoutes);
 
