@@ -1,9 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 var mongo = require('mongodb');
 const customers = mongoCollections.customers;
-
 ObjectId = require('mongodb').ObjectID;
-
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
 
@@ -19,21 +17,54 @@ module.exports = {
         let str=user1[i].username.toString();
 
         if(user1[i].username==un){
-            console.log(user1[i].username,un)
+            // console.log(user1[i].username,un)
           console.log('************* Check duplicate username**********************');
-          console.log('************* Check duplicate username ends **********************');
           return 0
         }
      }
       return 1;
     },
 
+     /*
+        ************* All Get functions **********************
+        */   
+        
+        
+        /*
+        ************* Grt All customers**********************
+        */ 
 
-    async getAllCustomers() {
-        const customerlist = await customers();
-        var list_all_users = await customerlist.find({}).toArray();
-        return list_all_users;
+    async getAllCustomers(){
+      const customers_data = await customers();
+      const list_all_customers = await customers_data.find({}).toArray();
+      return list_all_customers;
     },
+
+    /*
+        ************* Get customers by ID**********************
+    */ 
+
+
+  async getCustomerById(id) {
+    if (!id) throw 'No id entered';
+    if(typeof id === 'string' && id.length==0){
+      throw 'Invalid id';
+    }
+
+    const ObjectId = require('mongodb').ObjectId;
+    if(!ObjectId.isValid(id)){
+      throw 'Not a valid ObjectId';
+    }
+    
+
+    const customerCollection = await customers();
+    const customer = await customerCollection.findOne({_id: ObjectId(id)});
+    if (customer === null) throw 'restaurant does not exist';
+    customer._id=customer._id.toString();
+    return customer;
+  },
+
+   
 
     
    
@@ -187,8 +218,10 @@ module.exports = {
 
 
       let temp= await this.checkDuplicate(username) 
-       if(!temp){
-           throw 'User name already exists'
+      if(!temp){
+        console.log('Check duplicate function ends')
+        throw 'User name already exists'
+        console.log("-----------------------------")
        }
     
         const insertInfo = await userCollection.insertOne(newUser);
