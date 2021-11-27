@@ -2,7 +2,7 @@ const mongoCollections = require('../config/mongoCollections');
 var mongo = require('mongodb');
 const customers = mongoCollections.customers;
 ObjectId = require('mongodb').ObjectID;
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const saltRounds = 16;
 
 
@@ -226,6 +226,8 @@ module.exports = {
     
         const insertInfo = await userCollection.insertOne(newUser);
         if (insertInfo.insertedCount === 0) throw 'Could not add new User';
+
+        console.log(newUser, 'new user added')
     
         return {userInserted: true};
       },

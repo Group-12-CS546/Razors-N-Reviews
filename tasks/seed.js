@@ -6,49 +6,31 @@ const customersData = data.customers;
 const reviewsData = data.reviews;
 const salonsData = data.salons;
 
-// console.log(customersData)
 const main = async() => {
-    
-   
-    // await db.dropDatabase();
-
-    // const user1 = await customersData.createUser("firstname","lastname","email","username","password","profilePicture","city","state","age");
-    // console.log('************* User has been Added **********************');
-    // console.log(user1);
-    // console.log('************* User has been Added **********************');
-    // console.log('----------------------------------------------------------')
-    // const user2 = await customersData.createUser("firstname","lastname","email","username2","password","profilePicture","city","state","age");
-    // console.log('************* User has been Added **********************');
-    // console.log(user2);
-    // console.log('************* User has been Added **********************');
-    // console.log('----------------------------------------------------------')
-    const user_all = await customersData.getAllCustomers();
-    console.log('***-------List of all users starts------********');
-    console.log(user_all);
-    console.log('***-------List of all users ends------********');
-
-    console.log('****-----------Get customer by id starts----------------***')
-    const user_id = await customersData.getCustomerById("61a16e744791b11af88ab973");
-    console.log(user_id);
-    console.log('****-----------Get customer by id ends----------------***')
-        /*
-        ************* Firstname validation **********************
-        */   
-    
-
 
     const db = await dbConnection();
-    await db.serverConfig.close();
-    console.log('**********************')
+    // await db.dropDatabase();
+
+    // const safrronLounge = await salonsData.create("The Saffron Lounge", "http://www.saffronlounge.com", "Makeup", "New York City, New York", "New York", " NJ", "08820", 3, 3, "Shraddha");
+    // console.log(safrronLounge);
+    // console.log('safrronLounge restaurant has been added successfully!');
+    // console.log(safrronLounge._id, 'Salon id')
+
+    const user1 = await customersData.createUser("savleen","lastname","email","savleen","password","profilePicture","city","state","age");
+    console.log('************* User has been Added **********************');
+    console.log(user1);
+    console.log(user1._id, 'ID of user1')
+
+    // const test1 = await reviewsData.create("61a27d8d510458046238e781", "61a27d92510458046238e783", 'This is amazing', 9)
+    // console.log(test1)
+    // console.log('Reviews added successfully')
+
     console.log('Done seeding database');
-    console.log('**********************')
+
+    await db.serverConfig.close();
 
 };
-
 
 main().catch((error) => {
     console.log(error);
 });
-
-
-

@@ -20,6 +20,6 @@ module.exports = {
     customers: getCollectionFn('customers'),
     salons: getCollectionFn('salons'),
     reviews: getCollectionFn('reviews'),
-    covidReviews: getCollectionFn('covidReviews'),
+    //covidReviews: getCollectionFn('covidReviews'),
     comments: getCollectionFn('comments')
 };
