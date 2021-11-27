@@ -1,0 +1,14 @@
+<main>
+<dl>
+<dt>Username</dt>
+<dd>{{username}}</dd>
+</dl>
+<a href="/logout">logout</a>
+{{#if errorcode}}
+{{#each errors}}
+<li>
+{{this}}
+</li>
+{{/each}}
+{{/if}}
+</main>

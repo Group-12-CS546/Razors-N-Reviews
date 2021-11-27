@@ -70,7 +70,7 @@ module.exports = {
    
   
    
-    async createUser(firstname,lastname,email,username,password,profilePicture,city,state,age) {
+    async createUser(firstname,lastname,email,username,password,profilePicture,state,city,age) {
 
         
 
