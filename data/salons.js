@@ -2,7 +2,7 @@ const mongoCollections = require('../config/mongoCollections');
 const salons = mongoCollections.salons;
 let { ObjectId } = require('mongodb');
 
-const create = async function create(name, website, service, address, city, state, zip, rating, covidRating, userPassword) {
+const create = async function create(name, website, service, address, city, state, zip, longitude, latitude) {
     if (!name) throw 'You must provide a name for your salon';
     if (!website) throw 'You must provide a website for your salon';
     if (!service) throw 'You must provide a service for your salon';
@@ -10,9 +10,8 @@ const create = async function create(name, website, service, address, city, stat
     if (!city) throw 'You must provide a city for your salon';
     if (!state) throw 'You must provide a state for your salon';
     if (!zip) throw 'You must provide a zip for your salon';
-    if (!rating) throw 'You must provide a rating for your salon';
-    if (!covidRating) throw 'You must provide a covidRating for your salon';
-    if (!userPassword) throw 'You must provide a userPassword for your salon';
+    if (!longitude) throw 'You must provide a longitude for your salon';
+    if (!latitude) throw 'You must provide a latitude for your salon';
 
     //To check name is null or empty
     if (name.length == 0) {
@@ -21,14 +20,6 @@ const create = async function create(name, website, service, address, city, stat
     //To check name is string
     if (typeof name != 'string') {
         throw 'The entered name must be a string'
-    }
-    //To check service is null or empty
-    if (service.length == 0) {
-        throw 'service cannot be null or empty'
-    }
-    //To check service is string
-    if (typeof service != 'string') {
-        throw 'The entered service must be a string'
     }
     //To check address is null or empty
     if (address.length == 0) {
@@ -62,32 +53,22 @@ const create = async function create(name, website, service, address, city, stat
     if (typeof zip != 'string') {
         throw 'The entered zip must be a string'
     }
-    //To check rating is null or empty
-    if (rating.length == 0) {
-        throw 'rating cannot be null or empty'
+    //To check longitude is null or empty
+    if (longitude.length == 0) {
+        throw 'longitude cannot be null or empty'
     }
-    //To check rating is string
-    if (typeof rating != 'number') {
-        throw 'The entered rating must be a string'
+    //To check longitude is string
+    if (typeof longitude != 'number') {
+        throw 'The entered longitude must be a number'
     }
-    //To check covidRating is null or empty
-    if (covidRating.length == 0) {
-        throw 'covidRating cannot be null or empty'
+    //To check latitude is null or empty
+    if (latitude.length == 0) {
+        throw 'latitude cannot be null or empty'
     }
-    //To check covidRating is string
-    if (typeof covidRating != 'number') {
-        throw 'The entered covidRating must be a string'
+    //To check latitude is string
+    if (typeof latitude != 'number') {
+        throw 'The entered latitude must be a number'
     }
-
-    //To check userPassword is null or empty
-    if (userPassword.length == 0) {
-        throw 'userPassword cannot be null or empty'
-    }
-    //To check userPassword is string
-    if (typeof userPassword != 'string') {
-        throw 'The entered userPassword must be a string'
-    }
-
     //To check website is null or empty
     if (website.length == 0) {
         throw 'website cannot be null or empty'
@@ -97,43 +78,34 @@ const create = async function create(name, website, service, address, city, stat
         throw 'The entered website must be a string'
     }
 
-    if (rating < '0' || rating > '5') {
-        throw 'rating should be within valid range from 0 to 5'
+    if (service.length === 0) throw 'You must provide at least one service.';
+
+    if (!service || !Array.isArray(service))
+        throw 'You must provide an array of service';
+
+    for (var k = 0; k < service.length; k++) {
+        if (typeof service[k] != 'string') {
+            throw 'service should be string'
+        }
     }
-
-    if (covidRating < '0' || covidRating > '5') {
-        throw 'covidRating should be within valid range from 0 to 5'
+    if (name.trim().length == 0) {
+        throw "name cannot have spaces"
     }
-
-    // if (cuisines.length === 0) throw 'You must provide at least one cuisines.';
-
-    // if (!cuisines || !Array.isArray(cuisines))
-    //     throw 'You must provide an array of cuisines';
-
-    // for (var k = 0; k < cuisines.length; k++) {
-    //     if (typeof cuisines[k] != 'string') {
-    //         throw 'Cuisines should be string'
-    //     }
-    // }
-
-    // if (typeof serviceOptions.dineIn != 'boolean' || typeof serviceOptions.takeOut != 'boolean' || typeof serviceOptions.delivery != 'boolean') {
-    //     throw 'ServiceOptions.dineIn, serviceOptions.takeOut, serviceOptions.delivery should be boolean'
-    // }
-    // if (name.trim().length == 0) {
-    //     throw "name cannot have spaces"
-    // }
-    // if (location.trim().length == 0) {
-    //     throw "location cannot have spaces"
-    // }
-    // if (phoneNumber.trim().length == 0) {
-    //     throw "phoneNumber cannot have spaces"
-    // }
-    // if (website.trim().length == 0) {
-    //     throw "website cannot have spaces"
-    // }
-    // if (priceRange.trim().length == 0) {
-    //     throw "priceRange cannot have spaces"
-    // }
+    if (website.trim().length == 0) {
+        throw "website cannot have spaces"
+    }
+    if (address.trim().length == 0) {
+        throw "address cannot have spaces"
+    }
+    if (city.trim().length == 0) {
+        throw "city cannot have spaces"
+    }
+    if (state.trim().length == 0) {
+        throw "state cannot have spaces"
+    }
+    if (zip.trim().length == 0) {
+        throw "zip cannot have spaces"
+    }
     var subStringHttp = "http://www."
     var subStringCom = ".com"
     if (subStringHttp == website.substr(0, subStringHttp.length)) {
@@ -153,8 +125,6 @@ const create = async function create(name, website, service, address, city, stat
 
     const salonsCollection = await salons();
 
-    var userPasswordLowerCase = userPassword.toLowerCase();
-
     let newsalons = {
         name: name,
         website: website,
@@ -163,9 +133,10 @@ const create = async function create(name, website, service, address, city, stat
         city: city,
         state: state,
         zip: zip,
-        rating: rating,
-        covidRating: covidRating,
-        userPassword: userPasswordLowerCase,
+        longitude: longitude,
+        latitude: latitude,
+        rating: 0,
+        covidRating: 0,
         reviewId: []
     };
 
@@ -226,12 +197,12 @@ const remove = async function remove(salonId) {
     const deletionInfo = await salonCollection.deleteOne({ _id: parsedId });
 
     if (deletionInfo.deletedCount === 0) {
-        throw `Could not delete restaurant with id of ${salonId}`;
+        throw `Could not delete salon with id of ${salonId}`;
     }
     return { deleted: true };
 }
 
-const update = async function update(salonId, name, website, service, address, city, state, zip, rating, covidRating) {
+const update = async function update(salonId, name, website, service, address, city, state, zip, longitude, latitude) {
 
     if (!name) throw 'You must provide a name for your salon';
     if (!website) throw 'You must provide a website for your salon';
@@ -240,9 +211,8 @@ const update = async function update(salonId, name, website, service, address, c
     if (!city) throw 'You must provide a city for your salon';
     if (!state) throw 'You must provide a state for your salon';
     if (!zip) throw 'You must provide a zip for your salon';
-    if (!rating) throw 'You must provide a rating for your salon';
-    if (!covidRating) throw 'You must provide a covidRating for your salon';
-    if (!userPassword) throw 'You must provide a userPassword for your salon';
+    if (!longitude) throw 'You must provide a longitude for your salon';
+    if (!latitude) throw 'You must provide a latitude for your salon';
 
     //To check name is null or empty
     if (name.length == 0) {
@@ -251,14 +221,6 @@ const update = async function update(salonId, name, website, service, address, c
     //To check name is string
     if (typeof name != 'string') {
         throw 'The entered name must be a string'
-    }
-    //To check service is null or empty
-    if (service.length == 0) {
-        throw 'service cannot be null or empty'
-    }
-    //To check service is string
-    if (typeof service != 'string') {
-        throw 'The entered service must be a string'
     }
     //To check address is null or empty
     if (address.length == 0) {
@@ -292,32 +254,22 @@ const update = async function update(salonId, name, website, service, address, c
     if (typeof zip != 'string') {
         throw 'The entered zip must be a string'
     }
-    //To check rating is null or empty
-    if (rating.length == 0) {
-        throw 'rating cannot be null or empty'
+    //To check longitude is null or empty
+    if (longitude.length == 0) {
+        throw 'longitude cannot be null or empty'
     }
-    //To check rating is string
-    if (typeof rating != 'number') {
-        throw 'The entered rating must be a string'
+    //To check longitude is string
+    if (typeof longitude != 'number') {
+        throw 'The entered longitude must be a number'
     }
-    //To check covidRating is null or empty
-    if (covidRating.length == 0) {
-        throw 'covidRating cannot be null or empty'
+    //To check latitude is null or empty
+    if (latitude.length == 0) {
+        throw 'latitude cannot be null or empty'
     }
-    //To check covidRating is string
-    if (typeof covidRating != 'number') {
-        throw 'The entered covidRating must be a string'
+    //To check latitude is string
+    if (typeof latitude != 'number') {
+        throw 'The entered latitude must be a number'
     }
-
-    //To check userPassword is null or empty
-    if (userPassword.length == 0) {
-        throw 'userPassword cannot be null or empty'
-    }
-    //To check userPassword is string
-    if (typeof userPassword != 'number') {
-        throw 'The entered userPassword must be a string'
-    }
-
     //To check website is null or empty
     if (website.length == 0) {
         throw 'website cannot be null or empty'
@@ -327,43 +279,34 @@ const update = async function update(salonId, name, website, service, address, c
         throw 'The entered website must be a string'
     }
 
-    if (rating < '0' || rating > '5') {
-        throw 'rating should be within valid range from 0 to 5'
+    if (service.length === 0) throw 'You must provide at least one service.';
+
+    if (!service || !Array.isArray(service))
+        throw 'You must provide an array of service';
+
+    for (var k = 0; k < service.length; k++) {
+        if (typeof service[k] != 'string') {
+            throw 'service should be string'
+        }
     }
-
-    if (covidRating < '0' || covidRating > '5') {
-        throw 'covidRating should be within valid range from 0 to 5'
+    if (name.trim().length == 0) {
+        throw "name cannot have spaces"
     }
-
-    // if (cuisines.length === 0) throw 'You must provide at least one cuisines.';
-
-    // if (!cuisines || !Array.isArray(cuisines))
-    //     throw 'You must provide an array of cuisines';
-
-    // for (var k = 0; k < cuisines.length; k++) {
-    //     if (typeof cuisines[k] != 'string') {
-    //         throw 'Cuisines should be string'
-    //     }
-    // }
-
-    // if (typeof serviceOptions.dineIn != 'boolean' || typeof serviceOptions.takeOut != 'boolean' || typeof serviceOptions.delivery != 'boolean') {
-    //     throw 'ServiceOptions.dineIn, serviceOptions.takeOut, serviceOptions.delivery should be boolean'
-    // }
-    // if (name.trim().length == 0) {
-    //     throw "name cannot have spaces"
-    // }
-    // if (location.trim().length == 0) {
-    //     throw "location cannot have spaces"
-    // }
-    // if (phoneNumber.trim().length == 0) {
-    //     throw "phoneNumber cannot have spaces"
-    // }
-    // if (website.trim().length == 0) {
-    //     throw "website cannot have spaces"
-    // }
-    // if (priceRange.trim().length == 0) {
-    //     throw "priceRange cannot have spaces"
-    // }
+    if (website.trim().length == 0) {
+        throw "website cannot have spaces"
+    }
+    if (address.trim().length == 0) {
+        throw "address cannot have spaces"
+    }
+    if (city.trim().length == 0) {
+        throw "city cannot have spaces"
+    }
+    if (state.trim().length == 0) {
+        throw "state cannot have spaces"
+    }
+    if (zip.trim().length == 0) {
+        throw "zip cannot have spaces"
+    }
     var subStringHttp = "http://www."
     var subStringCom = ".com"
     if (subStringHttp == website.substr(0, subStringHttp.length)) {
@@ -380,7 +323,6 @@ const update = async function update(salonId, name, website, service, address, c
     } else {
         throw 'Entered url should start with http://www.'
     }
-
 
     let newObjId = ObjectId();
     if (!ObjectId.isValid(newObjId)) {
@@ -401,11 +343,11 @@ const update = async function update(salonId, name, website, service, address, c
         city: city,
         state: state,
         zip: zip,
-        rating: rating,
-        covidRating: covidRating,
+        longitude: longitude,
+        latitude: latitude
     };
 
-    const updateSalonInfo = await salonCollection.updateOne({ _id: parsedId }, { $set: updatedSalonInfo }, );
+    const updateSalonInfo = await salonCollection.updateOne({ _id: parsedId }, { $set: updatedSalonInfo });
 
     if (!updateSalonInfo.matchedCount && !updateSalonInfo.modifiedCount)
         throw 'Update failed';
