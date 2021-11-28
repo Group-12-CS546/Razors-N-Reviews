@@ -2,39 +2,39 @@ const mongoCollections = require('../config/mongoCollections')
 let { ObjectID } = require("mongodb");
 //const { customers } = require('.');
 const reviews = mongoCollections.reviews;
-//const salons = mongoCollections.salons;
-//const customer = mongoCollections.customers;
+const salons = mongoCollections.salons;
+const customer = mongoCollections.customers;
 //const validchecking = require('./validchecking');
  
  
 module.exports = {
    async create(salonId, customersId, reviewText, rating) //, comments, upvote, downvote)
    {
-     //salonId = salonId.toString();
-     //customersId = customersId.toString();
-      //  if(typeof salonId!= 'string') throw 'No Salon with proper type has been provided'
-      //  if(salonId == null || salonId.length == 0) throw 'No Salon has been selected'
-      //  if(salonId.trim()=='') throw 'Salon Id provided contains only empty spaces'
+     salonId = salonId.toString();
+     customersId = customersId.toString();
+       if(typeof salonId!= 'string') throw 'No Salon with proper type has been provided'
+       if(salonId == null || salonId.length == 0) throw 'No Salon has been selected'
+       if(salonId.trim()=='') throw 'Salon Id provided contains only empty spaces'
  
-      //  if(customersId == null || customersId.length == 0) throw 'Customer ID has not been entered for Review'
-      //  if(typeof customersId!= 'string') throw 'No customer with proper type has been provided'
-      //  if(customersId.trim() == '') throw 'Customer ID is provided contains only empty spaces'
+       if(customersId == null || customersId.length == 0) throw 'Customer ID has not been entered for Review'
+       if(typeof customersId!= 'string') throw 'No customer with proper type has been provided'
+       if(customersId.trim() == '') throw 'Customer ID is provided contains only empty spaces'
  
-      //  if(typeof reviewText!='string') throw 'Review is not of appropriate type'
-      //  if(reviewText == null || reviewText.length == 0) throw 'Review is not provided'
-      //  if(reviewText.trim() == '') throw 'Review provided only contains blank spaces'
+       if(typeof reviewText!='string') throw 'Review is not of appropriate type'
+       if(reviewText == null || reviewText.length == 0) throw 'Review is not provided'
+       if(reviewText.trim() == '') throw 'Review provided only contains blank spaces'
  
-      //  if(typeof rating!= 'number') throw 'Rating provided is not a number'
-      //  if(rating.length == 0 || rating == null) throw 'Rating is not provided'
-      //  if(rating <= 0 || rating >= 10) throw 'Rating must be between 0-10'
+       if(typeof rating!= 'number') throw 'Rating provided is not a number'
+       if(rating.length == 0 || rating == null) throw 'Rating is not provided'
+       if(rating <= 0 || rating >= 10) throw 'Rating must be between 0-10'
  
-       // if(comments)
-       // {
-       //     if(comments.length == 0 || comments == null) throw 'Comments are not provided'
-       //     if(comments.trim() == '') throw 'Only Blank spaces are provided in Comments'
-       //     if(typeof comments!= 'string') throw 'Comments are not of appropriate type'
+      //  if(comments)
+      //  {
+      //      if(comments.length == 0 || comments == null) throw 'Comments are not provided'
+      //      if(comments.trim() == '') throw 'Only Blank spaces are provided in Comments'
+      //      if(typeof comments!= 'string') throw 'Comments are not of appropriate type'
  
-       // }
+      //  }
  
        const reviewCollection = await reviews();
        const sal = await salons();
@@ -62,14 +62,16 @@ module.exports = {
            rating: rating,
            //comments: comments
        }
+
+       const insertInfo = await reviewCollection.insertOne(newReview);
+       if (insertInfo.insertedCount === 0) throw 'Could not add new Review';
  
        console.log(newReview, 'newReview')
        var demo
        var sum = 0
        const OverallRatingNew = await sal.updateOne({_id: parsedId},{$addToSet:{reviews: newReview} })
-       console.log(OverallRatingNew, 'Overall new rating')
+       //console.log(OverallRatingNew, 'Overall new rating')
 
-       //const 
  
        const reviewofOneSal = await sal.findOne({ _id: parsedId });
        console.log(reviewofOneSal, 'Review of one sal')
@@ -83,24 +85,25 @@ module.exports = {
              sum = sum + demo
  
            }
-           console.log(sum)
+           console.log(sum, 'sum')
          //var newSum = sum + rating
          var newLength = ReviewList.length
          //console.log(newLength,'newLength')
          var newOverallRating = Number((sum/newLength).toFixed(2));
-             console.log(newOverallRating)
+             console.log(newOverallRating, 'new overall rating')
        }
        else{
            var newOverallRating = rating
        }
  
        let updateCustomer = await customer();
-       let custUpdate = await updateCustomer.updateOne({_id:ObjectID(newReview.customersId)},{ $push: { reviews: (newReview._id).toString()}});
+       let custUpdate = await updateCustomer.updateOne({_id:ObjectID(newReview.customersId)},{ $push: { reviewId: (newReview._id).toString()}});
        //console.log(custUpdate, 'Custupdate')
 
        
        let updateSal = await salons();
-       let SalUpdate = await updateSal.updateOne({_id:ObjectID(newReview.salonId)},{ $push: { reviews: (newReview._id).toString()}})
+      let SalUpdate = await updateSal.updateOne({_id:ObjectID(newReview.salonId)},{ $push: { reviewId: (newReview._id).toString()}})
+      let SalUpdate1 = await updateSal.updateOne({_id:ObjectID(newReview.salonId)},{ $set: { rating: newOverallRating}})
 
        //console.log(SalUpdate, 'Sal update')
   
@@ -276,6 +279,11 @@ module.exports = {
  
      if((reviewText).length !== 0){
          const reviewCollection = await reviews();
+
+
+
+
+
          const updatedInfo = await reviewCollection.updateOne({_id: parsedID}, {$set: {reviewText: reviewText}});
  
          if(!updatedInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed';

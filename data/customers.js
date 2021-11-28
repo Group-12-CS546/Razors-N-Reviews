@@ -37,7 +37,8 @@ module.exports = {
     async getAllCustomers(){
       const customers_data = await customers();
       const list_all_customers = await customers_data.find({}).toArray();
-      return list_all_customers;
+     return  JSON.parse(JSON.stringify(list_all_customers));
+
     },
 
     /*
@@ -70,7 +71,7 @@ module.exports = {
    
   
    
-    async createUser(firstname,lastname,email,username,password,profilePicture,city,state,age) {
+    async createUser(firstname,lastname,email,username,password,profilePicture,state,city,age) {
 
         
 
@@ -210,7 +211,7 @@ module.exports = {
           city: city,
           state: state,
           age: age,
-          reviewIds: [],
+          reviewId: [],
           covidReviewIds:[],
           commentIds: []
          
@@ -226,10 +227,13 @@ module.exports = {
     
         const insertInfo = await userCollection.insertOne(newUser);
         if (insertInfo.insertedCount === 0) throw 'Could not add new User';
-
-        console.log(newUser, 'new user added')
+        const newId = insertInfo.insertedId;
+        const customer = await this.getCustomerById(newId.toString());
+        return JSON.parse(JSON.stringify(customer));
     
-        return {userInserted: true};
+        // return {userInserted: true};
+
+
       },
 
       async checkUser(username, password) {
