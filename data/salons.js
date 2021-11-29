@@ -140,6 +140,17 @@ const create = async function create(name, website, service, address, city, stat
         reviewId: []
     };
 
+    // const salonAvailable = await salonsCollection.findOne({ name: newsalons.name });
+    // if (salonAvailable) throw "salon name already in use";
+
+    const allSalons = await this.getAll();
+    allSalons.forEach(element => {
+        for(var i = 0; i < element.name.length; i++) {
+            if(element.name === name) {
+                throw "Salon name already in use"
+            }
+        }
+    });
     const insertInfo = await salonsCollection.insertOne(newsalons);
     if (insertInfo.insertedCount === 0) throw 'Could not add salons';
 
