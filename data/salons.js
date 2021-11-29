@@ -368,10 +368,23 @@ const update = async function update(salonId, name, website, service, address, c
     return objCmp;
 }
 
+
+const getSalonViaSearch = async function getSalonViaSearch(search) {
+        if (!search) throw "Error (getSalonViaSearch): Must provide search.";
+        if (typeof(search) !== "string") throw "Error (getSalonViaSearch): Search must be a string.";
+        const salonCollection = await salons();
+        const query = new RegExp(search, "i");
+        console.log("query",query)
+        const salonList = await salonCollection.find({ $or: [ {service: {$regex: query}}, {name: {$regex: query}} ] }).toArray();
+        console.log("salonList",salonList);
+        return salonList;
+}
+
 module.exports = {
     create,
     get,
     getAll,
     remove,
-    update
+    update,
+    getSalonViaSearch
 }
