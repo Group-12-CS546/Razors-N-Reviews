@@ -37,7 +37,8 @@ module.exports = {
     async getAllCustomers(){
       const customers_data = await customers();
       const list_all_customers = await customers_data.find({}).toArray();
-      return list_all_customers;
+     return  JSON.parse(JSON.stringify(list_all_customers));
+
     },
 
     /*
@@ -72,27 +73,12 @@ module.exports = {
    
     async createUser(firstname,lastname,email,username,password,profilePicture,state,city,age) {
 
-        
+      
 
-        /*
-        ************* Firstname validation **********************
-        */   
-        
-        
-        /*
-        ************* Firstname is lowercase  and more than 2 characters**********************
-        */ 
-       
-        firstname = firstname.toLowerCase();
-        
-        
-       
-        /*
-        ************* For empty string **********************
-        */ 
-        
-        if (!firstname ) throw 'Firstname not provided';
-
+       if(firstname===undefined){
+        throw 'Parameter not provided'
+      }
+      
         /*
         ************* For firstname  not of  string type **********************
         */ 
@@ -100,37 +86,89 @@ module.exports = {
         if(typeof firstname !="string"  ){
            
             throw 'Firstname not of type string'
-          }
+        }
+      
+        /*
+        ************* Firstname is Uppercased and trimmed**********************
+        */
+        firstname = firstname.toUpperCase();
+        firstname=firstname.trim()
+
+
+        // console.log(firstname)
+
+       
+
+
+        /*
+        ************* For empty string **********************
+        */
+
+       if (!firstname ) throw 'Firstname not provided or only empty spaces provided';
+
+
+       
+       /*
+        ************* For validating input as character only **********************
+        */
+
+      
+
+      function isCharacterALetter(char) {
+        char=firstname
+        value=/^[a-zA-Z]+$/.test(char);
+        // console.log(value);  
+        return value
+      }
+
+      let test=isCharacterALetter(firstname)
+      if(test){
+
+      }
+      else{
+        throw 'Firstname should only be characters'
+      }
+     
+       
+
+
+      
+
+        /*
+        ************* Firstname validation ends**********************
+        */   
+    
+        
           
         
         /*
-        ************* Lastname validation **********************
-        */   
-        
-        
-        /*             
-        
-        ************* Lastname is lowercase  and more than 2 characters**********************
+        ************* Lastname validation  starts**********************
         */ 
-       
-        lastname = lastname.toLowerCase();
-                
-        /*
-        ************* For empty string **********************
-        */ 
-        
-        if (!lastname ) throw 'Lastname not provided';
 
-        /*
+         /*
         ************* For firstname  not of  string type **********************
         */ 
 
         if(typeof lastname !="string"  ){
            
             throw 'Lastname not of type string'
-          }
-          
+        }
         
+        /*             
+        
+        ************* Lastname is lowercase  and trimmed**********************
+        */ 
+       
+        lastname = lastname.toLowerCase();
+        lastname=lastname.trim()
+        
+       /*
+        ************* For empty string **********************
+        */
+
+       if (!lastname ) throw 'Lastname not provided or only empty spaces provided';
+
+
 
         /*
         ************* Username validation **********************
@@ -159,10 +197,66 @@ module.exports = {
         */
         
         if (!username ) throw 'User name not provided';
+
+        if(username.trim().length==0){
+          
+          throw 'Username cannot be empty spaces'
+        }
+
+         
+       /*
+        ************* For validating input as character only **********************
+        */
+
+      
+
+      function ischar(char) {
+        char=lastname
+        value=/^[a-zA-Z]+$/.test(char);
+        // console.log(value);  
+        return value
+      }
+
+      let test_lastname=ischar(lastname)
+      if(test_lastname){
+
+      }
+      else{
+        throw 'Lastname should only be characters'
+      }
          
         /*
         ************* Username validation ends**********************
         */
+        email= email.toLowerCase()
+        
+        if(!email){
+          throw 'Email not provided'
+        }
+        if(email.trim().length==0){
+          
+          throw 'Email cannot be empty spaces'
+        }
+
+        function validateEmail(email) 
+        {
+            
+            var re = /\S+@\S+\.\S+/;
+            return re.test(email);
+          }
+        console.log(validateEmail(email));
+        let email_result=validateEmail(email)
+
+        if(email_result){
+
+        }
+        else{
+          throw 'Email is not valid'
+        }
+
+        
+        
+
 
        
         
@@ -174,18 +268,17 @@ module.exports = {
 
         if(typeof username !="string" || typeof password !="string" ){
            
-          throw 'Parameter not of type string'
+          throw 'Password/Username not of type string'
         }
     
     
-        if(username.trim().length==0){
-          
-          throw 'Username cannot be empty spaces'
-        }
+       
         if(password.trim().length==0 ){
           
             throw 'Password cannot be empty spaces'
           }
+
+
         
         /*
         ************* Password validation Ends **********************
@@ -210,8 +303,8 @@ module.exports = {
           city: city,
           state: state,
           age: age,
-          reviewIds: [],
-          covidReviewIds:[],
+          reviewId: [],
+          covidReviewId:[],
           commentIds: []
          
         };
@@ -226,8 +319,13 @@ module.exports = {
     
         const insertInfo = await userCollection.insertOne(newUser);
         if (insertInfo.insertedCount === 0) throw 'Could not add new User';
+        const newId = insertInfo.insertedId;
+        const customer = await this.getCustomerById(newId.toString());
+        return JSON.parse(JSON.stringify(customer));
     
-        return {userInserted: true};
+        // return {userInserted: true};
+
+
       },
 
       async checkUser(username, password) {

@@ -122,11 +122,11 @@ router.post("/signup", async(req, res) => {
     console.log(req.body);
     let errorcode= false;
     const errors = [];
-    // if (!req.body.username) {
-    //     errorcode = true;
-    //     res.status(400);
-    //     return res.render("users/signup", { errorcode: true, errors: errors, message: "Username is not supplied" });
-    // }
+    if (!req.body.username) {
+        errorcode = true;
+        res.status(400);
+        return res.render("users/signup", { errorcode: true, errors: errors, message: "Username is not supplied" });
+    }
     // if (!req.body.password) {
     //     errorcode = true;
     //     res.status(400);
@@ -187,7 +187,7 @@ router.post("/signup", async(req, res) => {
     console.log("userData", userData)
    
   
-    try {
+    
         console.log("*something new inside try")
         const user = await users.createUser(userData.firstname,userData.lastname,userData.email,userData.username, userData.password,userData.profilePicture,userData.state,userData.city,userData.age);
 
@@ -211,10 +211,7 @@ router.post("/signup", async(req, res) => {
         }
        
        
-    } catch (error) {
-        res.status(500);
-        res.render("users/signup", { message: "Internal server error", title: "Login", heading: "Login" });
-    }
+    
  });
  
 
