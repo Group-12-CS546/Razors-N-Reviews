@@ -9,16 +9,18 @@ const salons = data.salons;
 const comments = data.comments;
 
 //Get data using salon id
-router.get('/:salonId', async (req, res) => {
+router.get('/reviews/salons/:salonId', async (req, res) => {
     if(!req.params.salonId)
     {
       res.status(400).json({ error: 'You must provide a valid Salon ID for review'});
       return;
     }
     try {
-      const salonList = await reviewsData.getAll(req.params.salonId); 
-      res.status(200).json(reviewList);
+      const salonList = await reviewsData.getAllreviewsofSalon(req.params.salonId); 
+      //console.log(salonList, 'SalonList')
+      res.status(200).json(salonList);
     } catch (e) {
+      //console.log('Hi I am savleen')
       res.status(404).json({ error: e });
     }
   });
@@ -31,43 +33,47 @@ router.get('/:salonId', async (req, res) => {
       return;
     }
     try {
-          const reviewList = await reviewsData.get(req.params.reviewId);
+          const reviewList = await reviewsData.getReviewById(req.params.reviewId);
           res.status(200).json(reviewList);
       } catch (e) {
         res.status(404).json({message: e});
       }
     });
 
+    //rendering error without message
 //get all reviews by a customer
-    router.get('/:customersId' , async (req, res) => {
+    router.get('/reviews/customer/:customersId' , async (req, res) => {
       if(!req.params.customersId)
     {
       res.status(404).json({ error: 'You must provide a Customer ID for review'})
       return;
     }
     try {
-      const reviewList = await reviewsData.get(req.params.customersId);
+      console.log('Hicdvfsgbd')
+      const reviewList = await reviewsData.getReviewsPerCustomer(req.params.customersId);
+      console.log(reviewList, 'reviewList')
       res.status(200).json(reviewList);
     }catch (e)
     {
+      console.log('rgsnlb')
       res.status(404).json({message: e});
     }
-    })
+    });
 
-
-    router.post('/reviews/:restaurantId', async (req, res) => {
+//create a review
+    router.post('/reviews/:salonId', async (req, res) => {
   
       let reviewData = req.body;
-      if(!req.params.restaurantId)
+      if(!req.params.salonId)
       {
-        res.status(400).json({ error: 'You must provide a valid Restaurant ID for review'});
+        res.status(400).json({ error: 'You must provide a valid Salon ID for review'});
         return;
       }
-      if (!reviewData.title) {
-        res.status(400).json({ error: 'You must provide title for review'});
+      if (!reviewData.customersId) {
+        res.status(400).json({ error: 'You must provide customer ID for review'});
         return;
       }
-      if (!reviewData.reviewer) {
+      if (!reviewData.reviewText) {
         res.status(400).json({ error: 'You must provide a reviewer' });
         return;
       }
@@ -75,51 +81,79 @@ router.get('/:salonId', async (req, res) => {
         res.status(400).json({ error: 'You must provide a rating' });
         return;
       }
-      if (!reviewData.dateOfReview) {
-        res.status(400).json({ error: 'You must provide a date for review' });
-        return;
-      }
-      if (!reviewData.review) {
-        res.status(400).json({ error: 'You must provide a review' });
-        return;
-      }
+    
       try {
         const newPost = await reviewsData.create(
-          req.params.restaurantId,
-          reviewData.title,
-          reviewData.reviewer,
+          req.params.salonId,
+          reviewData.customersId,
+          reviewData.reviewText,
           reviewData.rating,
-          reviewData.dateOfReview,
-          reviewData.review
+          reviewData.rating
         );
-        //console.log(newPost+"For new Post")
+        console.log(newPost, "For new Post")
         res.status(200).json(newPost);
       } catch (e) {
         res.status(400).json({ error: e });
       }
     });
 
-
+//delete review
     router.delete('/:reviewId', async (req, res) => {
       if (!req.params.reviewId) {
         res.status(400).json({ error: 'You must Supply an ID to delete' });
         return;
       }
       try {
-        var reviewtoDelete = await reviewsData.get(req.params.reviewId);
+        var reviewtoDelete = await reviewsData.getReviewById(req.params.reviewId);
       }catch(e)
       {
         res.json({message: e});
         return;
       }
       try{
-        await reviewsData.remove(req.params.reviewId);
+        await reviewsData.removeReview(req.params.reviewId);
         res.status(200).json({ reviewId: reviewtoDelete._id , deleted: true });
       }catch (e) {
         res.status(404).json({ error: e });
         return;
       }
     });
+
+
+    router.put('/:reviewId', async (req, res) => {
+      let RestInfo = req.body;
+      if(!req.params.reviewId)
+      {
+        res.status(400).json({error: 'You must provide id'});
+        return;
+      }
+    
+      if (!RestInfo) {
+        res.status(400).json({ error: 'You must provide data to update the review' });
+        return;
+      }
+    
+      if (!RestInfo.reviewText) {
+        res.status(400).json({ error: 'You must provide a text to update' });
+        return;
+      }
+    
+      try {
+        await reviewsData.getReviewById(req.params.reviewId);
+      } catch (e) {
+        res.status(404).json({message: e})
+        return;
+      }
+      try {
+        const updateSal = await reviewsData.update(req.params.reviewId, RestInfo.reviewText);
+        console.log(updateSal, 'Update sal')
+        res.status(200).json(updateSal);
+      } catch (e) {
+        res.status(404).json({message: e})
+      }
+    });
+
+
 
 module.exports = router;
     
