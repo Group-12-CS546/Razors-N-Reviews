@@ -21,7 +21,7 @@ const main = async() => {
     // console.log(user1);
     // console.log(user1._id, 'ID of user1')
 
-    // const test1 = await reviewsData.create("61a57865e329bc121ea6d1ad", "61a31464a9ae001b73e192e1", 'Hair services are good', 3);
+    // const test1 = await reviewsData.create("61a3cd8b5b61d807549dfb93", "61a31464a9ae001b73e192e1", 'That good', 9);
     // console.log(test1)
     // console.log('Reviews added successfully')
 
@@ -39,17 +39,25 @@ const main = async() => {
     // console.log(reviewtest, 'Review Test')
 
     //For removing the review using the review id
-    const removetest = await reviewsData.removeReview("61a57a48b47ef512a08b6c3e")
-    console.log(removetest, 'removetest')
+    // const removetest = await reviewsData.removeReview("61a6927c0ef55b0e44782308")
+    // console.log(removetest, 'removetest')
 
     //For getid
-    // const idtest = await reviewsData.getReviewId("61a3ce15879a12078114da8a")
+    // const idtest = await reviewsData.getReviewId("61a51b4c960af80651deef19")
     // console.log(idtest, 'idtest')
 
     //Update review
-    // const reviewupdate = await reviewsData.update("61a51b4c960af80651deef19", 'This is aahhhmaazings')
+    // const reviewupdate = await reviewsData.update("61a6907b3256520d8cf3d4d5", 'This is aahhhmaazings')
     // console.log(reviewupdate, 'Review Update')
-    // console.log('Done seeding database');
+
+
+    //Upvote
+    //const upvotetest = await reviewsData.updateReviewLike("61a69059176e170d7bf74009", "61a31464a9ae001b73e192e1", 1)
+
+    //Downvote
+    //const downvotetest = await reviewsData.updateReviewLike("61a6907b3256520d8cf3d4d5", "61a31464a9ae001b73e192e1", 0)
+
+    console.log('Done seeding database');
 
     await db.serverConfig.close();
 

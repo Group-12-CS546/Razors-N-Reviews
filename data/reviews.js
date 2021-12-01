@@ -1,11 +1,8 @@
 const mongoCollections = require('../config/mongoCollections')
 let { ObjectID } = require("mongodb");
-//const { customers } = require('.');
 const reviews = mongoCollections.reviews;
 const salons = mongoCollections.salons;
 const customer = mongoCollections.customers;
-//const salonss = data.salons;
-//const validchecking = require('./validchecking');
 
 
 module.exports = {
@@ -61,6 +58,8 @@ module.exports = {
       customersId: customersId,
       reviewText: reviewText,
       rating: rating,
+      upvote: [],
+      downvote: []
       //comments: comments
     }
 
@@ -222,6 +221,7 @@ module.exports = {
 //NA for route
   async getReviewId(reviewId)
   {
+    console.log(reviewId, 'reviewId from getreviewID')
     if (reviewId == null || reviewId.length == 0) throw 'Reviw ID is null'
     if (typeof reviewId != 'string') throw 'Review ID is not of proper type'
     if (reviewId.trim() == '') throw 'Blank spaces are provided in Review Id'
@@ -236,12 +236,14 @@ module.exports = {
 
     const reviewcaught = await reviewCollection.findOne(parsedId);
     //console.log(reviewcaught, 'reviewcaught')
+    console.log(reviewcaught, 'reviewcaught from getreviewId func')
 
     return JSON.parse(JSON.stringify(reviewcaught))
   },
 
 
   async removeReview(reviewId) {
+    console.log(reviewId, 'Review ID')
     if (reviewId == null || reviewId.length == 0) throw 'Reviw ID is null'
     if (typeof reviewId != 'string') throw 'Review ID is not of proper type'
     if (reviewId.trim() == '') throw 'Blank spaces are provided in Review Id'
@@ -255,7 +257,7 @@ module.exports = {
     const reviewCollection = await reviews();
 
     var review = await this.getReviewId(reviewId)
-    //var review = await reviewCollection.findOne(parsedId)
+    //var review = await reviewCollection.findOne({"review._id": parsedId})
 
     // var review = await this.getReviewById(reviewId)
     console.log(review, 'review')
@@ -283,44 +285,34 @@ module.exports = {
     if(test == null) {
         throw 'Review ID cannot be found'
     }
-    //For now, remainingreview = getSal
- 
-    // const updateDetails = await reviewCollection.updateOne(
-    //     { _id: review._id },
-    //     { $pull: { reviews: { _id: parsedId } } });
-
-    // const remainingReview = await sal.findOne({ _id: getSal._id });
-    // console.log(remainingReview, 'remainingReview')
-    //return
-
     
- 
-    // if (!updateDetails.matchedCount && !updateDetails.modifiedCount) {
-    //     throw 'Update failed';
-    // }
-    // demo = reviewcaught.rating
-    //     console.log(demo, 'demo')
-    //     sum = sum + demo
     var ReviewList = getSal.reviewId
+    console.log(ReviewList, 'ReviewList')
     var sum = 0;
+    var demo = 0;
+    
+    
     if (ReviewList != null && ReviewList.length > 0) {
         for (var i = 0; i < ReviewList.length; i++) {
+          console.log(ReviewList[i] , 'Should returns')
           if (ReviewList[i] != reviewId) {
                   console.log(ReviewList[i], 'ReviewList[i]')
-                  var reviewcaught = await this.getReviewId((ReviewList[i]));
-                  var demo = reviewcaught.rating
+
+                  var reviewcaught = await this.getReviewId(ReviewList[i]);
+                  console.log(reviewcaught, 'review caught')
+                  demo = reviewcaught.rating
                   console.log(demo,'demo')
                   sum = sum + demo
+                  console.log(sum , 'sum')
+                  //reviewcaught = null
                 }
-            // var demo = remainingReview.reviews[i]
-            // console.log(demo, 'demo')
-            // sum = demo.rating + sum
-            // console.log(sum, 'sum')
+            
         }
+        
         console.log(sum, 'sum')
         //Number((sum / (ReviewList.length - 1)).toFixed(2));
  
-        var avgRating = sum / (ReviewList.length - 1).toFixed(2)
+        var avgRating = Number(sum / (ReviewList.length - 1).toFixed(2))
         //avgRating = Number(avgRating.toFixed(2));
         
  
@@ -334,136 +326,81 @@ module.exports = {
     console.log(avgRating, 'avgRating')
     await sal.updateOne({ _id: getSal._id }, { $set: { rating: avgRating } })
 
-    let SalUpdate1 = await sal.updateOne({ _id: ObjectID(review.salonId) }, { $pull: { reviewId: reviewId } })
+    let SalUpdate = await sal.updateOne({ _id: ObjectID(review.salonId) }, { $pull: { reviewId: reviewId } })
 
-
-
-
-
-    // const sal = await salons();
-    // const reviewofOneSal = await sal.findOne({ "reviews._id": parsedId });
-
-    // var test 
-
-    // console.log(reviewofOneSal, 'reviewofOneSal')
-    // for(var i =0; i<reviewofOneSal.reviews; i++)
-    // {
-    //   if(reviewiD == (reviewofOneSal.reviews[i]._id.toString()))
-    //   {
-    //     test = reviewofOneSal.reviews[i].id
-
-    //   }
-    // }
-    // console.log(test, 'test')
-
-    // const deleteInfo = await reviewCollection.removeOne({ _id: parsedId });
-    // if (deleteInfo.deletedCount === 0) throw `Could not delete review with id of ${parsedId}`;
-
-    // //  const sal = await salons();
-    // //const reviewofOneSal = await sal.findOne({ "reviews._id": parsedId });
-    // if (!reviewofOneSal) throw 'No Review is present with that id'
-
-    // let newOverallRating = 0
-    // if (reviewofOneSal != null && reviewofOneSal.reviews != null && reviewofOneSal.reviews.length > 0) {
-    //   var sum = 0;
-    //   var demo
-    //   var ReviewList = reviewofOneSal.reviews
-    //   //console.log(ReviewList.length)
-    //   for (var i = 0; i < ReviewList.length; i++) {
-    //     if (ReviewList[i]._id != reviewId) {
-    //       //console.log(ReviewList[i]._id, 'ReviewList[i]._id')
-    //       demo = ReviewList[i].rating
-    //       //console.log(demo,'demo')
-    //       sum = sum + demo
-    //     }
-    //   }
-    //   //console.log(sum,'sum')
-    //   newOverallRating = Number((sum / (ReviewList.length - 1)).toFixed(2));
-    //   //console.log(newOverallRating)
-    // }
-    // else {
-    //   //console.log('Hi checking for 0')
-    //   newOverallRating = 0
-    // }
-
-    // await sal.updateOne({ _id: reviewofOneSal._id }, { $set: { rating: newOverallRating } });
-
-
-
-    // let updateCustomer = await customer();
-    // let custUpdate = await updateCustomer.updateOne({ _id: ObjectID(review.customersId) }, { $pull: { reviewId: test } });
-
-    // //let updateSal = await salons();
-    // let SalUpdate = await sal.updateOne({ _id: ObjectID(review.salonId) }, { $pull: { reviews: test } })
-    // let SalUpdate1 = await sal.updateOne({ _id: ObjectID(review.salonId) }, { $pull: { reviewId: test } })
+    let updateCustomer = await customer();
+    let custUpdate = await updateCustomer.updateOne({ _id: ObjectID(review.customersId) }, { $pull: { reviewId: reviewId } });
 
     return { reviewiD: reviewId, deleted: true };
   },
 
 
   async update(reviewId, reviewText) {
-    reviewId = reviewId.toString();
+    
     if (!reviewId) throw 'ID not provided';
     if (typeof reviewId !== 'string' || reviewId.length === 0) throw 'Id should be a non empty string';
-    //if(id.length !== 24) throw 'Not a valid ID';
+
+    if(reviewText.trim() == '') throw 'Blank spaces are provided in Review to be updated'
+    if(reviewText.length == 0 || !reviewText) throw 'Review Text is not provided'
+    if (typeof reviewText !== 'string') throw 'Review should be text'
+    
+    let { ObjectId } = require('mongodb');
+    let newObjId = ObjectId();
+    if (!ObjectId.isValid(newObjId)) throw 'Object id is not valid'
+    let x = newObjId.toString();
     let parsedID = ObjectID(reviewId);
-    //console.log("hello0");
 
     const reviewCollection = await reviews();
 
-    let review = await reviewCollection.findOne({ _id: parsedID });
-    if (review === null) throw 'No review with that id.';
+    let review = await reviewCollection.findOne(parsedID);
+    if (review === null) throw 'No review with that id';
     console.log(review, 'review')
 
-    if (!reviewText) throw "Review not provided";
-    if (typeof reviewText !== 'string' || reviewText.length === 0) throw 'Review Text is empty';
-
-    if ((reviewText).length !== 0) {
-      //const reviewCollection = await reviews();
-      //const newReview = await this.getReviewById(reviewId);
-
+    if (reviewText.length !== 0) {
       const updatedInfo = await reviewCollection.updateOne({ _id: parsedID }, { $set: { reviewText: reviewText } });
-
-      let updateSal = await salons();
-      const findonesal = await updateSal.findOne({ "reviews._id": parsedID });
-      //let findonesal = await updateSal.findAll()
-      
-      console.log(findonesal, 'findonesal')
-
-
-      //var test
-      var demoTest
-      
-        for(var i = 0; i < findonesal.reviews.length ; i++) {
-        
-            demoTest = findonesal.reviews[i]
-            console.log(demoTest, 'demoTest')
-            
-            if(demoTest._id == reviewId ){
-              console.log(demoTest._id, 'demoTest._id')
-              
-                test = demoTest
-                
-                break;
-            }
-        }
-        console.log(test, 'test')
-    
-
-        //Ask
-        // var salUpdate = await updateSal.updateOne({_id: test._id}, { $set: { reviewText: reviewText }})
-        // console.log(salUpdate.modifiedCount, 'salUpdate.modifiedCount')
-
-        //if (salUpdate.modifiedCount)
-
-
-      //let SalUpdate = await updateSal.updateOne({_id:ObjectID(newReview.salonId)},{ $push: { reviewId: (newReview._id).toString()}})
-      let SalUpdate = await updateSal.updateOne({ _id: ObjectID(review.salonId), "reviews._id": parsedID }, { $set: { "reviews.$.reviewText": reviewText } })
-
-
       if (!updatedInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed';
     }
     return await this.getReviewById(reviewId);
+  },
+
+
+  async updateReviewLike(reviewId, customersId, isLike){
+    if (reviewId == null || reviewId.length == 0) throw 'Reviw ID is null'
+    if (typeof reviewId != 'string') throw 'Review ID is not of proper type'
+    if (reviewId.trim() == '') throw 'Blank spaces are provided in Review Id'
+
+    if (customersId == null || customersId.length == 0) throw 'Customer ID has not been entered for Review'
+    if (typeof customersId != 'string') throw 'No customer with proper type has been provided'
+    if (customersId.trim() == '') throw 'Customer ID is provided contains only empty spaces'
+
+    let { ObjectId } = require('mongodb');
+    let newObjId = ObjectId();
+    if (!ObjectId.isValid(newObjId)) throw 'Object id is not valid'
+    let x = newObjId.toString();
+    const parsedId = ObjectId(reviewId);
+    const custid = ObjectId(customersId)
+
+    const reviewCollection = await reviews();
+    let review = await reviewCollection.findOne({ _id: parsedId });
+      if (review === null) throw 'No review with that id.';
+
+      if (isLike == null) {
+          await reviewCollection.updateOne({_id: parsedId},{$pull: {upvote: custid}});
+      await reviewCollection.updateOne({_id: parsedId},{$pull: {downvote: custid}});
+          return true;
+          
+      } else if(isLike) {
+      const updateInfo = await reviewCollection.updateOne({_id: parsedId},{$addToSet: {upvote: custid}});
+      await reviewCollection.updateOne({_id: parsedId},{$pull: {downvote: custid}});
+      if (!updateInfo.matchedCount && !updateInfo.modifiedCount) return false;
+      return true;
+
+    } else {
+      const updateInfo = await reviewCollection.updateOne({_id: parsedId},{$addToSet: {downvote: custid}});
+      await reviewCollection.updateOne({_id: parsedId},{$pull: {upvote: custid}});
+      if (!updateInfo.matchedCount && !updateInfo.modifiedCount) return false;
+          return true;      
+    }
   }
 
 

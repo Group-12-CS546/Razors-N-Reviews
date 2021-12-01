@@ -40,7 +40,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
       }
     });
 
-    //rendering error without message
+
 //get all reviews by a customer
     router.get('/reviews/customer/:customersId' , async (req, res) => {
       if(!req.params.customersId)
@@ -63,7 +63,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
 //create a review
     router.post('/reviews/:salonId', async (req, res) => {
   
-      let reviewData = req.body;
+      let reviewsData = req.body;
       if(!req.params.salonId)
       {
         res.status(400).json({ error: 'You must provide a valid Salon ID for review'});
@@ -153,6 +153,37 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
       }
     });
 
+    router.post('/like/:reviewId/:customersId', async function (req,res){
+      const ReviewId = req.body.reviewId.trim() //xss(req.body.reviewId.trim());
+      const customersId = req.body.customersId.trim() //xss(req.body.customersId.trim());
+      const parsedreviewId = ObjectId(ReviewId);
+      const parsedcustomersId = ObjectId(customersId);
+      const review = await reviewsData.getReviewById(ReviewId);
+      const update = await reviewsData.updateReviewLike(ReviewId, customersId, 1)//(review.likes.includes(customersId))? null : true);
+      const updatedRev = await reviewsData.getReviewId(ReviewId);
+  
+      res.status(200).json({
+          Upvoted: updatedRev.upvote.length.toString(),
+          //dislikeNum: updatedRev.downvote.length.toString(),
+          success: true
+      });
+  })
+  
+  router.post('/dislike/:reviewId/:customersId', async function (req,res){
+      const ReviewId = req.body.reviewId.trim()//xss(req.body.reviewId.trim());
+      const customersId = req.body.customersId.trim() //xss(req.body.customersId.trim());
+      const parsedreviewId = ObjectId(ReviewId);
+      const parsedcustomersId = ObjectId(customersId);
+      const review = await reviewsData.getReviewById(ReviewId);
+      const update = await reviewsData.updateReviewLike(ReviewId, customersId, 0)//(review.dislikes.includes(customersId))? null : false);
+      const updatedRev = await reviewsData.getReviewId(ReviewId);
+  
+      res.status(200).json({
+          //likeNum: updatedRev.upvote.length.toString(),
+          Downvoted: updatedRev.downvote.length.toString(),
+          success: true
+      });
+  })
 
 
 module.exports = router;
