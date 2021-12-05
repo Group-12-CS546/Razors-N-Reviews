@@ -1,0 +1,60 @@
+<main>
+    <div class="center">
+
+    <div class="center padding">
+        <h1>Sign Up  </h1>
+        <form id="signup-form" class="center padding" action="/signup" method="POST">
+            <label>
+                <p> First Name :</p> 
+                <input id="username" name="firstname" placeholder="Username"/>
+                </label>
+            <label>
+            <p> Last Name:</p> 
+                <input id="password"  name="lastname"placeholder="Password"/>
+            </label>
+            <label>
+                <p> Email :</p> 
+                <input id="username" name="email" placeholder="Username"/>
+                </label>
+           
+            <label>
+                <p> Username :</p> 
+                <input id="username" name="username" placeholder="Username"/>
+                </label>
+          
+            <label>
+                <p> Password :</p>  
+                <input id="username" name="password" type="password" placeholder="Username"/>
+                </label>
+          
+            
+            <label>
+               <p> Profile Picture:</p> 
+                <input id="username" name="profilePicture" placeholder="Username"/>
+                </label>
+            
+            <label>
+                <p>State :</p> 
+                <input id="username" name="state" placeholder="State"/>
+            </label>
+            <label>
+                <p>City :</p> 
+                <input id="username" name="city" placeholder="City"/>
+            </label>
+           
+            <label>
+                <p> Age :</p> 
+                <input id="username" name="age" placeholder="Age"/>
+            </label>
+
+            <button type="submit" id="btn-id">Submit</button>
+            
+            <a href="/">Already have an account? Click here to log-in</a>
+        </form>
+    </div>
+    <div id="error-div">
+        <p class="error">{{message}}</p>
+    </div>
+    </div>
+ 
+</main>

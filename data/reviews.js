@@ -137,6 +137,7 @@ module.exports = {
 
   //all reviews of one salon
   async getAllreviewsofSalon(salonId) {
+    console.log(salonId, 'id from data')
     if (salonId == null || salonId.length == 0) throw 'You must provide a Salon ID '
     if (typeof salonId !== 'string') throw 'Not valid type of SalonID provided';
     if (salonId.trim() == '') throw 'Blank spaces are provided in SalonID'
@@ -150,14 +151,15 @@ module.exports = {
     const sal = await salons();
 
     const AllReviewsofaSal = await sal.findOne({ _id: parsedId });
-    //console.log(AllReviewsofaSal, 'all reveiws of a sal')
+    console.log(AllReviewsofaSal, 'all reveiws of a sal')
     if (AllReviewsofaSal == null) throw 'Salon ID is not present'
 
     var ReviewList = []
     //console.log(AllReviewsofaSal.reviews.length, 'AllReviewsofaSal.reviews.length')
-    for (var i = 0; i < AllReviewsofaSal.reviews.length; i++) {
-      ReviewList[i] = AllReviewsofaSal.reviews[i].reviewText
-      //console.log(ReviewList, 'review list')
+    for (var i = 0; i < AllReviewsofaSal.reviewId.length; i++) {
+      var reviewcaught = await this.getReviewId(AllReviewsofaSal.reviewId[i])
+      ReviewList[i] = reviewcaught.reviewText
+      console.log(ReviewList, 'review list')
     }
     console.log(ReviewList, 'review list')
 

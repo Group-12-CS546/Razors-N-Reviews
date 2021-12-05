@@ -1,38 +1,26 @@
-<div class="container col-8 mt-5">
-    <div class="container mb-4">
-        <a href="/salons/{{salon._id}}" class="text-decoration-none text-dark font-weight-bold">
-            <h1>{{salon.name}}</h1>
-        </a>
-    </div>
-    <div class="container review-input-box">
-        <form method="POST" action="/reviews/writeareview/{{salon._id}}" id="review-form" novalidate>
-            <div class="container">
-                <div class="row">
-                    <div class="col form-group">
-                        <label for="review-rating">Rating</label>
-                        <input type="number" class="form-control" id="review-rating" name="reviewRating" min="1" max="10">
-                        <div class="invalid-feedback">
-                            Please enter a valid rating number    
-                        </div>
-                    </div>
-                    
-                </div>
-                
-                <div class="form-group mw-100%">
-                    <label for="review-text"></label>
-                    <textarea name="reviewText" class="form-control form-control-lg" id="review-text" cols="30" rows="10" placeholder="Post a Review"></textarea>
-                    <div class="invalid-feedback">
-                        Please enter your review
-                    </div>
-                </div>
-                
-                <div id="review-submit-button">
-                    <button type="submit" class="btn btn-primary" name="submitButton" id="submitButton">Post Review</button>
-                </div>
-            </div>
-            {{#each errors}}
-                <div class = "error font-italic">{{this}}</div>
-            {{/each}}
+<main>
+    <div class="center">
+ 
+    <div class="center padding">
+        <h1>Salon Review</h1>
+        <form id="salon-review-form" class="center padding" action="/reviews/{{salonId}}" method="POST">
+            <label>
+                <p>Review Text:</p> 
+                <input id="name" value={{this.reviewText}} name="name" placeholder="Space for entering Review"/>
+                </label>
+            <label>
+            <p> Rating:</p> 
+                <input id="rating" name="rating" placeholder="Rating: 1-10"/>
+            </label>
+ 
+            <button type="submit" id="btn-id">Submit</button>
+            
+            {{!-- <a href="/">Already have an salon? Click here to log-in</a> --}}
         </form>
     </div>
-</div>
+    <div id="error-div">
+        <p class="error">{{message}}</p>
+    </div>
+    </div>
+ 
+</main>
