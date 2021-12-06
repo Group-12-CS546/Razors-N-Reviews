@@ -1,24 +1,10 @@
 <main>
-    <div class="center">
-
-    <div class="center padding">
-        <h1>Sign Up  </h1>
-        <form id="signup-form" class="center padding" action="/signup" method="POST">
-            <label>
-            <p> Username :</p> 
-                <input id="username" name="username" placeholder="Username"/>
-                </label>
-            <label>
-            <p> Password:</p> 
-                <input id="password" type="password" name="password"placeholder="Password"/>
-            </label>
-            <button type="submit" id="btn-id">Submit</button>
-            <a href="/">Already have an account? Click here to log-in</a>
-        </form>
+    <h1>Successfully Loggedout...........</h1>
+    <div>
+        <p class="logout">{{message}}</p>
     </div>
-    <div id="error-div">
-        <p class="error">{{message}}</p>
-    </div>
-    </div>
- 
+    {{#if message}}
+    <a class="logoutShiftLine" href="/">Login</a>
+    {{/if}}
 </main>
+

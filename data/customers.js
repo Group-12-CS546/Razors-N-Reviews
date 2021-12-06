@@ -66,16 +66,23 @@ module.exports = {
   },
 
    
-
     
    
   
    
     async createUser(firstname,lastname,email,username,password,profilePicture,state,city,age) {
 
-      
 
-       if(firstname===undefined){
+
+      /*
+        TODO
+        : How to check if no parameter provided??
+
+       */
+
+
+
+       if(firstname==undefined){
         throw 'Parameter not provided'
       }
       
@@ -168,6 +175,26 @@ module.exports = {
 
        if (!lastname ) throw 'Lastname not provided or only empty spaces provided';
 
+       
+       /*
+        ************* For validating input as character only **********************
+        */
+      
+      function isCharacterALetter(char) {
+        char=lastname
+        value=/^[a-zA-Z]+$/.test(char);
+        // console.log(value);  
+        return value
+      }
+
+      let test2=isCharacterALetter(lastname)
+      if(test2){
+
+      }
+      else{
+        throw 'Lastname should only be characters'
+      }
+
 
 
         /*
@@ -178,6 +205,13 @@ module.exports = {
         if(username.length<3){
             throw 'Username should contain more than two characters '
         }
+
+
+        /*
+        ************* For validating input as character only **********************
+        */
+
+  
 
         /*
         ************* Username Alphanumeric check **********************
@@ -209,21 +243,6 @@ module.exports = {
         */
 
       
-
-      function ischar(char) {
-        char=lastname
-        value=/^[a-zA-Z]+$/.test(char);
-        // console.log(value);  
-        return value
-      }
-
-      let test_lastname=ischar(lastname)
-      if(test_lastname){
-
-      }
-      else{
-        throw 'Lastname should only be characters'
-      }
          
         /*
         ************* Username validation ends**********************
@@ -256,7 +275,8 @@ module.exports = {
 
         
         
-
+       
+    
 
        
         

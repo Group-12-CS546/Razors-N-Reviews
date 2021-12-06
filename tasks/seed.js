@@ -11,14 +11,14 @@ const main = async() => {
     
     
     const db = await dbConnection();
-    await db.dropDatabase();
+    // await db.dropDatabase();
 
     // const user1 = await customersData.createUser("firstname","lastname","email","username","password","profilePicture","city","state","age");
     // console.log('************* User has been Added **********************');
     // console.log(user1);
     // console.log('************* User has been Added **********************');
     // console.log('----------------------------------------------------------')
-    const user3 = await customersData.createUser("hello","Hello","EMail@email.com","username88855","password","profilePicture","city","state","age");
+    const user3 = await customersData.createUser("newuser","Hello","EMail@email.com","username","password","profilePicture","city","state","age");
     console.log('************* User has been Added **********************');
     console.log(user3);
     // console.log('************* User has been Added **********************');

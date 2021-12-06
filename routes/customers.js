@@ -66,30 +66,30 @@ router.post("/login", async(req, res) => {
     if (typeof req.body.password != 'string') {
         errorcode= true;
         res.status(400);
-        return res.render("users/login", { hasErrors: hasErrors, errors: errors, message: "The entered password must be string only" });
+        return res.render("users/login", {errorcode: errorcode, hasErrors: hasErrors, errors: errors, message: "The entered password must be string only" });
     }
     var len;
     for (var i = 0, len = req.body.password.length; i < len; ++i) {
         if (req.body.password.charAt(i) === ' ') {
             errorcode= true;
             res.status(400);
-            return res.render("users/login", { hasErrors: hasErrors, errors: errors, message: "Username cannot have spaces!" });
+            return res.render("users/login", {errorcode: errorcode, hasErrors: hasErrors, errors: errors, message: "Username cannot have spaces!" });
         }
     }
     if (req.body.password.length < 6) {
         errorcode= true;
         res.status(400);
-        return res.render("users/login", { hasErrors: hasErrors, errors: errors, message: "Password should be greater than 6 characters" });
+        return res.render("users/login", {errorcode: errorcode, hasErrors: hasErrors, errors: errors, message: "Password should be greater than 6 characters" });
     }
     if (req.body.username.trim().length == 0) {
         errorcode= true;
         res.status(400);
-        return res.render("users/login", { hasErrors: hasErrors, errors: errors, message: "Username cannot be only spaces" });
+        return res.render("users/login", {errorcode: errorcode, hasErrors: hasErrors, errors: errors, message: "Username cannot be only spaces" });
     }
     if (req.body.password.trim().length == 0) {
         errorcode= true;
         res.status(400);
-        return res.render("users/login", { hasErrors: hasErrors, errors: errors, message: "Password cannot be only spaces" });
+        return res.render("users/login", {errorcode: errorcode, hasErrors: hasErrors, errors: errors, message: "Password cannot be only spaces" });
     }
     
  
@@ -106,13 +106,15 @@ router.post("/login", async(req, res) => {
             console.log(req.session.user, "req.session.user")
             res.status(200).render("users/private", { username: userData.username, title: "Login", heading: "Login" });
         } else {
+            errorcode= true;
             res.status(400);
-            res.render("users/login", { error: "Either the username or password is invalid", title: "Login", heading: "Login", message: "Either the username or password is invalid" });
+            return res.render("users/login", {errorcode: errorcode, error: "Either the username or password is invalid", title: "Login", heading: "Login", message: "Either the username or password is invalid" });
         }
     } catch (error) {
+        errorcode= true;
        
         res.status(400);
-        res.render("users/login", { error: "Either the username or password is invalid", title: "Login", heading: "Login", message: "Either the username or password is invalid" });
+        return res.render("users/login", {errorcode: errorcode, error: "Either the username or password is invalid", title: "Login", heading: "Login", message: "Either the username or password is invalid" });
     }
  
 });
