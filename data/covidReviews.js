@@ -9,27 +9,28 @@ const customers = mongoCollections.customers;
 // const uuid = require('uuid/v4');
 
 module.exports = {
-	async addReview(reviewId, salonId, customerId, covidRating) {
+	async addCovidReview(reviewId, salonId, covidRating) {
 		if (!reviewId || typeof reviewId != "string")
 			throw "Salon ID must be given as a string";
 		if (!salonId || typeof salonId != "string")
 			throw "Salon ID must be given as a string";
 		if (!customerId || typeof customerId != "string")
 			throw "CustomerId text must be given as a string";
-		if (!rating || typeof rating != "number" || rating < 1 || rating > 5)
-			throw "rating must be given as a number from 1 to 5";
-		if (!reviewPicture || reviewPicture == "") {
-			reviewPicture = "";
-		}
-
-		const covidReviewCollection = await reviews();
+		if (
+			!rating ||
+			typeof covidRating != "number" ||
+			covidRating < 1 ||
+			covidRating > 5
+		)
+			throw "covidRating must be given as a number from 1 to 5";
+		const revCollection = await reviews();
 		let newReview = {
 			reviewId: reviewId,
 			salonId: salonId,
 			customerId: customerId,
 			covidRating: covidRating,
 		};
-		const alreadyReviewed = await reviewCollection.findOne({
+		/* const alreadyReviewed = await reviewCollection.findOne({
 			$and: [
 				{
 					salonId: salonId,
@@ -38,15 +39,20 @@ module.exports = {
 					customerId: customerId,
 				},
 			],
-		});
-		if (alreadyReviewed) throw "This user already reviewed this Salon";
-		const insertInfo = await covidReviewCollection.insertOne(newReview);
+		}); 
+		if (alreadyReviewed) throw "This user already reviewed this Salon";*/
+		let parsedId = ObjectId(reviewId);
+		//const insertInfo = await revCollection.insertOne(newReview);
+		const insertInfo = await revCollection.updateOne(
+			{ _id: parsedId },
+			{ $push: { covidRating: covidRating } }
+		);
 		// if (insertInfo.insertedCount === 0) throw "could not add review";
 
-		const salCollection = await salons();
-		const customerCollection = await customers();
-		const salCollection = ObjectId.createFromHexString(salonId);
-		const objIdForCust = ObjectId.createFromHexString(customerId);
+		//const salCollection = await salons();
+
+		/* const salCollection = ObjectId.createFromHexString(salonId);
+		const objIdForCust = ObjectId.createFromHexString(customerId); */
 
 		// const insertInfo = await commentCollection.insertOne(newAlbum);
 
@@ -78,7 +84,7 @@ module.exports = {
 		return review;
 	},
 
-	async getReview(id) {
+	async getCovidReview(id) {
 		if (!id) throw "id must be given";
 		if (typeof id === "string") id = ObjectId.createFromHexString(id);
 		const reviewCollection = await reviews();
@@ -87,15 +93,15 @@ module.exports = {
 		return review;
 	},
 
-	async getAllReviews() {
+	/* async getAllReviews() {
 		const reviewCollection = await reviews();
 		const reviewList = await reviewCollection.find({}).toArray();
 		if (reviewList.length === 0) throw "no reviews in the collection";
 		return reviewList;
-	},
+	}, */
 
 	async updateReview(id, updatedReview) {
-		if (typeof id === "string") id = ObjectId.createFromHexString(id);
+		if (typeof id === "string") id = ObjectId(id);
 		const reviewCollection = await reviews();
 		const updatedReviewData = {};
 		if (updatedReview.reviewText) {
