@@ -58,17 +58,38 @@ const create = async function create(name, website, service, address, city, stat
         throw 'longitude cannot be null or empty'
     }
     //To check longitude is string
-    if (typeof longitude != 'number') {
-        throw 'The entered longitude must be a number'
+    // if (typeof longitude != 'number') {
+    //     throw 'The entered longitude must be a number'
+    // }
+    // if (!isNaN(longitude % 1) && longitude % 1 !== 0) {
+    //     throw 'The entered longitude must be a number'
+    // }
+
+    var decimal = /^[-+]?[0-9]+\.[0-9]+$/;
+
+    if (!longitude.match(decimal)) {
+        // alert('Please enter valid float');
+        throw 'The entered longitude must be a float'
     }
+
+    if (!latitude.match(decimal)) {
+        // alert('Please enter valid float');
+        throw 'The entered latitude must be a float'
+    }
+
     //To check latitude is null or empty
     if (latitude.length == 0) {
         throw 'latitude cannot be null or empty'
     }
     //To check latitude is string
-    if (typeof latitude != 'number') {
-        throw 'The entered latitude must be a number'
-    }
+    // if (typeof latitude != 'number') {
+    //     throw 'The entered latitude must be a number'
+    // }
+
+    // if (!isNaN(latitude % 1) && latitude % 1 !== 0) {
+    //     throw 'The entered latitude must be a number'
+    // }
+
     //To check website is null or empty
     if (website.length == 0) {
         throw 'website cannot be null or empty'
@@ -80,8 +101,8 @@ const create = async function create(name, website, service, address, city, stat
 
     if (service.length === 0) throw 'You must provide at least one service.';
 
-    if (!service || !Array.isArray(service))
-        throw 'You must provide an array of service';
+    // if (!service || !Array.isArray(service))
+    //     throw 'You must provide an array of service';
 
     for (var k = 0; k < service.length; k++) {
         if (typeof service[k] != 'string') {
@@ -128,13 +149,13 @@ const create = async function create(name, website, service, address, city, stat
     let newsalons = {
         name: name,
         website: website,
-        service: service,
+        service: [service],
         address: address,
         city: city,
         state: state,
         zip: zip,
-        longitude: longitude,
-        latitude: latitude,
+        longitude: parseFloat(longitude),
+        latitude: parseFloat(latitude),
         rating: 0,
         covidRating: 0,
         reviewId: []
@@ -145,8 +166,8 @@ const create = async function create(name, website, service, address, city, stat
 
     const allSalons = await this.getAll();
     allSalons.forEach(element => {
-        for(var i = 0; i < element.name.length; i++) {
-            if(element.name === name) {
+        for (var i = 0; i < element.name.length; i++) {
+            if (element.name === name) {
                 throw "Salon name already in use"
             }
         }
@@ -370,14 +391,16 @@ const update = async function update(salonId, name, website, service, address, c
 
 
 const getSalonViaSearch = async function getSalonViaSearch(search) {
-        if (!search) throw "Error (getSalonViaSearch): Must provide search.";
-        if (typeof(search) !== "string") throw "Error (getSalonViaSearch): Search must be a string.";
-        const salonCollection = await salons();
-        const query = new RegExp(search, "i");
-        console.log("query",query)
-        const salonList = await salonCollection.find({ $or: [ {service: {$regex: query}}, {name: {$regex: query}} ] }).toArray();
-        console.log("salonList",salonList);
-        return salonList;
+    console.log("search*********", search)
+    if (!search) throw "Error (getSalonViaSearch): Must provide search.";
+    if (typeof(search) !== "string") throw "Error (getSalonViaSearch): Search must be a string.";
+    const salonCollection = await salons();
+    console.log("salonCollection***", salonCollection.length)
+    const query = new RegExp(search, "i");
+    console.log("query", query)
+    const salonList = await salonCollection.find({ $or: [{ service: { $regex: query } }, { name: { $regex: query } }] }).toArray();
+    console.log("salonList", salonList);
+    return salonList;
 }
 
 module.exports = {
