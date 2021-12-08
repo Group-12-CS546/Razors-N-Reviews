@@ -1,7 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const salons = mongoCollections.salons;
 let { ObjectId } = require('mongodb');
- 
+
 const create = async function create(name, website, service, address, city, state, zip, longitude, latitude) {
     if (!name) throw 'You must provide a name for your salon';
     if (!website) throw 'You must provide a website for your salon';
@@ -12,7 +12,7 @@ const create = async function create(name, website, service, address, city, stat
     if (!zip) throw 'You must provide a zip for your salon';
     if (!longitude) throw 'You must provide a longitude for your salon';
     if (!latitude) throw 'You must provide a latitude for your salon';
- 
+
     //To check name is null or empty
     if (name.length == 0) {
         throw 'Name cannot be null or empty'
@@ -58,17 +58,38 @@ const create = async function create(name, website, service, address, city, stat
         throw 'longitude cannot be null or empty'
     }
     //To check longitude is string
-    if (typeof longitude != 'number') {
-        throw 'The entered longitude must be a number'
-    }
+    // if (typeof longitude != 'number') {
+    //     throw 'The entered longitude must be a number'
+    // }
+    // if (!isNaN(longitude % 1) && longitude % 1 !== 0) {
+    //     throw 'The entered longitude must be a number'
+    // }
+
+    var decimal = /^[-+]?[0-9]+\.[0-9]+$/;
+
+    // if (!longitude.match(decimal)) {
+    //     // alert('Please enter valid float');
+    //     throw 'The entered longitude must be a float'
+    // }
+
+    // if (!latitude.match(decimal)) {
+    //     // alert('Please enter valid float');
+    //     throw 'The entered latitude must be a float'
+    // }
+
     //To check latitude is null or empty
     if (latitude.length == 0) {
         throw 'latitude cannot be null or empty'
     }
     //To check latitude is string
-    if (typeof latitude != 'number') {
-        throw 'The entered latitude must be a number'
-    }
+    // if (typeof latitude != 'number') {
+    //     throw 'The entered latitude must be a number'
+    // }
+
+    // if (!isNaN(latitude % 1) && latitude % 1 !== 0) {
+    //     throw 'The entered latitude must be a number'
+    // }
+
     //To check website is null or empty
     if (website.length == 0) {
         throw 'website cannot be null or empty'
@@ -77,12 +98,12 @@ const create = async function create(name, website, service, address, city, stat
     if (typeof website != 'string') {
         throw 'The entered website must be a string'
     }
- 
+
     if (service.length === 0) throw 'You must provide at least one service.';
- 
-    if (!service || !Array.isArray(service))
-        throw 'You must provide an array of service';
- 
+
+    // if (!service || !Array.isArray(service))
+    //     throw 'You must provide an array of service';
+
     for (var k = 0; k < service.length; k++) {
         if (typeof service[k] != 'string') {
             throw 'service should be string'
@@ -122,32 +143,43 @@ const create = async function create(name, website, service, address, city, stat
     } else {
         throw 'Entered url should start with http://www.'
     }
- 
+
     const salonsCollection = await salons();
- 
+
     let newsalons = {
         name: name,
         website: website,
-        service: service,
+        service: [service],
         address: address,
         city: city,
         state: state,
         zip: zip,
-        longitude: longitude,
-        latitude: latitude,
+        longitude: parseFloat(longitude),
+        latitude: parseFloat(latitude),
         rating: 0,
         covidRating: 0,
         reviewId: []
     };
- 
+
+    // const salonAvailable = await salonsCollection.findOne({ name: newsalons.name });
+    // if (salonAvailable) throw "salon name already in use";
+
+    const allSalons = await this.getAll();
+    allSalons.forEach(element => {
+        for (var i = 0; i < element.name.length; i++) {
+            if (element.name === name) {
+                throw "Salon name already in use"
+            }
+        }
+    });
     const insertInfo = await salonsCollection.insertOne(newsalons);
     if (insertInfo.insertedCount === 0) throw 'Could not add salons';
- 
+
     const newId = insertInfo.insertedId;
     const salon = await this.get(newId.toString());
     return JSON.parse(JSON.stringify(salon));
 }
- 
+
 const get = async function get(salonId) {
     if (!salonId) throw 'You must provide an salonId to search for';
     if (salonId.length == 0) {
@@ -161,23 +193,23 @@ const get = async function get(salonId) {
         throw 'Not valid ObjectID'
     }
     let x = newObjId.toString();
- 
+
     let parsedId = ObjectId(salonId);
- 
+
     const salonCollection = await salons();
     const salonDetails = await salonCollection.findOne({ _id: parsedId });
     if (salonDetails === null) throw 'No salon found with that id';
- 
+
     return JSON.parse(JSON.stringify(salonDetails));
 }
- 
+
 const getAll = async function getAll() {
     const salonCollection = await salons();
- 
+
     const salonList = await salonCollection.find({}).toArray();
     return JSON.parse(JSON.stringify(salonList));
 }
- 
+
 const remove = async function remove(salonId) {
     if (!salonId) throw 'You must provide an salonId to search for';
     if (salonId.length == 0) {
@@ -192,18 +224,18 @@ const remove = async function remove(salonId) {
     }
     let x = newObjId.toString();
     let parsedId = ObjectId(salonId);
- 
+
     const salonCollection = await salons();
     const deletionInfo = await salonCollection.deleteOne({ _id: parsedId });
- 
+
     if (deletionInfo.deletedCount === 0) {
         throw `Could not delete salon with id of ${salonId}`;
     }
     return { deleted: true };
 }
- 
+
 const update = async function update(salonId, name, website, service, address, city, state, zip, longitude, latitude) {
- 
+
     if (!name) throw 'You must provide a name for your salon';
     if (!website) throw 'You must provide a website for your salon';
     if (!service) throw 'You must provide a service for your salon';
@@ -213,7 +245,7 @@ const update = async function update(salonId, name, website, service, address, c
     if (!zip) throw 'You must provide a zip for your salon';
     if (!longitude) throw 'You must provide a longitude for your salon';
     if (!latitude) throw 'You must provide a latitude for your salon';
- 
+
     //To check name is null or empty
     if (name.length == 0) {
         throw 'Name cannot be null or empty'
@@ -278,12 +310,12 @@ const update = async function update(salonId, name, website, service, address, c
     if (typeof website != 'string') {
         throw 'The entered website must be a string'
     }
- 
+
     if (service.length === 0) throw 'You must provide at least one service.';
- 
+
     if (!service || !Array.isArray(service))
         throw 'You must provide an array of service';
- 
+
     for (var k = 0; k < service.length; k++) {
         if (typeof service[k] != 'string') {
             throw 'service should be string'
@@ -323,18 +355,18 @@ const update = async function update(salonId, name, website, service, address, c
     } else {
         throw 'Entered url should start with http://www.'
     }
- 
+
     let newObjId = ObjectId();
     if (!ObjectId.isValid(newObjId)) {
         throw 'Not valid ObjectID'
     }
     let x = newObjId.toString();
- 
+
     let parsedId = ObjectId(salonId);
     if (parsedId === null) throw 'No salon found with that id';
- 
+
     const salonCollection = await salons();
- 
+
     const updatedSalonInfo = {
         name: name,
         website: website,
@@ -346,22 +378,36 @@ const update = async function update(salonId, name, website, service, address, c
         longitude: longitude,
         latitude: latitude
     };
- 
+
     const updateSalonInfo = await salonCollection.updateOne({ _id: parsedId }, { $set: updatedSalonInfo });
- 
+
     if (!updateSalonInfo.matchedCount && !updateSalonInfo.modifiedCount)
         throw 'Update failed';
- 
+
     var getParsedID = await this.get(salonId);
     const objCmp = JSON.parse(JSON.stringify(getParsedID));
     return objCmp;
 }
- 
+
+
+const getSalonViaSearch = async function getSalonViaSearch(search) {
+    console.log("search*********", search)
+    if (!search) throw "Error (getSalonViaSearch): Must provide search.";
+    if (typeof(search) !== "string") throw "Error (getSalonViaSearch): Search must be a string.";
+    const salonCollection = await salons();
+    console.log("salonCollection***", salonCollection.length)
+    const query = new RegExp(search, "i");
+    console.log("query", query)
+    const salonList = await salonCollection.find({ $or: [{ service: { $regex: query } }, { name: { $regex: query } }] }).toArray();
+    console.log("salonList", salonList);
+    return salonList;
+}
+
 module.exports = {
     create,
     get,
     getAll,
     remove,
-    update
+    update,
+    getSalonViaSearch
 }
-

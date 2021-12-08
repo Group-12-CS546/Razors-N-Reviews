@@ -41,6 +41,15 @@ module.exports = {
 
     },
 
+
+    async  getCustomerIdbyusername(username) {    
+      let userData = {};
+      const customerCollection = await customers();
+      const customer_details = await customerCollection.findOne({username:"username"});
+      return customer_details
+   },
+
+  
     /*
         ************* Get customers by ID**********************
     */ 
@@ -60,12 +69,38 @@ module.exports = {
 
     const customerCollection = await customers();
     const customer = await customerCollection.findOne({_id: ObjectId(id)});
-    if (customer === null) throw 'restaurant does not exist';
+    if (customer === null) throw 'Customer does not exist';
     customer._id=customer._id.toString();
     return customer;
   },
+  
 
+   async deleteCustomerbyId(id){
+
+
+
+   },
+
+   async deleteCustomerbyId(id){
    
+    if (!id) throw 'No id entered';
+    if(typeof id === 'string' && id.length==0){
+      throw 'Invalid id';
+    }
+
+    const ObjectId = require('mongodb').ObjectId;
+    if(!ObjectId.isValid(id)){
+      throw 'Not a valid ObjectId';
+    }
+      /* delete review from DB */
+      const reviewCollection = await customers();
+      const customerCollection = await customers();
+      const customerinfo = await customerCollection.deleteOne({_id: ObjectId(id)});
+      // const deletionInfo = await reviewCollection.deleteOne({ _id: ObjectId(reviewId) });
+      if (customerinfo.deletedCount === 0) throw `Could not delete user of ${id}.`;
+
+      return {userdeleted: true}; 
+  },
     
    
   
@@ -166,7 +201,7 @@ module.exports = {
         ************* Lastname is lowercase  and trimmed**********************
         */ 
        
-        lastname = lastname.toLowerCase();
+        lastname = lastname.toUpperCase();
         lastname=lastname.trim()
         
        /*

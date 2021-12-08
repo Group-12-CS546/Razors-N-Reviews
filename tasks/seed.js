@@ -18,9 +18,9 @@ const main = async() => {
     // console.log(user1);
     // console.log('************* User has been Added **********************');
     // console.log('----------------------------------------------------------')
-    const user3 = await customersData.createUser("newuser","Hello","EMail@email.com","username","password","profilePicture","city","state","age");
-    console.log('************* User has been Added **********************');
-    console.log(user3);
+    // const user3 = await customersData.createUser("newuser","Hello","EMail@email.com","username","password","profilePicture","city","state","age");
+    // console.log('************* User has been Added **********************');
+    // console.log(user3);
     // console.log('************* User has been Added **********************');
     // console.log('----------------------------------------------------------')
     // const user_all = await customersData.getAllCustomers();
@@ -35,12 +35,12 @@ const main = async() => {
     // console.log(typeof(user_id._id))
     // console.log(user_id);
 
-    console.log('****-----------Get customer by id ends----------------***')
+    // console.log('****-----------Get customer by id ends----------------***')
         
 
-    const safrronLounge = await salonsData.create("The Saffron Lounge", "http://www.saffronlounge.com", ["Makeup"], "New York City, New York", "New York", " NJ", "08820", 40.732628, -74.037628);
-    console.log(safrronLounge);
-    console.log('safrronLounge salon has been added successfully!');
+    // const safrronLounge = await salonsData.create("The Saffron Lounge", "http://www.saffronlounge.com", ["Makeup"], "New York City, New York", "New York", " NJ", "08820", 40.732628, -74.037628);
+    // console.log(safrronLounge);
+    // console.log('safrronLounge salon has been added successfully!');
 
 
         /*
@@ -48,9 +48,24 @@ const main = async() => {
         */   
     
 
-        const test1 = await reviewsData.create(safrronLounge._id,user3._id, 'This is amazing', 9)
-        console.log(test1)
-        console.log('Reviews added successfully')
+        // const test1 = await reviewsData.create(safrronLounge._id,user3._id, 'This is amazing', 9)
+        // console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;")
+        // console.log('****-----------Get customer by id with username----------------***')
+        // const testname = await customersData.getCustomerIdbyusername("username")
+        // console.log(testname)
+        const messi = await salonsData.create("messi", "http://www.saffrolounge.com", ["Makeup"], "New York City, New York", "New York", " NJ", "08820", 40.742628, -74.037628);
+    console.log(messi);
+    console.log('safrronLounge salon has been added successfully!');
+
+    const ronaldo = await salonsData.create("roandlo", "http://www.timeindialaunge.com", ["Makeup","Hair"], "324 Central Ave", "Jersey City", "NJ", "07307", 40.7429498, -74.0512955);
+    console.log(ronaldo);
+    console.log('timeLaunge salon has been added successfully!');
+        // console.log('****-----------Delete----------------***')
+        // const deleted = await customersData.deleteCustomerbyId("61af9824b9fb68035098b5c1")
+        // console.log(deleted)
+
+    
+        // console.log('Reviews added successfully')
 
         console.log('**********************')
         console.log('Done seeding database');
