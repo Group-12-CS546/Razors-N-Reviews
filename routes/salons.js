@@ -9,7 +9,7 @@ router.get('/salons', async(req, res) => {
         // res.status(200).json(salonsList)
         console.log("salonsList***", salonsList)
             // res.status(200).json(salonsList);
-        res.status(200).render("salons/list", { name: salonsList });
+        res.status(200).render("salons/list", { salonsList });
     } catch (e) {
         // res.status(404).json({ error: e });
         res.status(200).render("salons/error", { error: e });
@@ -17,19 +17,21 @@ router.get('/salons', async(req, res) => {
 });
 
 router.get('/salons/:salonId', async(req, res) => {
-    if (!req.params.salonId) {
-        res.status(400).json({ error: "should provide valid salons Id" });
-        return;
-    }
-    if (typeof req.params.salonId != 'string') {
-        res.status(400).json({ message: 'Id should be in string' })
-    }
+    console.log("body", req.params.salonId);
+    // if (!req.params.salonId) {
+    //     res.status(400).json({ error: "should provide valid salons Id" });
+    //     return;
+    // }
+    // if (typeof req.params.salonId != 'string') {
+    //     res.status(400).json({ error: 'Id should be in string' })
+    // }
     try {
         let salonsId = await salonsData.get(req.params.salonId);
-        // res.status(200).json(salonsId);
-        res.status(200).render("salons/salonsignup", { message: "You have successfully signed up", salonId: salonsId });
+        console.log("salonsId", salonsId)
+            // res.status(200).json(salonsId);
+        res.status(200).render("salons/salonprofile", { salonId: salonsId._id, name: salonsId.name, website: salonsId.website, service: salonsId.service, address: salonsId.address, city: salonsId.city, state: salonsId.state, zip: salonsId.zip, rating: salonsId.rating, covidRating: salonsId.covidRating, longitude: salonsId.longitude, latitude: salonsId.latitude });
     } catch (e) {
-        res.status(404).json({ error: 'Salon not found******' });
+        res.status(404).json({ error: "not found**********" });
     }
 });
 

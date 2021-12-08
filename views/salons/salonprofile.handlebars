@@ -2,17 +2,24 @@
 <main>
     {{!-- <h2>{{data.name}}</h2> --}}
     {{!-- <h1>{{this.data}}</h1> --}}
-    {{#each data}}
+    {{!-- {{#each data}} --}}
+    <h1>{{this.salonId}}</h1>
     <span>{{this.name}}</span>
     <span>{{this.address}}</span>
     <span>{{this.city}}</span>
     <span>{{this.rating}}</span>
-    {{/each}}
+    {{!-- {{/each}} --}}
+
+
+    <button type="submit" class="btn btn-primary">Post a Review</button>
+
+
+
     {{#if data}}
     <ul>
         {{#each data}}
         <li>
-            <a style="color: white;" href="/salons/">******{{this.data}}</a>
+            <a style="color: white;" href="/salons/">******{{this.salonId}}</a>
         </li>
         {{/each}}
     </ul>
