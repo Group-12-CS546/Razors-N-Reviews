@@ -19,9 +19,6 @@ app.use(session({
     saveUninitialized: true
 }));
 
-
-
-
 async function authentication(req, res, next) {
     if (req.session.user) {
         console.log('Authentication User');
@@ -47,8 +44,6 @@ app.use(async(req, res, next) => {
     next();
 })
 
-
-
 app.use('/private', (req, res, next) => {
     if (!req.session.AuthCookie) {
         res.status(403);
@@ -57,8 +52,6 @@ app.use('/private', (req, res, next) => {
         next();
     }
 });
-
-
 
 configRoutes(app);
 app.listen(3000, () => {

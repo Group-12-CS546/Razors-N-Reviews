@@ -1,0 +1,18 @@
+<main>
+    <!-- We should consider having review titles, otherwise rating will be header -->
+    <div class="card-full">
+        {{!-- <h1><a href="../reviews/{{reviewList.reviewId}}">{{this}}</a></h1> --}}
+        <p>Reviews of the Salon- {{name}} are:</p>
+        <p>{{this.reviews}}</p>
+        {{#each this.reviews}}
+            <p{{this}}></p>;
+        {{/each}}
+        {{!-- <p>{{this.reviews}}</p> --}}
+        {{!-- <p>Rating: {{newPost.rating}}/10</p> --}}
+        {{!-- <img src="/reviews/reviewPic/{{review._id}}" onerror="this.style.display='none'" alt="Review Picture" class="reviewImgIcon"> --}}
+        {{!-- <p>{{newPost.reviewText}}</p> --}}
+        {{!-- {{#if isReviewer}}
+            <p><a href="/reviews/{{id}}/edit">Edit Review</a></p>
+        {{/if}} --}}
+    </div>
+</main>

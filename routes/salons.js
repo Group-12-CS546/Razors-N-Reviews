@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const salonsData = data.salons;
+const reviewsData = data.reviews;
 
 router.get('/salons', async(req, res) => {
     try {
@@ -29,21 +30,25 @@ router.get('/salons/:salonId', async(req, res) => {
         let salonsId = await salonsData.get(req.params.salonId);
         console.log("salonsId", salonsId)
             // res.status(200).json(salonsId);
-        res.status(200).render("salons/salonprofile", { salonId: salonsId._id, name: salonsId.name, website: salonsId.website, service: salonsId.service, address: salonsId.address, city: salonsId.city, state: salonsId.state, zip: salonsId.zip, rating: salonsId.rating, covidRating: salonsId.covidRating, longitude: salonsId.longitude, latitude: salonsId.latitude });
+        let getReviews = await reviewsData.getAllreviewsofSalon(req.params.salonId)
+        console.log("getReviews", getReviews)
+
+        res.status(200).render("salons/salonprofile", { salonId: salonsId._id, name: salonsId.name, website: salonsId.website, service: salonsId.service, address: salonsId.address, city: salonsId.city, state: salonsId.state, zip: salonsId.zip, rating: salonsId.rating, covidRating: salonsId.covidRating, longitude: salonsId.longitude, latitude: salonsId.latitude, getReviews: getReviews });
     } catch (e) {
+        console.log("e**", e)
         res.status(404).json({ error: "not found**********" });
     }
 });
 
 router.get("/manage", async(req, res) => {
-    // if (!req.session.AuthCookie) {
-    //     res.status(401).redirect("/users/login");
-    // } else {
+    if (!req.session.AuthCookie) {
+        res.status(401).redirect("/salons");
+    }
     try {
         const salonsList = await salonsData.getAll();
-        console.log("salonsList***", salonsList)
-            // const userLoggedIn = (req.session.AuthCookie) ? true : false;
-            // res.status(200).render("", { restaurants: restaurantList, userLoggedIn: true })
+        // console.log("salonsList***", salonsList)
+        // const userLoggedIn = (req.session.AuthCookie) ? true : false;
+        // res.status(200).render("", { restaurants: restaurantList, userLoggedIn: true })
         res.status(200).render("salons/salonsignup", { message: "You have p", salonsList: salonsList });
     } catch (e) {
         console.log(e);
@@ -52,85 +57,120 @@ router.get("/manage", async(req, res) => {
     // }
 });
 
+router.get("/manage", (req, res) => {
+    console.log("req.session.AuthCookie*********", req.session.AuthCookie)
+    if (!req.session.AuthCookie)
+    // res.render("users/login", { title: "Login", heading: "Login" });
+        res.redirect("salons/salonsignup", { title: "Login", heading: "Login" });
+    else
+        res.redirect("/manage");
+});
+
+
 router.post('/post', async(req, res) => {
     let salonInfo = req.body;
     console.log("salonInfo*********", salonInfo)
+    let errorcode = false;
+    const errors = [];
+    if (!req.session.AuthCookie) {
+        res.status(401).redirect("/");
+    }
     if (!salonInfo) {
-        res.status(400).json({ error: 'You must provide proper data to create a salon' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please enter all the fields" });
     }
     if (!salonInfo.name) {
-        res.status(400).json({ error: 'You must provide a name' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a valid name" });
+
     }
     if (typeof salonInfo.name != 'string') {
-        res.status(400).json({ message: 'Salon name should be in string' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a name in string format" });
     }
     if (!salonInfo.website) {
-        res.status(400).json({ error: 'You must provide a website' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a valid website" });
     }
     if (typeof salonInfo.website != 'string') {
-        res.status(400).json({ message: 'Salon website should be in string' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a website in string" });
     }
     if (!salonInfo.service) {
-        res.status(400).json({ error: 'You must provide a service' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a valid service name" });
     }
     // if (!Array.isArray(salonInfo.service)) {
     //     res.status(400).json({ error: "service should be an array" });
     //     return;
     // }
     if (!salonInfo.address) {
-        res.status(400).json({ error: 'You must provide a address' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a valid address" });
     }
     if (typeof salonInfo.address != 'string') {
-        res.status(400).json({ message: 'Salon address should be in string' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a address in string" });
     }
     if (!salonInfo.city) {
-        res.status(400).json({ error: 'You must provide a city' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a city name" });
     }
     if (typeof salonInfo.city != 'string') {
-        res.status(400).json({ message: 'Salon city should be in string' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a city name in string" });
     }
     if (!salonInfo.state) {
-        res.status(400).json({ error: 'You must provide a state' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a state" });
     }
     if (typeof salonInfo.state != 'string') {
-        res.status(400).json({ message: 'Salon stste should be in string' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a state name in string" });
     }
     if (!salonInfo.zip) {
-        res.status(400).json({ error: 'You must provide a zip' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a zip code" });
     }
     if (typeof salonInfo.zip != 'string') {
-        res.status(400).json({ message: 'Salon zip should be in string' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a zip code in string" });
     }
     if (!salonInfo.longitude) {
-        res.status(400).json({ error: 'You must provide a longitude' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a valid longitude" });
     }
-    // if (typeof salonInfo.longitude != 'number') {
-    //     res.status(400).json({ message: 'Salon longitute should be in number' });
-    //     return;
-    // }
+    if (typeof salonInfo.longitude != 'number') {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a longitude in number format" });
+    }
     if (!salonInfo.latitude) {
-        res.status(400).json({ error: 'You must provide a latitude' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a valid latitude" });
+
     }
-    // if (typeof salonInfo.latitude != 'number') {
-    //     res.status(400).json({ message: 'Salon latitude should be in number' });
-    //     return;
-    // }
+    if (typeof salonInfo.latitude != 'number') {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a latitude in number format" });
+    }
 
     try {
         const newSalon = await salonsData.create(
@@ -146,15 +186,15 @@ router.post('/post', async(req, res) => {
         );
         console.log("newSalon", newSalon)
             // res.status(200).json(newSalon);
-        res.status(200).json({ message: "You have success signedup" });
+        res.status(200).json({ message: "You have successfully created new salon" });
         res.redirect("/manage");
     } catch (e) {
         res.status(404).json({ error: e });
-        res.status(404).render("salons/error", { message: "You have p", error: e });
+        res.status(404).render("salons/error", { message: "not created", error: e });
     }
 });
 
-router.delete('/salons/:salonId/delete', async(req, res) => {
+router.get('/salons/:salonId/delete', async(req, res) => {
     console.log("*delete********", req.params.salonId)
     if (!req.params.salonId) {
         res.status(400).json({ error: "should provide valid salon Id to delete" });

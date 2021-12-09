@@ -128,8 +128,8 @@ router.post("/login", async(req, res) => {
 
             const customer_details = await customerCollection.findOne({ username: req.session.user.Username });
             console.log("*********", customer_details)
-
-
+            const testid = customer_details._id
+            req.session.user = { id: testid }
             console.log(req.session.user, "req.session.user")
             res.status(200).render("users/private", { age: customer_details.age, state: customer_details.state, city: customer_details.city, email: customer_details.email, email: customer_details.email, firstname: customer_details.firstname, lastname: customer_details.lastname, username: customer_details.username, title: "Login", heading: "Login" });
         } else {

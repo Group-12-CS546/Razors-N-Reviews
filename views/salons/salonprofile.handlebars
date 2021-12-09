@@ -1,18 +1,51 @@
-<h1>Characters Found</h1>
+{{!-- <h1>Characters Found</h1> --}}
 <main>
-    {{!-- <h2>{{data.name}}</h2> --}}
-    {{!-- <h1>{{this.data}}</h1> --}}
-    {{!-- {{#each data}} --}}
-    <h1>{{this.salonId}}</h1>
-    <span>{{this.name}}</span>
-    <span>{{this.address}}</span>
-    <span>{{this.city}}</span>
-    <span>{{this.rating}}</span>
-    {{!-- {{/each}} --}}
+
+    <div class="card-deck">
+        <div class="col-sm-6">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top">
+                <div class="card-body">
+                    {{!-- <h5 class="card-title"><a href="/salons/{{salonId._id}}">{{this.name}}</a></h5> --}}
+                    <p class="card-text">Name: {{this.name}}</p>
+                    <p class="card-text">Website: {{this.website}}</p>
+                    <p class="card-text">Service: {{this.service}}</p>
+                    <p class="card-text">Address: {{this.address}}</p>
+                    <p class="card-text">City: {{this.city}}</p>
+                    <p class="card-text">State: {{this.state}}</p>
+                    <p class="card-text">Zip: {{this.zip}}</p>
+                    <p class="card-text">Longitude: {{this.longitude}}</p>
+                    <p class="card-text">Latitude: {{this.latitude}}</p>
+                    <p class="card-text">Rating: {{this.rating}}</p>
+                    <p class="card-text">CovidRating: {{this.covidRating}}</p>
+                    {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-    <button type="submit" class="btn btn-primary">Post a Review</button>
+    <div class="card-deck">
+        <div class="col-sm-6">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top">
+                <div class="card-body">
+                    {{!-- <h5 class="card-title"><a href="/salons/{{salonId._id}}">{{this.name}}</a></h5> --}}
+                    {{#each getReviews}}
+                    <p class="card-text">Review: {{this}}</p>
+                    {{/each}}
+                    {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <button type="submit" class="btn btn-primary">delete</button>
+
+    {{!-- <button type="submit" class="btn btn-primary">review
+        <a href=""></a>
+    </button> --}}
 
     {{!-- <form method="post" action="/salons/{{salonId}}/delete?_method=DELETE">
         <input type="hidden" name="_method" value="DELETE">
@@ -20,11 +53,11 @@
             <button class="dropbtn">Options</button>
             <div class="dropdown-content">
                 {{!-- <p><a href="/reviews/{{this.review._id}}/edit">Edit Review</a></p> --}}
-                {{!-- <p><a href="../sal/{{this.restaurant._id}}/{{this.review._id}}/delete">Delete Review</a></p> --}}
-                {{!-- <p><a href="/salons/{{this.salonId}}/delete">Delete Review</a></p>
+    {{!-- <p><a href="../sal/{{this.restaurant._id}}/{{this.review._id}}/delete">Delete Review</a></p> --}}
+    {{!-- <p><a href="/salons/{{this.salonId}}/delete">Delete Review</a></p>
             </div>
         </div>
-    </form> --}} 
+    </form> --}}
 
 
     <form id="login" action="/salons/{{this.salonId}}/delete" method="POST">
@@ -33,10 +66,41 @@
             <div class="dropdown-content">
                 {{!-- <p><a href="/reviews/{{this.review._id}}/edit">Edit Review</a></p>
                 <p><a href="../sal/{{this.restaurant._id}}/{{this.review._id}}/delete">Delete Review</a></p> --}}
-                <p><a href="/salons/{{this.salonId}}/delete">Delete Review</a></p>
+                {{!-- <p><a href="/salons/{{this.salonId}}/delete">Delete Salon</a></p> --}}
+                <p><a href="/salons/{{this.salonId}}/delete">Delete Salon</a></p>
             </div>
         </div>
-    </form> 
+    </form>
+
+
+
+    <div class="container">
+        <h1>Review </h1>
+        <form id="login" class="center padding" action="/reviews/reviews/{{this.salonId}}" method="POST">
+            <div class="form-group">
+                <label for="rating">Rating:</label>
+                <input type="text" class="form-control" id="rating" name="rating" aria-describedby="rating"
+                    placeholder="Rating">
+
+            </div>
+            <div class="form-group">
+                <label for="reviewText">ReviewText:</label>
+                <input type="text" class="form-control" id="reviewText" name="reviewText" aria-describedby="reviewText"
+                    placeholder="reviewText">
+
+            </div>
+            <button type="submit" id="btn-id" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
+        </form>
+
+        {{#if errorcode}}
+
+        <p class="error">{{message}}</p>
+        {{/if}}
+
+    </div>
+
+
 
 
     {{#if data}}
