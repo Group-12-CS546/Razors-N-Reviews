@@ -17,7 +17,7 @@ router.get('/salons', async(req, res) => {
 });
 
 router.get('/salons/:salonId', async(req, res) => {
-    console.log("body", req.params.salonId);
+    console.log("salon if to print*************************", req.params.salonId);
     // if (!req.params.salonId) {
     //     res.status(400).json({ error: "should provide valid salons Id" });
     //     return;
@@ -154,7 +154,8 @@ router.post('/post', async(req, res) => {
     }
 });
 
-router.delete('/salons/:salonId', async(req, res) => {
+router.delete('/salons/:salonId/delete', async(req, res) => {
+    console.log("*delete********", req.params.salonId)
     if (!req.params.salonId) {
         res.status(400).json({ error: "should provide valid salon Id to delete" });
         return;
@@ -169,11 +170,17 @@ router.delete('/salons/:salonId', async(req, res) => {
         return;
     }
     try {
-        const getSalonId = await salonsData.get(req.params.salonId);
-        await salonsData.remove(req.params.salonId);
-        res.status(200).json({ getSalonId: getSalonId._id, deleted: true });
+        // const getSalonId = await salonsData.get(req.params.salonId);
+        deleteSalon = await salonsData.remove(req.params.salonId);
+        // res.status(200).json({ getSalonId: getSalonId._id, deleted: true });
+        if (deleteSalon) {
+            return res.render("salons/delete", { message: "deleted" });
+            // res.status(200).json({ getSalonId: getSalonId._id, deleted: true });
+        } else {
+            res.status(400).render("salons/error", { error: 'not deleted' });
+        }
     } catch (e) {
-        res.status(404).json({ error: 'Salon not deleted properly' });
+        res.status(404).render("salons/error", { error: e });
     }
 });
 

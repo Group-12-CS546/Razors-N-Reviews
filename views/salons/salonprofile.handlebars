@@ -12,7 +12,31 @@
 
 
     <button type="submit" class="btn btn-primary">Post a Review</button>
+    <button type="submit" class="btn btn-primary">delete</button>
 
+    {{!-- <form method="post" action="/salons/{{salonId}}/delete?_method=DELETE">
+        <input type="hidden" name="_method" value="DELETE">
+        <div class="dropdown">
+            <button class="dropbtn">Options</button>
+            <div class="dropdown-content">
+                {{!-- <p><a href="/reviews/{{this.review._id}}/edit">Edit Review</a></p> --}}
+                {{!-- <p><a href="../sal/{{this.restaurant._id}}/{{this.review._id}}/delete">Delete Review</a></p> --}}
+                {{!-- <p><a href="/salons/{{this.salonId}}/delete">Delete Review</a></p>
+            </div>
+        </div>
+    </form> --}} 
+
+
+    <form id="login" action="/salons/{{this.salonId}}/delete" method="POST">
+        <div class="dropdown">
+            <button class="dropbtn">Options</button>
+            <div class="dropdown-content">
+                {{!-- <p><a href="/reviews/{{this.review._id}}/edit">Edit Review</a></p>
+                <p><a href="../sal/{{this.restaurant._id}}/{{this.review._id}}/delete">Delete Review</a></p> --}}
+                <p><a href="/salons/{{this.salonId}}/delete">Delete Review</a></p>
+            </div>
+        </div>
+    </form> 
 
 
     {{#if data}}
