@@ -41,6 +41,15 @@ module.exports = {
 
     },
 
+
+    async  getCustomerIdbyusername(username) {    
+      let userData = {};
+      const customerCollection = await customers();
+      const customer_details = await customerCollection.findOne({username:"username"});
+      return customer_details
+   },
+
+  
     /*
         ************* Get customers by ID**********************
     */ 
@@ -60,40 +69,57 @@ module.exports = {
 
     const customerCollection = await customers();
     const customer = await customerCollection.findOne({_id: ObjectId(id)});
-    if (customer === null) throw 'restaurant does not exist';
+    if (customer === null) throw 'Customer does not exist';
     customer._id=customer._id.toString();
     return customer;
   },
+  
 
+   async deleteCustomerbyId(id){
+
+
+
+   },
+
+   async deleteCustomerbyId(id){
    
+    if (!id) throw 'No id entered';
+    if(typeof id === 'string' && id.length==0){
+      throw 'Invalid id';
+    }
 
+    const ObjectId = require('mongodb').ObjectId;
+    if(!ObjectId.isValid(id)){
+      throw 'Not a valid ObjectId';
+    }
+      /* delete review from DB */
+      const reviewCollection = await customers();
+      const customerCollection = await customers();
+      const customerinfo = await customerCollection.deleteOne({_id: ObjectId(id)});
+      // const deletionInfo = await reviewCollection.deleteOne({ _id: ObjectId(reviewId) });
+      if (customerinfo.deletedCount === 0) throw `Could not delete user of ${id}.`;
+
+      return {userdeleted: true}; 
+  },
     
    
   
    
     async createUser(firstname,lastname,email,username,password,profilePicture,state,city,age) {
 
-        
 
-        /*
-        ************* Firstname validation **********************
-        */   
-        
-        
-        /*
-        ************* Firstname is lowercase  and more than 2 characters**********************
-        */ 
-       
-        firstname = firstname.toLowerCase();
-        
-        
-       
-        /*
-        ************* For empty string **********************
-        */ 
-        
-        if (!firstname ) throw 'Firstname not provided';
 
+      /*
+        TODO
+        : How to check if no parameter provided??
+       */
+
+
+
+       if(firstname==undefined){
+        throw 'Parameter not provided'
+      }
+      
         /*
         ************* For firstname  not of  string type **********************
         */ 
@@ -101,37 +127,109 @@ module.exports = {
         if(typeof firstname !="string"  ){
            
             throw 'Firstname not of type string'
-          }
+        }
+      
+        /*
+        ************* Firstname is Uppercased and trimmed**********************
+        */
+        firstname = firstname.toUpperCase();
+        firstname=firstname.trim()
+
+
+        // console.log(firstname)
+
+       
+
+
+        /*
+        ************* For empty string **********************
+        */
+
+       if (!firstname ) throw 'Firstname not provided or only empty spaces provided';
+
+
+       
+       /*
+        ************* For validating input as character only **********************
+        */
+
+      
+
+      function isCharacterALetter(char) {
+        char=firstname
+        value=/^[a-zA-Z]+$/.test(char);
+        // console.log(value);  
+        return value
+      }
+
+      let test=isCharacterALetter(firstname)
+      if(test){
+
+      }
+      else{
+        throw 'Firstname should only be characters'
+      }
+     
+       
+
+
+      
+
+        /*
+        ************* Firstname validation ends**********************
+        */   
+    
+        
           
         
         /*
-        ************* Lastname validation **********************
-        */   
-        
-        
-        /*             
-        
-        ************* Lastname is lowercase  and more than 2 characters**********************
+        ************* Lastname validation  starts**********************
         */ 
-       
-        lastname = lastname.toLowerCase();
-                
-        /*
-        ************* For empty string **********************
-        */ 
-        
-        if (!lastname ) throw 'Lastname not provided';
 
-        /*
+         /*
         ************* For firstname  not of  string type **********************
         */ 
 
         if(typeof lastname !="string"  ){
            
             throw 'Lastname not of type string'
-          }
-          
+        }
         
+        /*             
+        
+        ************* Lastname is lowercase  and trimmed**********************
+        */ 
+       
+        lastname = lastname.toUpperCase();
+        lastname=lastname.trim()
+        
+       /*
+        ************* For empty string **********************
+        */
+
+       if (!lastname ) throw 'Lastname not provided or only empty spaces provided';
+
+       
+       /*
+        ************* For validating input as character only **********************
+        */
+      
+      function isCharacterALetter(char) {
+        char=lastname
+        value=/^[a-zA-Z]+$/.test(char);
+        // console.log(value);  
+        return value
+      }
+
+      let test2=isCharacterALetter(lastname)
+      if(test2){
+
+      }
+      else{
+        throw 'Lastname should only be characters'
+      }
+
+
 
         /*
         ************* Username validation **********************
@@ -141,6 +239,13 @@ module.exports = {
         if(username.length<3){
             throw 'Username should contain more than two characters '
         }
+
+
+        /*
+        ************* For validating input as character only **********************
+        */
+
+  
 
         /*
         ************* Username Alphanumeric check **********************
@@ -160,10 +265,52 @@ module.exports = {
         */
         
         if (!username ) throw 'User name not provided';
+
+        if(username.trim().length==0){
+          
+          throw 'Username cannot be empty spaces'
+        }
+
+         
+       /*
+        ************* For validating input as character only **********************
+        */
+
+      
          
         /*
         ************* Username validation ends**********************
         */
+        email= email.toLowerCase()
+        
+        if(!email){
+          throw 'Email not provided'
+        }
+        if(email.trim().length==0){
+          
+          throw 'Email cannot be empty spaces'
+        }
+
+        function validateEmail(email) 
+        {
+            
+            var re = /\S+@\S+\.\S+/;
+            return re.test(email);
+          }
+        console.log(validateEmail(email));
+        let email_result=validateEmail(email)
+
+        if(email_result){
+
+        }
+        else{
+          throw 'Email is not valid'
+        }
+
+        
+        
+       
+    
 
        
         
@@ -175,18 +322,17 @@ module.exports = {
 
         if(typeof username !="string" || typeof password !="string" ){
            
-          throw 'Parameter not of type string'
+          throw 'Password/Username not of type string'
         }
     
     
-        if(username.trim().length==0){
-          
-          throw 'Username cannot be empty spaces'
-        }
+       
         if(password.trim().length==0 ){
           
             throw 'Password cannot be empty spaces'
           }
+
+
         
         /*
         ************* Password validation Ends **********************
@@ -212,7 +358,7 @@ module.exports = {
           state: state,
           age: age,
           reviewId: [],
-          covidReviewIds:[],
+          covidReviewId:[],
           commentIds: []
          
         };

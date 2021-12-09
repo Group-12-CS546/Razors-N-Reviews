@@ -41,6 +41,6 @@ function closeCommentBox() {
     document.getElementById("row-override").style.display = "none";
 }
 
-// document.getElementById("routeToLogin").onclick = function () {
-//     location.href = "/users/login";
-// };
+document.getElementById("routeToLogin").onclick = function () {
+    location.href = "/users/login";
+};

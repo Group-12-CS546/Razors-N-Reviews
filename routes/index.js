@@ -8,7 +8,7 @@ const constructorMethod = (app) => {
     // app.use('', commentsRoutes);
     // app.use('', covidReviewsRoutes);
     app.use('', customersRoutes);
-    app.use('', reviewsRoutes);
+    app.use('/', reviewsRoutes);
     app.use('', salonsRoutes);
 
     app.use('*', (req, res) => {

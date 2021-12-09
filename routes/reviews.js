@@ -65,7 +65,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
       }
     });
 
-
+//check
     router.get('/reviews/alldata/:reviewId', async(req, res) => {
       try {
         const reviewList = await reviewsData.getReviewId(req.params.reviewId)
@@ -74,7 +74,8 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
           console.log("reviewList***", reviewList)
           //res.status(200).json(reviewList);
           //  res.status(200).render("reviews/reviewbyId", { message: "You have successfully signed up", name: reviewList });
-          res.status(200).render("reviews/review", { message: "You have successfully signed up", name: reviewList });
+          // res.status(200).render("reviews/reviewbyid", { message: "You have successfully signed up", name: reviewList });
+          res.status(200).render("reviews/review", { reviewList });
       } catch (e) {
           res.status(404).json({ error: e });
       }
@@ -104,7 +105,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
     }
     });
 
-    router.get("/manage/test", async(req, res) => {
+    router.get("/reviews/reviewforms/", async(req, res) => {
       // if (!req.session.AuthCookie) {
       //     res.status(401).redirect("/users/login");
       // } else {
@@ -119,58 +120,80 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
           // res.status(200).render("management", { restaurants: [], userLoggedIn: true })
       //}
       // }
+      //const x = req.params._id
       try {
-        const reviewList = await reviewsData.getReviewId(test)
+        //const reviewList = await reviewsData.getReviewId(x)
           //const salonsList = await salonsData.getAll();
           // res.status(200).json(salonsList)
-          console.log("reviewList***", reviewList)
+          //console.log("reviewList***", reviewList)
           //res.status(200).json(reviewList);
-           res.status(200).render("reviews/review", { message: "You have successfully given a review", reviewText: reviewList });
+           res.status(200).render("reviews/review");
       } catch (e) {
           res.status(404).json({ error: e });}
   });
   
 //create a review
+
     router.post('/reviews/:salonId', async (req, res) => {
+      console.log(req.params.salonId, 'req.paramss')
+      console.log(req.body, 'req.body')
       let reviewData = req.body;
-      if(!req.params.salonId)
-      {
-        res.status(400).json({ error: 'You must provide a valid Salon ID for review'});
-        return;
-      }
-      if (!reviewData.customersId) {
-        res.status(400).json({ error: 'You must provide customer ID for review'});
-        return;
-      }
-      if (!reviewData.reviewText) {
-        res.status(400).json({ error: 'You must provide a reviewer' });
-        return;
-      }
-      if (!reviewData.rating) {
-        res.status(400).json({ error: 'You must provide a rating' });
-        return;
-      }
+      console.log(reviewData, "reviewData")
+      console.log(req.session, 'req.session')
+      const user = req.session.user
+      console.log(user, 'user: post review')
     
+      // const salData = await salons.get(newPost.salonId)
+      //   const custData = await customers.getCustomerById(newPost.customersId)
+      // const redirectURL = "/salons/" + salonId;
+      //   return res.redirect(redirectURL);
+      
+      // if(!req.params.salonId)
+      // {
+      //   res.status(400).json({ error: 'You must provide a valid Salon ID for review'});
+      //   return;
+      // }
+      // if (!user.id) {
+      //   res.status(400).json({ error: 'You must provide customer ID for review'});
+      //   return;
+      // }
+      // if (!reviewData.reviewText) {
+      //   res.status(400).json({ error: 'You must provide a reviewer' });
+      //   return;
+      // }
+      // if (!reviewData.rating) {
+      //   res.status(400).json({ error: 'You must provide a rating' });
+      //   return;
+      // }
+      console.log(req.session.AuthCookie, 'req.session.AuthCookie')
+    console.log(reviewData.rating, 'reviewData.rating')
+    console.log(reviewData.reviewText, ' reviewText')
+    console.log(user.id, 'user.id')
       try {
         const newPost = await reviewsData.create(
           req.params.salonId,
-          reviewData.customersId,
+          user.id,
           reviewData.reviewText,
           reviewData.rating,
-          reviewData.rating
+          //reviewData.rating
         );
         console.log(newPost, "For new Post")
-        var test = (newPost._id).toString()
-        console.log(test, 'test')
-        res.redirect("/manage/test")
+        const salData = await salons.get(newPost.salonId)
+          const custData = await customers.getCustomerById(newPost.customersId)
+        // var test = (newPost._id).toString()
+        // console.log(test, 'test')
+        // res.redirect("/manage/test")
+        res.status(200).render("reviews/salonreview", {salonId : newPost.salonId, name: salData.name, username: custData.username, customersId: newPost.customersId,  reviewText: newPost.reviewText, rating: newPost.rating, _id: req.params.reviewId });
+      
         res.status(200).json(newPost);
-      } catch (e) {
+       } catch (e) {
+        res.status(400).render("reviews/error", { error: e})
         res.status(400).json({ error: e });
       }
     });
 
 //delete review
-    router.delete('/:reviewId', async (req, res) => {
+    router.delete('/reviews/:reviewId', async (req, res) => {
       if (!req.params.reviewId) {
         res.status(400).json({ error: 'You must Supply an ID to delete' });
         return;
@@ -234,6 +257,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
       }
     });
 
+    //like a review
     router.post('/like/:reviewId/:customersId', async function (req,res){
       const ReviewId = req.body.reviewId.trim() //xss(req.body.reviewId.trim());
       const customersId = req.body.customersId.trim() //xss(req.body.customersId.trim());
@@ -250,6 +274,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
       });
   })
   
+  //dislike a review
   router.post('/dislike/:reviewId/:customersId', async function (req,res){
       const ReviewId = req.body.reviewId.trim()//xss(req.body.reviewId.trim());
       const customersId = req.body.customersId.trim() //xss(req.body.customersId.trim());

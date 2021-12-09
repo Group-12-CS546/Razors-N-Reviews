@@ -8,6 +8,10 @@ const customer = mongoCollections.customers;
 module.exports = {
   async create(salonId, customersId, reviewText, rating) //, comments, upvote, downvote)
   {
+    console.log(salonId, 'salonId')
+    console.log(customersId, 'customersId')
+    console.log(reviewText, 'reviewText')
+    console.log(rating, 'rating')
     salonId = salonId.toString();
     customersId = customersId.toString();
     if (typeof salonId != 'string') throw 'No Salon with proper type has been provided'
@@ -22,9 +26,9 @@ module.exports = {
     if (reviewText == null || reviewText.length == 0) throw 'Review is not provided'
     if (reviewText.trim() == '') throw 'Review provided only contains blank spaces'
 
-    if (typeof rating != 'number') throw 'Rating provided is not a number'
-    if (rating.length == 0 || rating == null) throw 'Rating is not provided'
-    if (rating <= 0 || rating >= 10) throw 'Rating must be between 0-10'
+    // if (typeof rating != 'number') throw 'Rating provided is not a number'
+    // if (rating.length == 0 || rating == null) throw 'Rating is not provided'
+    // if (rating <= 0 || rating >= 10) throw 'Rating must be between 0-10'
 
     //  if(comments)
     //  {
@@ -223,7 +227,7 @@ module.exports = {
 //NA for route
   async getReviewId(reviewId)
   {
-    console.log(reviewId, 'reviewId from getreviewID')
+    //console.log(reviewId, 'reviewId from getreviewID')
     if (reviewId == null || reviewId.length == 0) throw 'Reviw ID is null'
     if (typeof reviewId != 'string') throw 'Review ID is not of proper type'
     if (reviewId.trim() == '') throw 'Blank spaces are provided in Review Id'
