@@ -22,7 +22,7 @@ const main = async() => {
     const user3 = await customersData.updateUser("61af9601f902ca36848981fe",
     
     {
-    "username": "newusername11",
+    "username": "pupreti",
     "password": "newusername11",
     "firstname": "Iamnewuser22",
     "lastname": "newusername12",

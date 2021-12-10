@@ -1,5 +1,4 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
 const router = express.Router();
 const users = require('../data/customers');
 const mongoCollections = require('../config/mongoCollections');
@@ -8,7 +7,8 @@ const customers = mongoCollections.customers;
 let { ObjectId } = require('mongodb');
 const xss = require('xss');
  
-
+const bcrypt = require('bcrypt');
+const saltRounds = 16;
  
 router.get("/signup", (req, res) => {
     if (!req.session.AuthCookie)
@@ -29,7 +29,7 @@ router.get('/delete', async (req, res) => {
     else{
         let errorcode = false;
     console.log("helooooooooooooooooooooooooooooooooooooooooooooooo")
-    let tempId=req.session.user.cust_id
+    let tempId=req.session.user.id
     tempId = tempId.toString(tempId);
     console.log(tempId,"00000000000000000")
 	// if (!req.params.userId) {
@@ -176,8 +176,15 @@ router.post("/login", async(req, res) => {
             console.log("*********",customer_details._id)
                        userid=customer_details._id
                        session_user_id =userid.toString()
-    
-            req.session.user = { Username: userData.username, Password: userData.password,cust_id:session_user_id };
+            
+                       /*
+                       TODO:REMAINING
+                       */
+                       const testid = customer_details._id
+                       req.session.user = {id: testid}
+                       console.log(req.session.user, "req.session.user")
+           
+            // req.session.user = { Username: userData.username, Password: userData.password,cust_id:session_user_id };
             
             console.log("req session 733333333333333333337333333333333333333", req.session.user)
             console.log(req.session.user, "req.session.user")
@@ -196,7 +203,48 @@ router.post("/login", async(req, res) => {
  
 });
 
+// Update users 
+router.post("/update", async (req, res) => {
+    let errorcode = false;
+    let editedUser;
+    let hashedPassword;
+    const user_info = req.body;
+    console.log(req.body)
+    const firstname = user_info.firstname;
+    const lastname = user_info.lastname;
+    const email = user_info.email;
+    const username = user_info.username;
+    const city = user_info.city;
+    const state = user_info.state;
+    const age = user_info.age;
+    const password = user_info.password;
 
+      editedUser = {
+        firstname: firstname,
+        lastname: lastname,
+        username: username,
+        email: email,
+        password: password,
+        city: city,
+        state: state,
+        age: age
+      }
+    try {
+      const updatedUser = await users.updateUser(req.session.user.id, editedUser);
+      return res.render('users/private', { 
+        id: req.session.user.id,
+        firstname: updatedUser.firstname,
+        lastname: updatedUser.lastname,
+        username:username,
+        email: updatedUser.email,
+        city: updatedUser.city,
+        state: updatedUser.state,
+        age: updatedUser.age,
+        userLoggedIn: true})
+      } catch(e) {
+        res.status(404).json({ message: "Could not update user!" });
+      }
+    });
  
  
 router.post("/signup", async(req, res) => {
@@ -323,9 +371,9 @@ router.get("/logout", (req, res) => {
         res.redirect('/');
     } else {
         res.render('users/private', {
-            username: req.session.user.Username,
-            firstName: currentUser.firstname,
-            lastName: currentUser.lastname,
+            // username: req.session.user.Username,
+            // firstName: currentUser.firstname,
+            // lastName: currentUser.lastname,
         });
     }
      

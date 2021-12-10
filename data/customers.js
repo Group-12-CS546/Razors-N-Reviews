@@ -74,7 +74,16 @@ module.exports = {
               newuserinfo.lastname = cust_info.lastname;
           }
           if (cust_info.username) {
+            let temp= await this.checkDuplicate(cust_info.username) 
+            if(!temp){
+              console.log('Check duplicate function ends')
+              throw 'User name already exists'
+              console.log("-----------------------------")
+            }
+            else{
               newuserinfo.username = cust_info.username;
+
+            }
           }
           if (cust_info.email) {
               newuserinfo.email = cust_info.email;
