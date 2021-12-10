@@ -317,14 +317,16 @@ router.get("/logout", (req, res) => {
     }
 });
 
- router.get("/private", (req, res) => {
-    let errorcode = false;
+ router.get("/private",async (req, res) => {
+ 
     if (!req.session.AuthCookie) {
         res.redirect('/');
-        errorcode = true;
-        res.render("users/signup", {errorcode: errorcode , message: "Either the username or password is invalid, Please signup again", title: "Signup", heading: "Signup" });
     } else {
-        res.status(200).render("users/private", {age:customer_details.age,state:customer_details.state,city:customer_details.city,email:customer_details.email,email:customer_details.email,firstname: customer_details.firstname,lastname: customer_details.lastname, username: customer_details.username, title: "Login", heading: "Login" });
+        res.render('users/private', {
+            username: req.session.user.Username,
+            firstName: currentUser.firstname,
+            lastName: currentUser.lastname,
+        });
     }
      
       

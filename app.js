@@ -50,9 +50,11 @@ app.use(async(req, res, next) => {
  
  
 app.use('/private', (req, res, next) => {
+    let errorcode = false;
    if (!req.session.AuthCookie) {
-     res.status(403);
-     return res.render("users/errors",{title:"Error",heading:"Error",message:"User is not logged in",msg:true});
+    errorcode = true;
+     res.status(400);
+     res.render('users/login', { errorcode: errorcode , message: "User is not logged in." });
    } else{
        next();
    }

@@ -54,6 +54,58 @@ module.exports = {
         ************* Get customers by ID**********************
     */ 
 
+        async updateUser(id, cust_info) {
+          if (!id) throw "id is missing";
+          if (!cust_info) {
+              return await this.getCustomerById(id);
+          }
+          if (typeof(id) === "string") id = ObjectId.createFromHexString(id);
+          const userCollection = await customers();
+          let newuserinfo = {};
+          let gotten = await this.getCustomerById(id);
+          if (JSON.stringify(cust_info) == JSON.stringify(gotten)) {
+              return await this.getCustomerById(id);
+          }
+  
+          if (cust_info.firstname) {
+              newuserinfo.firstname = cust_info.firstname;
+          }
+          if (cust_info.lastname) {
+              newuserinfo.lastname = cust_info.lastname;
+          }
+          if (cust_info.username) {
+              newuserinfo.username = cust_info.username;
+          }
+          if (cust_info.email) {
+              newuserinfo.email = cust_info.email;
+          }
+          if (cust_info.city) {
+              newuserinfo.city = cust_info.city;
+          }
+          if (cust_info.state) {
+              newuserinfo.state = cust_info.state;
+          }
+          if (cust_info.age) {
+              newuserinfo.age = cust_info.age;
+          }
+          if (cust_info.profilePicture) {
+              newuserinfo.profilePicture = cust_info.profilePicture;
+          }
+          if (cust_info.password) {
+             const plainTextPassword = cust_info.password;
+             const hash = await bcrypt.hash(plainTextPassword, saltRounds);
+             password = hash;
+              newuserinfo.password = password;
+          }
+  
+          if (newuserinfo == {}) {
+              return await this.getCustomerById(id);
+          }
+          const updateInfoUser = await userCollection.updateOne({ _id: id }, { $set: newuserinfo });
+          if (updateInfoUser.modifiedCount === 0 && updateInfoUser.deletedCount === 0) throw "Could not update your details ";
+          return await this.getCustomerById(id);
+      },
+
 
   async getCustomerById(id) {
     if (!id) throw 'No id entered';
@@ -74,12 +126,9 @@ module.exports = {
     return customer;
   },
   
+  
 
-   async deleteCustomerbyId(id){
-
-
-
-   },
+  
 
    async deleteCustomerbyId(id){
    
@@ -102,6 +151,7 @@ module.exports = {
 
       return {userdeleted: true}; 
   },
+  
     
    
   

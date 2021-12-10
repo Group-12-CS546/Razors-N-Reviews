@@ -19,6 +19,21 @@ const main = async() => {
     // console.log('************* User has been Added **********************');
     // console.log('----------------------------------------------------------')
     // const user3 = await customersData.createUser("newuser","Hello","EMail@email.com","username","password","profilePicture","city","state","age");
+    const user3 = await customersData.updateUser("61af9601f902ca36848981fe",
+    
+    {
+    "username": "newusername11",
+    "password": "newusername11",
+    "firstname": "Iamnewuser22",
+    "lastname": "newusername12",
+    "email": "pupr223eti@stevens.edu",
+    "city": "Jersey Cityyy",
+    "state": "New Jerseyyy",
+    "age": "39",
+    }
+    
+    );
+    console.log(user3);
     // console.log('************* User has been Added **********************');
     // console.log(user3);
     // console.log('************* User has been Added **********************');
