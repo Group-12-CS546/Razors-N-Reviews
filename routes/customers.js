@@ -1,3 +1,4 @@
+ 
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
@@ -6,8 +7,11 @@ const mongoCollections = require('../config/mongoCollections');
 const users1 = mongoCollections.customers;
 const customers = mongoCollections.customers;
 let { ObjectId } = require('mongodb');
+const xss = require('xss');
+const reviewsData = require('../data/reviews');
+const salData = require('../data/salons')
  
-
+ 
  
 router.get("/signup", (req, res) => {
     if (!req.session.AuthCookie)
@@ -15,32 +19,76 @@ router.get("/signup", (req, res) => {
     else
         res.redirect("/private");
 });
-
+ 
 /*
 TODO:Delete Routes
 */
-
-router.delete("/private/:id", (req, res) => {
-
-    if (!req.session.AuthCookie)
-    res.render("users/signup", { title: "Signup", heading: "Signup" });
-    else{
-        res.json("hello")
+router.get('/delete', async (req, res) => {
+    if (!req.session.AuthCookie){
+ 
+        res.render("users/signup", { title: "Signup", heading: "Signup" });
+ 
     }
-    
+    else{
+        let errorcode = false;
+    console.log("helooooooooooooooooooooooooooooooooooooooooooooooo")
+    let tempId=req.session.user.id
+    tempId = tempId.toString(tempId);
+    console.log(tempId,"00000000000000000")
+    // if (!req.params.userId) {
+    //  res.status(400)
+    //     res.render("users/signup", { title: "Signup", heading: "Signup" });
+    //  return;
+    // }
+    try {
+       
+        deleteuser = await users.deleteCustomerbyId(tempId);
+    if(deleteuser){
+        errorcode = true;
+        res.status(500);
+        return res.render("users/signup", {title: "Signup", heading: "Signup" , errorcode: errorcode, message: "Please create  an account again." });
+ 
+    } else {
+        return res.render("users/private", {title: "Signup", heading: "Signup" , errorcode: errorcode, message: "User not deleted" });
+    }
+        //res.json({deleted: true, data: toBeDeletedReview});
+    } catch (e) {
+        return res.render("users/private", { errorcode: errorcode, message: "User not deleted" });
+    }
+    }
+});
+ 
+// router.post("/:id/delete",async (req, res) => {
    
-
-
-})
-
-
+ 
+//     if (!req.session.AuthCookie){
+//         res.status(400);
+//         res.render("users/signup", { title: "Signup", heading: "Signup" });
+ 
+//     }
+ 
+   
+//     else{
+       
+//         req.params.id=req.session.user._id
+//         let user_delete_id=req.params.id
+//         console.log(user_delete_id,"!!!!!!!!!!!!!!!!!!!!!!**********************!!!!!")
+//         // const currentUser = await users.getCustomerById(req.session.user._id);
+//         // const customerCollection = await customers();
+//         const user_deleted = await customerCollection.deleteOne({user_delete_id});
+//         res.status(200);
+//         return res.render("users/signup", {id: req.params.id, errorcode: errorcode, errors: errors, message: "Your account has been deleted please SignUp to create a new account." });
+//     }
+// })
+ 
+ 
 router.get("/", (req, res) => {
     if (!req.session.AuthCookie)
         res.render("users/login", { title: "Login", heading: "Login" });
     else
         res.redirect("/private");
 });
-
+ 
 router.post("/login", async(req, res) => {
     console.log(req.body);
     let errorcode = false;
@@ -50,7 +98,7 @@ router.post("/login", async(req, res) => {
         res.status(400);
         return res.render("users/login", { errorcode: errorcode, errors: errors, message: "Please provide a username" });
     }
-
+ 
     if (!req.body.password) {
         errorcode = true;
         res.status(400);
@@ -109,7 +157,7 @@ router.post("/login", async(req, res) => {
         res.status(400);
         return res.render("users/login", {errorcode: errorcode, hasErrors: hasErrors, errors: errors, message: "Password cannot be only spaces" });
     }
-    
+   
  
     const userData = req.body;
     console.log("userData", userData)
@@ -125,13 +173,39 @@ router.post("/login", async(req, res) => {
             const customerCollection = await customers();
             customer_name=req.session.user.Username;
             console.log(customer_name,"-----customername----------")
-
+           
             const customer_details = await customerCollection.findOne({username:req.session.user.Username});
             console.log("*********",customer_details)
-            const testid = customer_details._id
-            req.session.user = {id: testid}
+            console.log("*********",customer_details._id)
+                       userid=customer_details._id
+                       session_user_id =userid.toString()
+           
+                       /*
+                       TODO:REMAINING
+                       */
+                       const testid = customer_details._id
+                       req.session.user = {id: testid}
+                       console.log(req.session.user, "req.session.user")
+           
+            // req.session.user = { Username: userData.username, Password: userData.password,cust_id:session_user_id };
+           
+            console.log("req session 733333333333333333337333333333333333333", req.session.user)
             console.log(req.session.user, "req.session.user")
-            res.status(200).render("users/private", {age:customer_details.age,state:customer_details.state,city:customer_details.city,email:customer_details.email,email:customer_details.email,firstname: customer_details.firstname,lastname: customer_details.lastname, username: customer_details.username, title: "Login", heading: "Login" });
+
+
+            const getReviews = await reviewsData.getReviewsPerCustomer(req.session.user.id);
+            console.log(getReviews, 'getReviews************')
+
+            // var sal = []
+            // for(var i =0; i<getReviews.length; i++)
+            // {
+            //     sal = await salData.get(getReviews[i].salonId)
+            // }
+
+            // console.log(sal, 'sal from routes')
+
+
+            res.status(200).render("users/private", {age:customer_details.age,state:customer_details.state,city:customer_details.city,email:customer_details.email,email:customer_details.email,firstname: customer_details.firstname,lastname: customer_details.lastname, username: customer_details.username, title: "Login", heading: "Login" , getReviews: getReviews});
         } else {
             errorcode= true;
             res.status(400);
@@ -145,8 +219,8 @@ router.post("/login", async(req, res) => {
     }
  
 });
-
-
+ 
+ 
  
  
 router.post("/signup", async(req, res) => {
@@ -223,28 +297,28 @@ router.post("/signup", async(req, res) => {
         res.status(400);
         res.render('users/signup', { errorcode: errorcode , errors: errors, hasErrors: true, message: "Password cannot have spaces" });
     }
-  
+ 
     const userData = req.body;
     console.log("userData", userData)
    
-  
-    
+ 
+   
         console.log("*something new inside try")
         const user = await users.createUser(userData.firstname,userData.lastname,userData.email,userData.username, userData.password,userData.profilePicture,userData.state,userData.city,userData.age);
-
+ 
         console.log("User inside try",user)
         if(user == null)
         {
         errorcode = true;
         res.status(400);
         res.render('users/signup', {  errorcode: errorcode , message: "Username already exists with that username" });
-  
+ 
         }
         else{
             if (user) {
                 errorcode = true;
                 console.log("user****", user)
-                
+               
                 res.status(200).render("users/login", { errorcode: errorcode , message: "You have successfully signed up", title: "Login", heading: "Login" });
             } else {
                 res.status(400);
@@ -253,10 +327,10 @@ router.post("/signup", async(req, res) => {
         }
        
        
-    
+   
  });
  
-
+ 
  
 router.get("/logout", (req, res) => {
     if (!req.session.AuthCookie)
@@ -266,18 +340,10 @@ router.get("/logout", (req, res) => {
         res.render("users/logout", { title: "Logout", heading: "Logout", message: "User successfully logged out", msg: true });
     }
 });
-
+ 
  router.get("/private",async (req, res) => {
  
- 
-    console.log("req.body", req.session.user.Username)
- 
-    let user = req.session.user;
-    console.log("user******", user)
-    const currentUser = await users.getCustomerById(req.session.user);
-    console.log("################################################")
-    console.log(currentUser)
-    if (!req.session.user) {
+    if (!req.session.AuthCookie) {
         res.redirect('/');
     } else {
         res.render('users/private', {
@@ -287,9 +353,9 @@ router.get("/logout", (req, res) => {
         });
     }
      
-      
-      
-    
+     
+     
+   
  
 });
 module.exports = router;

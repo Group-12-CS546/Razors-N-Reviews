@@ -96,7 +96,11 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
     router.get('/reviews/customer/:customersId' , async (req, res) => {
       if (!req.session.AuthCookie){
         res.redirect("/");
-      }
+       }
+       console.log(req.session, 'req.session')
+       console.log(session_user_id, 'session_user_id form review route')
+       const user = session_user_id
+      console.log(user, 'user: post review')
       if(!req.params.customersId)
     {
       // res.status(404).json({ error: 'You must provide a Customer ID for review'})
@@ -105,11 +109,12 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
     }
     try {
       //console.log('Hicdvfsgbd')
-      const custData = await customers.getCustomerById(req.params.customersId)
+      const custData = await customers.getCustomerById(user)
       const reviewList = await reviewsData.getReviewsPerCustomer(req.params.customersId);
       //console.log(reviewList, 'reviewList')
       // res.status(200).json(reviewList);
-      res.status(200).render("reviews/custReviews", {username: custData.username, reviews: reviewList});
+      // res.status(200).render("reviews/custReviews", {username: custData.username, reviews: reviewList});
+      res.status(200).render("users/private", {reviewList : reviewList});
     }catch (e)
     {
       //console.log('rgsnlb')

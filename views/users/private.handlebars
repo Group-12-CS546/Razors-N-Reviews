@@ -24,49 +24,60 @@
 {{/each}}
 {{/if}}
 </main> --}}
+
+
+
+
 <main>
+
 <div class="container">
-        <div  id="card-private" class="card" style="width: 18rem;">
+    <div id="card-private" class="card" style="width: 18rem;">
             <img src="../../public/img/default-user.png" class="card-img-top" alt="...">
             <div class="card-body">
-                <h5 class="card-title"><span class="text-bold">{{firstname}} {{lastname}}</h5>
-                <div class="card" style="width: 18rem;">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><span class="text-bold">Username:</span>{{username}}</li>
-                        <li class="list-group-item"><span class="text-bold">Email:</span>{{email}}</li>
-                        <li class="list-group-item"><span class="text-bold">State:</span>{{state}}</li>
-                        <li class="list-group-item"><span class="text-bold">City:</span>{{city}}</li>
-                        <li class="list-group-item"><span class="text-bold">Age:</span>{{age}}</li>
-                    </ul>
-                </div>
-                    <div>
-                            <a href="#"  class="btn-private btn btn-primary">Change Details</a>
-                            <a href="#"  class="btn-private btn btn-primary">Delete Account</a>
-                    </div>
- 
+                <h5 class="card-title">{{firstname}} {{lastname}}</h5>
             </div>
-       
-       
-        </div>
-            <div class="user-reviews">
- 
-                    {{#each review_each}}
-                    <li>
-                         {{this.reviewText}}
-                         {{this.rating}}
-                    </li>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span class="text-bold">Username:</span>{{username}}</li>
+                <li class="list-group-item"><span class="text-bold">Email:</span>{{email}}</li>
+                <li class="list-group-item"><span class="text-bold">State:</span>{{state}}</li>
+                <li class="list-group-item"><span class="text-bold">City:</span>{{city}}</li>
+                <li class="list-group-item"><span class="text-bold">Age:</span>{{age}}</li>
+            </ul>
+            <div>
+                <a href="#"  class="btn-private btn btn-primary">Change Details</a>
+                <a href="/delete"  class="btn-private btn btn-primary">Delete Account</a>
+            </div>
+    </div>
+
+    <div class="container">
+        {{!-- <div class="col-sm-6"> --}}
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top">
+                <div class="card-body">
+                    {{!-- <h5 class="card-title"><a href="/salons/{{salonId._id}}">{{this.name}}</a></h5> --}}
+                    {{#each this.getReviews}}
+                    <p class="card-text">reviewText: {{this.reviewText}}</p>
+                    <p class="card-text">rating: {{this.rating}}</p>
+                    {{!-- <p><a href="/reviews/reviews/updatereview/{{this._id}}">Edit Review</a></p>
+                    <p><a href="/reviews/reviews/deletereview/{{this._id}}">Delete Review</a></p> --}}
                     {{/each}}
-       
+                    {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                </div>
             </div>
-       
+        {{!-- </div> --}}
+    </div>
+
+
+    <a href="/logout">Logout</a>
+
 </div>
- 
-<a href="/logout">logout</a>
-{{#if errorcode}}
-{{#each errors}}
-<li>
-{{this}}
-</li>
-{{/each}}
-{{/if}}
+
+ {{#if errorcode}}
+              
+          <p class="error" >{{message}}</p>
+ {{/if}}
+          
+
+
+
 </main>

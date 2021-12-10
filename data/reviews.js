@@ -185,20 +185,21 @@ module.exports = {
     const reviewCollection = await reviews();
     const reviewList = await reviewCollection.find({ 'customersId': customersId }).toArray();
 
-    console.log(reviewList, 'reviewList')
-    var customerReviews = []
+    console.log(reviewList, 'reviewList from data')
+    // var customerReviews = []
 
-    for (var i = 0; i < reviewList.length; i++) {
-      customerReviews[i] = reviewList[i].reviewText
-    }
+    // for (var i = 0; i < reviewList.length; i++) {
+    //   customerReviews[i] = reviewList[i].reviewText
+    // }
     //console.log(customerReviews, 'customerReviews')
 
-    if (!customerReviews) throw "No Reviews in the system for this customer";
+    //if (!customerReviews) throw "No Reviews in the system for this customer";
+    if (!reviewList) throw "No Reviews in the system for this customer";
     //  reviewList.forEach((val) => {
     //      val._id = (val._id).toString();
     //  })
 
-    return customerReviews;
+    return reviewList;
   },
 
 
