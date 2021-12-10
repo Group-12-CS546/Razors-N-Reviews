@@ -10,6 +10,38 @@ const salons = data.salons;
 const comments = data.comments;
 
 //Get data using salon id
+// router.get('/reviews/salons/:salonId', async(req, res) => {
+//     console.log(req.params.salonId, 'id from routes')
+//     if (!req.params.salonId) {
+//         res.status(400).json({ error: 'You must provide a valid Salon ID for review' });
+//         //res.status(400).render("reviews/error", "You must provide a valid Salon ID for review")
+//         return;
+//     }
+//     try {
+//         const salData = await salons.get(req.params.salonId)
+//         const salonList = await reviewsData.getAllreviewsofSalon(req.params.salonId);
+//         console.log(salonList, 'SalonList')
+//             //res.status(200).json(salonList);
+//         console.log(salonList, 'salonList.reviewText')
+//         var demo1 = {}
+//         for (var i = 0; i < salonList.length; i++) {
+//             demo1[i] = salonList[i]
+//             console.log("demo3333333333333", demo1[i])
+
+//         }
+//         console.log(demo1, 'demo1')
+//         var test = Object.values(demo1)
+//         console.log(test, 'test')
+
+//         res.status(200).render("reviews/salonreview", { name: salData.name, reviews: test })
+//     } catch (e) {
+//         console.log('Hi I am savleen')
+//             //res.status(404).json({ error: e });
+//         res.status(400).render("reviews/error", { error: e })
+//     }
+// });
+
+
 router.get('/reviews/salons/:salonId', async(req, res) => {
     console.log(req.params.salonId, 'id from routes')
     if (!req.params.salonId) {
@@ -33,13 +65,17 @@ router.get('/reviews/salons/:salonId', async(req, res) => {
         var test = Object.values(demo1)
         console.log(test, 'test')
 
-        res.status(200).render("reviews/salonreview", { name: salData.name, reviews: test })
+        // res.status(200).render("reviews/salonreview", {test: test}) //{name: salData.name, reviews: test})
+        res.status(200).render("reviews/salonreview", { test: test })
     } catch (e) {
         console.log('Hi I am savleen')
             //res.status(404).json({ error: e });
         res.status(400).render("reviews/error", { error: e })
     }
 });
+
+
+
 
 //get using review id
 router.get('/:reviewId', async(req, res) => {

@@ -286,22 +286,36 @@ const update = async function update(salonId, name, website, service, address, c
     if (typeof zip != 'string') {
         throw 'The entered zip must be a string'
     }
-    //To check longitude is null or empty
-    if (longitude.length == 0) {
-        throw 'longitude cannot be null or empty'
+    // //To check longitude is null or empty
+    // if (longitude.length == 0) {
+    //     throw 'longitude cannot be null or empty'
+    // }
+    // //To check longitude is string
+    // if (typeof longitude != 'number') {
+    //     throw 'The entered longitude must be a number'
+    // }
+    // //To check latitude is null or empty
+    // if (latitude.length == 0) {
+    //     throw 'latitude cannot be null or empty'
+    // }
+    // //To check latitude is string
+    // if (typeof latitude != 'number') {
+    //     throw 'The entered latitude must be a number'
+    // }
+
+    var decimal = /^[-+]?[0-9]+\.[0-9]+$/;
+
+    if (!longitude.match(decimal)) {
+        // alert('Please enter valid float');
+        throw 'The entered longitude must be a float'
     }
-    //To check longitude is string
-    if (typeof longitude != 'number') {
-        throw 'The entered longitude must be a number'
+
+    if (!latitude.match(decimal)) {
+        // alert('Please enter valid float');
+        throw 'The entered latitude must be a float'
     }
-    //To check latitude is null or empty
-    if (latitude.length == 0) {
-        throw 'latitude cannot be null or empty'
-    }
-    //To check latitude is string
-    if (typeof latitude != 'number') {
-        throw 'The entered latitude must be a number'
-    }
+
+
     //To check website is null or empty
     if (website.length == 0) {
         throw 'website cannot be null or empty'
@@ -313,8 +327,8 @@ const update = async function update(salonId, name, website, service, address, c
 
     if (service.length === 0) throw 'You must provide at least one service.';
 
-    if (!service || !Array.isArray(service))
-        throw 'You must provide an array of service';
+    // if (!service || !Array.isArray(service))
+    //     throw 'You must provide an array of service';
 
     for (var k = 0; k < service.length; k++) {
         if (typeof service[k] != 'string') {

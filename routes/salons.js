@@ -224,7 +224,7 @@ router.get('/salons/:salonId/delete', async(req, res) => {
     }
 });
 
-router.put('/salons/:salonId', async(req, res) => {
+router.post('/salons/:salonId/edit', async(req, res) => {
     const updatedData = req.body;
     console.log("updatedData", updatedData)
     if (!req.params.salonId) {
@@ -247,11 +247,37 @@ router.put('/salons/:salonId', async(req, res) => {
 
     try {
         const updatedSalon = await salonsData.update(req.params.salonId, updatedData.name, updatedData.website, updatedData.service, updatedData.address, updatedData.city, updatedData.state, updatedData.zip, updatedData.longitude, updatedData.latitude);
-        res.status(200).json(updatedSalon);
+        // res.status(200).json(updatedSalon);
+        res.render('salons/editsalon', { message: "Updated successfully", updatedSalon: updatedSalon });
+        // res.redirect("/manage");
     } catch (e) {
-        res.status(404).json({ error: e });
+        console.log(e)
+            // res.status(404).json({ error: e });
+        res.status(404).render("salons/error", { error: e });
     }
 });
+
+
+router.get('/salons/:salonId/edit', async(req, res) => {
+    console.log("salon if to print*************************", req.params.salonId);
+    // if (!req.params.salonId) {
+    //     res.status(400).json({ error: "should provide valid salons Id" });
+    //     return;
+    // }
+    // if (typeof req.params.salonId != 'string') {
+    //     res.status(400).json({ error: 'Id should be in string' })
+    // }
+    try {
+        let salonsId = await salonsData.get(req.params.salonId);
+        console.log("salonsId", salonsId)
+            // res.status(200).json(salonsId);
+        res.status(200).render("salons/editsalon", { salonId: salonsId._id, name: salonsId.name, website: salonsId.website, service: salonsId.service, address: salonsId.address, city: salonsId.city, state: salonsId.state, zip: salonsId.zip, rating: salonsId.rating, covidRating: salonsId.covidRating, longitude: salonsId.longitude, latitude: salonsId.latitude });
+    } catch (e) {
+        console.log("e**", e)
+        res.status(404).json({ error: "not found**********" });
+    }
+});
+
 
 router.post('/search', async(req, res) => {
     try {

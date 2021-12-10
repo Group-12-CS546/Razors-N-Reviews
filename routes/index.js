@@ -12,6 +12,7 @@ const constructorMethod = (app) => {
     app.use('/', salonsRoutes);
 
     app.use('*', (req, res) => {
+        console.log('here')
         res.status(404).json({ error: 'Not found' });
     });
 };
