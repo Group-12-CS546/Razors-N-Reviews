@@ -160,9 +160,11 @@ module.exports = {
 
     var ReviewList = []
     //console.log(AllReviewsofaSal.reviews.length, 'AllReviewsofaSal.reviews.length')
+    console.log('reivewId', AllReviewsofaSal.reviewId)
     for (var i = 0; i < AllReviewsofaSal.reviewId.length; i++) {
       var reviewcaught = await this.getReviewId(AllReviewsofaSal.reviewId[i])
-      ReviewList[i] = reviewcaught.reviewText
+      console.log(reviewcaught)
+      ReviewList.push(reviewcaught)
       console.log(ReviewList, 'review list')
     }
     console.log(ReviewList, 'review list')
@@ -215,7 +217,7 @@ module.exports = {
     const reviewCollection = await reviews();
 
     const reviewcaught = await reviewCollection.findOne(parsedId);
-    //console.log(reviewcaught, 'reviewcaught')
+    console.log(reviewcaught, 'reviewcaught')
     const onereview = reviewcaught.reviewText
     if (!onereview) throw 'No review found with the supplied review ID'
     return onereview;
@@ -366,7 +368,7 @@ module.exports = {
       const updatedInfo = await reviewCollection.updateOne({ _id: parsedID }, { $set: { reviewText: reviewText } });
       if (!updatedInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed';
     }
-    return await this.getReviewById(reviewId);
+    return await this.getReviewId(reviewId);
   },
 
 

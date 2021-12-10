@@ -1,104 +1,93 @@
-<h1>Characters Found</h1>
-<main>
-    {{!-- <h2>{{data.name}}</h2> --}}
-    {{!-- <h1>{{this.data}}</h1> --}}
-    {{!-- {{#each data}} --}}
-    {{!-- <h1>{{this.salonId}}</h1> --}}
-    <span>{{this.name}}</span>
-    <span>{{this.address}}</span>
-    <span>{{this.city}}</span>
-    <span>{{this.rating}}</span>
-    {{!-- {{/each}} --}}
-    {{!-- <button class="open-button" onclick="openAlert()">Post a Review</button> --}}
-    {{!-- <button class="open-button" onclick="openAlert()">Post a Review</button>
-    <button class="open-button" onclick="openForm()">Post a Review</button>
-    <div class="form-popup" id="myForm">
-        <h2>Post a Review</h2>
-        <form id="login-form" name ="loginForm" class="form-container" enctype="multipart/form-data" action="/reviews/{{salon._id}}" method="POST">
-            <label>
-                <input type="text" name="rating" id="rating" class = "inputFields" pattern="\d+" placeholder="Enter your Rating" required title="Enter a Number from 1 to 10"/> 
-            </label>
-            <label>
-                <input type="text" name="reviewText" id="reviewText" class = "inputFields" placeholder="Enter your Review" required/>
-            </label>
-            {{!-- <input type="file" name="picture" accept="image/*" class=""/> --}}
-            <button type="submit" class="btn">Post!</button>
-            <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
-        </form>
+{{!-- <main></main>
+<div class="card-deck">
+        <div class="col-sm-6">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top">
+                <div class="card-body">
+                    {{!-- <h5 class="card-title"><a href="/salons/{{salonId._id}}">{{this.name}}</a></h5> --}}
+                    {{!-- <p class="card-text">Name: {{this.name}}</p>
+                    <p class="card-text">Website: {{this.website}}</p>
+                    <p class="card-text">Service: {{this.service}}</p>
+                    <p class="card-text">Address: {{this.address}}</p>
+                    <p class="card-text">City: {{this.city}}</p>
+                    <p class="card-text">State: {{this.state}}</p>
+                    <p class="card-text">Zip: {{this.zip}}</p>
+                    <p class="card-text">Longitude: {{this.longitude}}</p>
+                    <p class="card-text">Latitude: {{this.latitude}}</p>
+                    <p class="card-text">Rating: {{this.rating}}</p> --}}
+                    {{!-- <p class="card-text">CovidRating: {{this.covidRating}}</p> --}}
+                    {{!-- <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
     </div> --}}
-    {{!-- {{#if currentUserData.reviewedRestaurantPage}} --}}
-    {{!-- <button class="open-button" onclick="openAlert()">Post a Review</button>
-            {{!-- <button class="open-button" onclick="openForm()">Post a Review</button>
-            <button class="open-button" onclick="openLoginForm()">Post a Review</button> --}}
-    <div class="form-popup" id="myForm">
-        <h2>Post a Review</h2>
-        <form id="login-form" name ="loginForm" class="form-container" enctype="multipart/form-data" action="/reviews/{{this.salonId}}" method="POST">
-            <label for="ratings"></label>
-                <input type="text" name="rating" id="ratings" class = "inputFields" pattern="\d+" placeholder="Enter your Rating" required title="Enter a Number from 1 to 10"/> 
-            
-            <label for="reviewTexts"></label>
-                <input type="text" name="reviewText" id="reviewTexts" class = "inputFields" placeholder="Enter your Review" required/>
-            
-            {{!-- <input type="file" name="picture" accept="image/*" class=""/> --}}
-            <button type="submit" class="btn">Post!</button>
-            <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
-        </form>
 
+
+    {{!-- <div class="card-deck">
+        <div class="col-sm-6">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top">
+                <div class="card-body"> --}}
+                    {{!-- <h5 class="card-title"><a href="/salons/{{salonId._id}}">{{this.name}}</a></h5> --}}
+                    {{!-- {{#each getReviews}}
+                    <p class="card-text">Review: {{this}}</p>
+                    {{/each}} --}}
+                    {{!-- {{#each this.test}}
+                    <p class="card-text">reviewText: {{this.reviewText}}</p>
+                    <p class="card-text">rating: {{this.rating}}</p>
+                    {{/each}} --}}
+                    {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                {{!-- </div>
+            </div>
+        </div>
     </div>
-    <script src="/public/javascript/forms.js"></script> --}}
+    <form id="login" action="/reviews/updatereview/{{this._id}}" method="POST">
+                        <div class="dropdown">
+                            <button class="dropbtn">Options</button>
+                            <div class="dropdown-content">
+                                <p><a href="../reviews/updatereview/{{this._id}}/edit">Edit Review</a></p>
+                                {{!-- <p><a href="../reviews/reviews/{{this.salonId}}/{{this._id}}/delete">Delete Review</a></p> --}}
+                            {{!-- </div>
+                        </div> --}} 
+    {{!-- </form>
+
+<form id="login" action="/salons/{{this.salonId}}/delete" method="POST">
+        <div class="dropdown">
+            <button class="dropbtn">Options</button>
+            <div class="dropdown-content"> --}}
+                {{!-- <p><a href="/reviews/{{this.review._id}}/edit">Edit Review</a></p>
+                <p><a href="../sal/{{this.restaurant._id}}/{{this.review._id}}/delete">Delete Review</a></p> --}}
+                {{!-- <p><a href="/salons/{{this.salonId}}/delete">Delete Salon</a></p>
+                <p><a href="/salons/{{this.salonId}}/delete">Delete Salon</a></p>
+            </div>
+        </div>
+    </form> --}}
 
   
-  <div class="container">
-    <h1>Login </h1>
-    <form id="login" class="center padding" action="/reviews/{{this.salonId}}" method="POST">
+  {{!-- <div class="container">
+    <h1>Post a review for this Salon </h1>
+    <form id="login" class="center padding" action="/reviews/reviews/{{this.salonId}}" method="POST">
       <div class="form-group">
         <label for="rating">Rating:</label>
         <input type="text" class="form-control" id="rating" name="rating" aria-describedby="rating" placeholder="Rating">
         
-      </div>
-      <div class="form-group">
+      </div> --}}
+      {{!-- <div class="form-group">
         <label for="reviewText">ReviewText:</label>
         <input type="text" class="form-control" id="reviewText" name="reviewText" aria-describedby="reviewText" placeholder="reviewText">
         
       </div>
       <button type="submit" id="btn-id" class="btn btn-primary">Submit</button>
       <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
-    </form>
+    </form> --}}
     
-      {{#if errorcode}}
+      {{!-- {{#if errorcode}}
               
           <p class="error" >{{message}}</p>
-          {{/if}}
-          
+          {{/if}}     
 
     </div>
-    
-
   </div>
-    
-    {{!-- <form id="salon-review-form" class="center padding" action="/reviews/reviewform" method="POST">
-        <label>
-                <p>Salon name:</p> 
-                <input id="name" name="Salon name" placeholder="Salon Name"/>
-                </label>
-            <label>
-                <p>Review Text:</p> 
-                <input id="name" name="text" placeholder="Space for entering Review"/>
-                </label>
-            <label>
-            <p> Rating:</p> 
-                <input id="rating" name="rating" placeholder="Rating: 1-10"/>
-            </label>
-            <button type="submit" id="btn-id">Submit</button>
-        </form> --}}
-        {{!-- <form action="//reviews/{{}}" method="POST" class="new-post-form">
-      <label>
-        {{ data.name }}
-        <input type="text" name="name" placeholder="search" value="{{data.name}}" class="full-width-input" />
-        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-      </label>
-    </form> --}}
-
 
 
     {{#if data}}
@@ -128,4 +117,179 @@
         <a href="/">Make another search</a>
     </div>
 
+</main> --}} 
+
+{{!-- <h1>Characters Found</h1> --}}
+<main>
+    <p><a href="/salons">Go back to the Salon list page!</a></p>
+ 
+    <div class="card-deck">
+        <div class="col-sm-6">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top">
+                <div class="card-body">
+                    {{!-- <h5 class="card-title"><a href="/salons/{{salonId._id}}">{{this.name}}</a></h5> --}}
+                    <p class="card-text">Name: {{this.name}}</p>
+                    <p class="card-text">Website: {{this.website}}</p>
+                    <p class="card-text">Service: {{this.service}}</p>
+                    <p class="card-text">Address: {{this.address}}</p>
+                    <p class="card-text">City: {{this.city}}</p>
+                    <p class="card-text">State: {{this.state}}</p>
+                    <p class="card-text">Zip: {{this.zip}}</p>
+                    <p class="card-text">Longitude: {{this.longitude}}</p>
+                    <p class="card-text">Latitude: {{this.latitude}}</p>
+                    <p class="card-text">Rating: {{this.rating}}</p>
+                    <p class="card-text">CovidRating: {{this.covidRating}}</p>
+                    {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+ 
+    <div class="card-deck">
+        <div class="col-sm-6">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top">
+                <div class="card-body">
+                    {{!-- <h5 class="card-title"><a href="/salons/{{salonId._id}}">{{this.name}}</a></h5> --}}
+                    {{#each this.getReviews}}
+                    <p class="card-text">reviewText: {{this.reviewText}}</p>
+                    <p class="card-text">rating: {{this.rating}}</p>
+                    <p><a href="/reviews/reviews/updatereview/{{this._id}}">Edit Review</a></p>
+                    <p><a href="/reviews/reviews/deletereview/{{this._id}}">Delete Review</a></p>
+                    {{/each}}
+                    {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{!-- <div class = "dblclick container">
+                                {{#if (checkListMem ../customer._id this.likes)}}
+                                <i class = "likebtn fa fa-thumbs-up filled" data-rid = "{{this.id}}" data-uid = "{{../customer._id}}"></i>
+                                {{else}}
+                                <i class = "likebtn fa fa-thumbs-up" data-rid = "{{this.id}}" data-uid = "{{../customer._id}}"></i>
+                                {{/if}}
+                                <span class = "like">{{this.like.length}}</span>
+
+                                {{#if (checkListMem ../customer._id this.dislikes)}}
+                                <i class = "dislikebtn fa fa-thumbs-down filled" data-rid = "{{this.id}}" data-uid = "{{../customer._id}}"></i>
+                                {{else}}
+                                <i class = "dislikebtn fa fa-thumbs-down" data-rid = "{{this.id}}" data-uid = "{{../customer._id}}"></i>
+                                {{/if}}
+                                <span class = "dislike">{{this.dislike.length}}</span>
+    </div> --}}
+
+
+
+    {{!-- *************** --}}
+    {{!-- <div class="card-deck">
+        <div class="col-sm-6">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top">
+                <div class="card-body">
+                    {{!-- <h5 class="card-title"><a href="/salons/{{salonId._id}}">{{this.name}}</a></h5> --}}
+                    {{!-- {{#each this.getReviews}}
+                    <p class="card-text">reviewText: {{this.reviewText}}</p>
+                    <p class="card-text">rating: {{this.rating}}</p>
+                    <p><a href="/reviews/reviews/updatereview/{{this._id}}">Edit Review</a></p>
+                    {{/each}}
+                    {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                </div>
+            </div>
+        </div>
+    </div> --}}
+ 
+ 
+    {{!-- <button type="submit" class="btn btn-primary">delete</button> --}}
+ 
+    {{!-- <button type="submit" class="btn btn-primary">review
+        <a href=""></a>
+    </button> --}}
+ 
+    {{!-- <form method="post" action="/salons/{{salonId}}/delete?_method=DELETE">
+        <input type="hidden" name="_method" value="DELETE">
+        <div class="dropdown">
+            <button class="dropbtn">Options</button>
+            <div class="dropdown-content">
+                {{!-- <p><a href="/reviews/{{this.review._id}}/edit">Edit Review</a></p> --}}
+    {{!-- <p><a href="../sal/{{this.restaurant._id}}/{{this.review._id}}/delete">Delete Review</a></p> --}}
+    {{!-- <p><a href="/salons/{{this.salonId}}/delete">Delete Review</a></p>
+            </div>
+        </div>
+    </form> --}}
+ 
+ 
+    <form id="login" action="/salons/{{this.salonId}}/delete" method="POST">
+        <div class="dropdown">
+            <button class="dropbtn">Options</button>
+            <div class="dropdown-content">
+                {{!-- <p><a href="/reviews/{{this.review._id}}/edit">Edit Review</a></p>
+                <p><a href="../sal/{{this.restaurant._id}}/{{this.review._id}}/delete">Delete Review</a></p> --}}
+                {{!-- <p><a href="/salons/{{this.salonId}}/delete">Delete Salon</a></p> --}}
+                <p><a href="/salons/{{this.salonId}}/delete">Delete Salon</a></p>
+                <p><a href="/salons/{{this.salonId}}/edit">Edit Salon</a></p>
+            </div>
+        </div>
+    </form>
+ 
+ 
+ 
+    <div class="container">
+        <h1>Review </h1>
+        <form id="login" class="center padding" action="/reviews/reviews/{{this.salonId}}" method="POST">
+            <div class="form-group">
+                <label for="rating">Rating:</label>
+                <input type="text" class="form-control" id="rating" name="rating" aria-describedby="rating"
+                    placeholder="Rating">
+ 
+            </div>
+            <div class="form-group">
+                <label for="reviewText">ReviewText:</label>
+                <input type="text" class="form-control" id="reviewText" name="reviewText" aria-describedby="reviewText"
+                    placeholder="reviewText">
+ 
+            </div>
+            <button type="submit" id="btn-id" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
+        </form>
+ 
+        {{#if errorcode}}
+ 
+        <p class="error">{{message}}</p>
+        {{/if}}
+ 
+    </div>
+ 
+ 
+ 
+ 
+    {{#if data}}
+    <ul>
+        {{#each data}}
+        <li>
+            <a style="color: white;" href="/salons/">******{{this.salonId}}</a>
+        </li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <p class="not-found">We're sorry, but no results were found for {{this.data.name}}.</p>
+    {{/if}}
+ 
+ 
+    {{#if hasErrors}}
+    {{#each errors}}
+    <li>
+        {{this}}
+    </li>
+    <div class="another">
+        <a href="/">Make another search</a>
+    </div>
+    {{/each}}
+    {{/if}}
+    <div class="another">
+        <a href="/">Make another search</a>
+    </div>
+ 
 </main>

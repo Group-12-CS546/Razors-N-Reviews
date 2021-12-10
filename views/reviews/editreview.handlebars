@@ -1,16 +1,25 @@
 <main>
-    <br>
+    {{!-- <br> --}}
     {{!-- {{reviewId}} {{reviewText}} --}}
-    <div class="card-wide" id="right">
+    {{!-- <div class="card-wide" id="right">
         <h2>Edit Review</h2>
-        <form if="editreview" action="/reviews/editreview/{{this.reviewId}}" enctype="multipart/form-data" method="post">
+        <form if="editreview" action="../reviews/updatereview/{{this._id}}}" enctype="multipart/form-data" method="post">
             <label for="reviewText"><h4>Review Text</h4>
+            <p>Please note: You can only edit the review</p>
                 <input type="text" id="reviewText" name="reviewText" value="{{this.reviewText}}" class="inputFields">
             </label>
             {{!-- <input type="file" name="picture" accept="image/*" class=""/> --}}
             <button type="submit" class="btn">Confirm</button>
         </form>
-    </div>
+    </div> --}}
+    <div class="card-center">
+    <h3>Edit Review</h3>
+    <form method="POST" action="reviews/reviews/updatereview/{{this.id}}">
+    <label for="reviewText"><h4>Review Text</h4>
+            <p>Please note: You can only edit the review</p>
+                <input type="text" id="reviewText" name="reviewText" value="{{this.reviewText}}" class="inputFields">
+            </label>
+            <button type="submit" class="btn">Confirm</button>
     <div>
         {{#if hasError}}
         <div class="error">

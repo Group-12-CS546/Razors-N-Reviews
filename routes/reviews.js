@@ -34,7 +34,8 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
       var test = Object.values(demo1)
       console.log(test, 'test')
 
-      res.status(200).render("reviews/salonreview", {name: salData.name, reviews: test})
+      // res.status(200).render("reviews/salonreview", {test: test}) //{name: salData.name, reviews: test})
+      res.status(200).render("salons/salonprofile", {test: test})
     } catch (e) {
       console.log('Hi I am savleen')
       //res.status(404).json({ error: e });
@@ -105,6 +106,8 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
     }
     });
 
+
+    //na for now
     router.get("/reviews/reviewforms/", async(req, res) => {
       // if (!req.session.AuthCookie) {
       //     res.status(401).redirect("/users/login");
@@ -193,7 +196,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
     });
 
 //delete review
-    router.delete('/reviews/:reviewId', async (req, res) => {
+    router.get('/reviews/deletereview/:reviewId', async (req, res) => {
       if (!req.params.reviewId) {
         res.status(400).json({ error: 'You must Supply an ID to delete' });
         return;
@@ -207,12 +210,32 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
       }
       try{
         await reviewsData.removeReview(req.params.reviewId);
-        res.status(200).json({ reviewId: reviewtoDelete._id , deleted: true });
+        // res.status(200).json({ reviewId: reviewtoDelete._id , deleted: true });
+        res.status(200).render("reviews/deletereview", { message: "Deleted your review!" });
       }catch (e) {
-        res.status(404).json({ error: e });
+        // res.status(404).json({ error: e });
+        res.status(404).render("reviews/error",{ error: e });
         return;
       }
     });
+
+
+    //get to edit the review
+    router.get('/reviews/updatereview/:reviewId', async (req, res) => {
+      let RestInfo = req.body;
+      if (!req.params.reviewId) {
+        res.status(400).json({ error: 'You must Supply an ID to edit' });
+        return;
+      }
+      if (!RestInfo.reviewText) {
+        // res.status(400).json({ error: 'You must provide a text to update' });
+        res.status(400).render("reviews/error", { error: 'You must provide a text to update' });
+        return;
+      }
+
+      let updatereview = await reviewsData.update(req.params.reviewId, RestInfo.reviewText)
+      res.status(200).render('reviews/editreview', {id : updatereview.reviewId })
+    })
 
 
     //update a review

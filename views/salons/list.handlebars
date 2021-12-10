@@ -14,46 +14,44 @@
 
 <main>
     {{!-- <div class="card-wide" id="sticky"> --}}
-        {{!-- <h1>{{name}}</h1> --}}
-        {{#each salonsList}}
-        {{!-- <div class="card-wide" id="sticky">
+    {{!-- <h1>{{name}}</h1> --}}
+    {{#each salonsList}}
+    {{!-- <div class="card-wide" id="sticky">
             
             <h1>{{this.name}}</h1>
             <p>{{this.address}}</p>
            <p>{{this.city}} &nbsp;&nbsp;&nbsp;&nbsp;Rating: {{this.rating}}</p>
         </div> --}}
-        
-        {{!-- <p>{{this.rating}}</p> --}}
-        {{!-- <ul class="">
+
+    {{!-- <p>{{this.rating}}</p> --}}
+    {{!-- <ul class="">
             <li>{{this.name}}</li>
             <li>{{this.address}}</li>
             <li>{{this.city}} &nbsp;&nbsp;&nbsp;&nbsp;Rating: {{this.rating}}</li>
         </ul> --}}
-        <div class="card-deck">
-            <div class="col-sm-6">
+    <div class="card-deck">
+        <div class="col-sm-6">
             <div class="card" style="width: 18rem;">
-            <img class="card-img-top">
-            <div class="card-body">
-            <h5 class="card-title">{{this.name}}</h5>
-            <p class="card-text">{{this.address}}</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+                <img class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="/salons/{{this._id}}">{{this.name}}</a></h5>
+                    <p class="card-text">{{this.address}}</p>
+                    <p class="card-text">{{this.city}} &nbsp;&nbsp;&nbsp;&nbsp;Rating: {{this.rating}}</p>
+                    {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                </div>
+            </div>
         </div>
-        </div>
-        
-        
-    {{!-- <h1>{{this.name}}</h1>
-            <p>{{this.address}}</p>
-           <p>{{this.city}} &nbsp;&nbsp;&nbsp;&nbsp;Rating: {{this.rating}}</p> --}}
-  </div>
-</div>
+    </div>
+    {{/each}}
+    <br>
+    <br>
+
+    <button type="submit" class="btn btn-primary"><a href="/manage"></a> Post a Salon</button>
 
 
-        {{/each}}
-
-        
 
 
-        {{!-- <p class = "category">{{restaurant.category}}</p>
+    {{!-- <p class = "category">{{restaurant.category}}</p>
         <p>{{restaurant.address}}</p>
         <p>{{restaurant.city}}, {{restaurant.state}} {{restaurant.zip}}</p>
         <p class="avg">{{restaurant.rating}}/5 ({{restaurant.reviews.length}} Reviews)</p>
