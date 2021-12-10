@@ -92,6 +92,7 @@ module.exports = {
     if(!ObjectId.isValid(id)){
       throw 'Not a valid ObjectId';
     }
+    
       /* delete review from DB */
       const reviewCollection = await customers();
       const customerCollection = await customers();

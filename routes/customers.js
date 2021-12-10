@@ -6,6 +6,7 @@ const mongoCollections = require('../config/mongoCollections');
 const users1 = mongoCollections.customers;
 const customers = mongoCollections.customers;
 let { ObjectId } = require('mongodb');
+const xss = require('xss');
  
 
  
@@ -19,19 +20,63 @@ router.get("/signup", (req, res) => {
 /*
 TODO:Delete Routes
 */
+router.get('/delete', async (req, res) => {
+    if (!req.session.AuthCookie){
 
-router.delete("/private/:id", (req, res) => {
+        res.render("users/signup", { title: "Signup", heading: "Signup" });
 
-    if (!req.session.AuthCookie)
-    res.render("users/signup", { title: "Signup", heading: "Signup" });
-    else{
-        res.json("hello")
     }
+    else{
+        let errorcode = false;
+    console.log("helooooooooooooooooooooooooooooooooooooooooooooooo")
+    let tempId=req.session.user.cust_id
+    tempId = tempId.toString(tempId);
+    console.log(tempId,"00000000000000000")
+	// if (!req.params.userId) {
+	// 	res.status(400)
+    //     res.render("users/signup", { title: "Signup", heading: "Signup" });
+	// 	return;
+	// }
+	try {
+        
+        deleteuser = await users.deleteCustomerbyId(tempId);
+    if(deleteuser){
+        errorcode = true;
+        res.status(500);
+        return res.render("users/signup", {title: "Signup", heading: "Signup" , errorcode: errorcode, message: "Please create  an account again." });
+
+    } else {
+        return res.render("users/private", {title: "Signup", heading: "Signup" , errorcode: errorcode, message: "User not deleted" });
+    }
+		//res.json({deleted: true, data: toBeDeletedReview});
+	} catch (e) {
+		return res.render("users/private", { errorcode: errorcode, message: "User not deleted" });
+	}
+    }
+});
+
+// router.post("/:id/delete",async (req, res) => {
     
-   
 
+//     if (!req.session.AuthCookie){
+//         res.status(400);
+//         res.render("users/signup", { title: "Signup", heading: "Signup" });
 
-})
+//     }
+
+    
+//     else{
+        
+//         req.params.id=req.session.user._id
+//         let user_delete_id=req.params.id
+//         console.log(user_delete_id,"!!!!!!!!!!!!!!!!!!!!!!**********************!!!!!")
+//         // const currentUser = await users.getCustomerById(req.session.user._id);
+//         // const customerCollection = await customers();
+//         const user_deleted = await customerCollection.deleteOne({user_delete_id});
+//         res.status(200);
+//         return res.render("users/signup", {id: req.params.id, errorcode: errorcode, errors: errors, message: "Your account has been deleted please SignUp to create a new account." });
+//     }
+// })
 
 
 router.get("/", (req, res) => {
@@ -125,11 +170,16 @@ router.post("/login", async(req, res) => {
             const customerCollection = await customers();
             customer_name=req.session.user.Username;
             console.log(customer_name,"-----customername----------")
-
+            
             const customer_details = await customerCollection.findOne({username:req.session.user.Username});
             console.log("*********",customer_details)
+            console.log("*********",customer_details._id)
+                       userid=customer_details._id
+                       session_user_id =userid.toString()
+    
+            req.session.user = { Username: userData.username, Password: userData.password,cust_id:session_user_id };
             
-            
+            console.log("req session 733333333333333333337333333333333333333", req.session.user)
             console.log(req.session.user, "req.session.user")
             res.status(200).render("users/private", {age:customer_details.age,state:customer_details.state,city:customer_details.city,email:customer_details.email,email:customer_details.email,firstname: customer_details.firstname,lastname: customer_details.lastname, username: customer_details.username, title: "Login", heading: "Login" });
         } else {
@@ -267,24 +317,14 @@ router.get("/logout", (req, res) => {
     }
 });
 
- router.get("/private",async (req, res) => {
- 
- 
-    console.log("req.body", req.session.user.Username)
- 
-    let user = req.session.user;
-    console.log("user******", user)
-    const currentUser = await users.getCustomerById(req.session.user);
-    console.log("################################################")
-    console.log(currentUser)
-    if (!req.session.user) {
+ router.get("/private", (req, res) => {
+    let errorcode = false;
+    if (!req.session.AuthCookie) {
         res.redirect('/');
+        errorcode = true;
+        res.render("users/signup", {errorcode: errorcode , message: "Either the username or password is invalid, Please signup again", title: "Signup", heading: "Signup" });
     } else {
-        res.render('users/private', {
-            username: req.session.user.Username,
-            firstName: currentUser.firstname,
-            lastName: currentUser.lastname,
-        });
+        res.status(200).render("users/private", {age:customer_details.age,state:customer_details.state,city:customer_details.city,email:customer_details.email,email:customer_details.email,firstname: customer_details.firstname,lastname: customer_details.lastname, username: customer_details.username, title: "Login", heading: "Login" });
     }
      
       

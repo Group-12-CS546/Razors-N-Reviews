@@ -52,7 +52,7 @@ app.use(async(req, res, next) => {
 app.use('/private', (req, res, next) => {
    if (!req.session.AuthCookie) {
      res.status(403);
-     return res.render("users/message",{title:"Error",heading:"Error",message:"User is not logged in",msg:true});
+     return res.render("users/errors",{title:"Error",heading:"Error",message:"User is not logged in",msg:true});
    } else{
        next();
    }
