@@ -11,6 +11,9 @@ const comments = data.comments;
 
 //Get data using salon id
 router.get('/reviews/salons/:salonId', async (req, res) => {
+  if (!req.session.AuthCookie){
+    res.redirect("/");
+  }
   console.log(req.params.salonId, 'id from routes')
     if(!req.params.salonId)
     {
@@ -45,6 +48,9 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
 
 //get using review id
   router.get('/:reviewId', async (req, res) => {
+    if (!req.session.AuthCookie){
+      res.redirect("/");
+    }
     if(!req.params.reviewId)
     {
       //res.status(404).json({ error: 'You must provide a Review ID for review'})
@@ -68,6 +74,9 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
 
 //check
     router.get('/reviews/alldata/:reviewId', async(req, res) => {
+      if (!req.session.AuthCookie){
+        res.redirect("/");
+      }
       try {
         const reviewList = await reviewsData.getReviewId(req.params.reviewId)
           //const salonsList = await salonsData.getAll();
@@ -85,6 +94,9 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
 
 //get all reviews by a customer
     router.get('/reviews/customer/:customersId' , async (req, res) => {
+      if (!req.session.AuthCookie){
+        res.redirect("/");
+      }
       if(!req.params.customersId)
     {
       // res.status(404).json({ error: 'You must provide a Customer ID for review'})
@@ -109,6 +121,9 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
 
     //na for now
     router.get("/reviews/reviewforms/", async(req, res) => {
+      if (!req.session.AuthCookie){
+        res.redirect("/");
+      }
       // if (!req.session.AuthCookie) {
       //     res.status(401).redirect("/users/login");
       // } else {
@@ -138,6 +153,9 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
 //create a review
 
     router.post('/reviews/:salonId', async (req, res) => {
+      if (!req.session.AuthCookie){
+        res.redirect("/");
+      }
       console.log(req.params.salonId, 'req.paramss')
       console.log(req.body, 'req.body')
       let reviewData = req.body;
@@ -197,6 +215,9 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
 
 //delete review
     router.get('/reviews/deletereview/:reviewId', async (req, res) => {
+      if (!req.session.AuthCookie){
+        res.redirect("/");
+      }
       if (!req.params.reviewId) {
         res.status(400).json({ error: 'You must Supply an ID to delete' });
         return;
@@ -222,24 +243,44 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
 
     //get to edit the review
     router.get('/reviews/updatereview/:reviewId', async (req, res) => {
-      let RestInfo = req.body;
-      if (!req.params.reviewId) {
-        res.status(400).json({ error: 'You must Supply an ID to edit' });
-        return;
+      //console.log(req.body, 'req.body from get')
+      console.log(req.params.reviewId, 'id from get')
+      if (!req.session.AuthCookie){
+        res.redirect("/");
       }
-      if (!RestInfo.reviewText) {
-        // res.status(400).json({ error: 'You must provide a text to update' });
-        res.status(400).render("reviews/error", { error: 'You must provide a text to update' });
-        return;
+      // let RestInfo = req.body;
+      // if (!req.params.reviewId) {
+      //   res.status(400).json({ error: 'You must Supply an ID to edit' });
+      //   return;
+      // }
+      // if (!RestInfo.reviewText) {
+      //   // res.status(400).json({ error: 'You must provide a text to update' });
+      //   res.status(400).render("reviews/error", { error: 'You must provide a text to update' });
+      //   return;
+        
+      // }
+      console.log("hi from get")
+      try {
+        const testreview = await reviewsData.getReviewId(req.params.reviewId)
+        //const testreview = await reviewsData.getReviewId(RestInfo.reviewId);
+        console.log(testreview, 'testreview')
+        //let updatereview = await reviewsData.update(req.params.reviewId, RestInfo.reviewText)
+      //console.log(updatereview, 'updatereview')
+      res.status(200).render('reviews/editreview', {id: testreview._id ,testreview: testreview.reviewText})
+      } catch (error) {
+        console.log(error, 'error')
+        req.status(400).render("reviews/error", { error: error })
       }
-
-      let updatereview = await reviewsData.update(req.params.reviewId, RestInfo.reviewText)
-      res.status(200).render('reviews/editreview', {id : updatereview.reviewId })
     })
 
 
     //update a review
     router.post('/reviews/updatereview/:reviewId', async (req, res) => {
+      console.log(req.params.reviewId, 'id from post')
+      if (!req.session.AuthCookie){
+        res.redirect("/");
+      }
+      console.log(req.body, 'req.body from post')
       let RestInfo = req.body;
       if(!req.params.reviewId)
       {
@@ -271,9 +312,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
         const updateSal = await reviewsData.update(req.params.reviewId, RestInfo.reviewText);
         console.log(updateSal, 'Update sal')
         // res.status(200).json(updateSal);
-        res.status(200).render("reviews/editreview", {reviewId: req.params.reviewId, reviewText: updateSal.reviewText});
-
-        
+        res.status(200).render("reviews/editreview", {message: "Updated your review successfully" ,updateSal: updateSal});
       } catch (e) {
         // res.status(404).json({message: e})
         res.status(404).render("reviews/error", {message: e})
@@ -282,6 +321,9 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
 
     //like a review
     router.post('/like/:reviewId/:customersId', async function (req,res){
+      if (!req.session.AuthCookie){
+        res.redirect("/");
+      }
       const ReviewId = req.body.reviewId.trim() //xss(req.body.reviewId.trim());
       const customersId = req.body.customersId.trim() //xss(req.body.customersId.trim());
       const parsedreviewId = ObjectId(ReviewId);
@@ -299,6 +341,9 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
   
   //dislike a review
   router.post('/dislike/:reviewId/:customersId', async function (req,res){
+    if (!req.session.AuthCookie){
+      res.redirect("/");
+    }
       const ReviewId = req.body.reviewId.trim()//xss(req.body.reviewId.trim());
       const customersId = req.body.customersId.trim() //xss(req.body.customersId.trim());
       const parsedreviewId = ObjectId(ReviewId);
