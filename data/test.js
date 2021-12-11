@@ -7,15 +7,15 @@ const reviews = mongoCollections.reviews;
 const covidReviews = mongoCollections.covidReviews;
 
 module.exports = {
-	async addCovidReview(customerId, salonId, reviewId) {
+	async addCovidReview(reviewId, covidRating) {
 		console.log("This is running");
-		if (!customerId || typeof customerId != "string")
+		 if (!salonId || typeof salonId != "string")
 			throw "customerId must be given as a string";
 		if (!reviewId || typeof reviewId != "string")
 			throw "reviewId must be given as a string";
-		if (!salonId || typeof salonId != "string")
-			throw "salonId must be given as a string";
-		let covidRating1 = await calculate.displayRadioValue();
+		if (!covidRating || typeof covidRating != "number")
+			throw "covidRating must be given";
+		/* let covidRating1 = await calculate.displayRadioValue(); */
 		console.log(covidRating1);
 		const covidReviewsCollection = await covidReviews();
 		let newCovidReview = {

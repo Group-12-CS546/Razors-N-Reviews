@@ -1,0 +1,63 @@
+{{!-- <div class="center">
+    <h1>Salon Finder</h1>
+    <main>
+        <form action="/search" method="POST" class="new-post-form">
+            <label>
+                {{ data.name }}
+                <input type="text" name="name" placeholder="search" value="{{data.name}}" class="full-width-input" />
+            </label>
+            <button type="submit">Submit</button>
+        </form>
+    </main>
+</div> --}}
+
+<main>
+    {{!-- <div class="card-wide" id="sticky"> --}}
+        {{!-- <h1>{{name}}</h1> --}}
+        {{#each salonsList}}
+        {{!-- <div class="card-wide" id="sticky">
+
+            <h1>{{this.name}}</h1>
+            <p>{{this.address}}</p>
+            <p>{{this.city}} &nbsp;&nbsp;&nbsp;&nbsp;Rating: {{this.rating}}</p>
+        </div> --}}
+
+        {{!-- <p>{{this.rating}}</p> --}}
+        {{!-- <ul class="">
+            <li>{{this.name}}</li>
+            <li>{{this.address}}</li>
+            <li>{{this.city}} &nbsp;&nbsp;&nbsp;&nbsp;Rating: {{this.rating}}</li>
+        </ul> --}}
+        <div class="card-deck">
+            <div class="col-sm-6">
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="/salons/{{this._id}}">{{this.name}}</a></h5>
+                        <p class="card-text">{{this.address}}</p>
+                        <p class="card-text">{{this.city}} &nbsp;&nbsp;&nbsp;&nbsp;Rating: {{this.rating}}</p>
+                        {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+        <br>
+        <br>
+
+        <button type="submit" class="btn btn-primary"><a href="/manage"></a> Post a Salon</button>
+
+
+
+
+        {{!-- <p class="category">{{restaurant.category}}</p>
+        <p>{{restaurant.address}}</p>
+        <p>{{restaurant.city}}, {{restaurant.state}} {{restaurant.zip}}</p>
+        <p class="avg">{{restaurant.rating}}/5 ({{restaurant.reviews.length}} Reviews)</p>
+        <p><a href="https://{{restaurant.website}}">More Info!</a></p>
+        <div id="gmap" style="height:400px; width:100%;"></div>
+        <!-- Some restaurants already have a pin on Google maps, and manual pin is somewhat inaccurate due to our estimation -->
+        --}}
+        {{!--
+    </div> --}}
+</main>

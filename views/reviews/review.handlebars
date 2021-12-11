@@ -1,26 +1,28 @@
 <main>
     <div class="center">
- 
-    <div class="center padding">
-        <h1>Salon Review</h1>
-        <form id="salon-review-form" class="center padding" action="/reviews/{{salonId}}" method="POST">
-            <label>
-                <p>Review Text:</p> 
-                <input id="name" value={{this.reviewText}} name="name" placeholder="Space for entering Review"/>
+
+        <div class="center padding">
+            <h1>Salon Review</h1>
+            <form id="salon-review-form" class="center padding" action="/reviews/{{this.salonId}}" method="POST">
+                <label>
+                    <p>Salon name:</p>
+                    <input id="name" name="name" placeholder="Salon Name" />
                 </label>
-            <label>
-            <p> Rating:</p> 
-                <input id="rating" name="rating" placeholder="Rating: 1-10"/>
-            </label>
- 
-            <button type="submit" id="btn-id">Submit</button>
-            
-            {{!-- <a href="/">Already have an salon? Click here to log-in</a> --}}
-        </form>
+                <label>
+                    <p>Review Text:</p>
+                    <input id="reviewText" name="reviewText" placeholder="Space for entering Review" />
+                </label>
+                <label>
+                    <p> Rating:</p>
+                    <input id="rating" name="rating" placeholder="Rating: 1-10" />
+                </label>
+
+                <button type="submit" id="btn-id">Submit</button>
+            </form>
+        </div>
+        <div id="error-div">
+            <p class="error">{{message}}</p>
+        </div>
     </div>
-    <div id="error-div">
-        <p class="error">{{message}}</p>
-    </div>
-    </div>
- 
+
 </main>

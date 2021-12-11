@@ -8,7 +8,8 @@ const customers = mongoCollections.customers;
 
 module.exports = {
 	async addComment(customerId, reviewId, commentText) {
-		if (!customerId || typeof customerId != "string")
+		console.log(customerId, reviewId, commentText);
+		 if (!customerId || typeof customerId != "string")
 			throw "customerId must be given as a string";
 		if (!reviewId || typeof reviewId != "string")
 			throw "reviewId must be given as a string";

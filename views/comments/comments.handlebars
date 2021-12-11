@@ -4,3 +4,46 @@
     </p>
     <p>{{commentText}}</p>
 </main>
+
+
+
+
+
+{{!-- <h4>Comments</h4>
+<div class="comments">
+
+    <form id="login-form" name="loginForm" class="form-container"
+        action="/comments/{{../currentUserData._id}}/{{this._id}}/{{this.salonId}}/add" method="POST">
+        <label>
+            <input type="textarea" name="commentValue" id="commentValue" class="inputFields"
+                placeholder="Write a comment..." rows="3" required />
+        </label>
+        <button type="submit" class="btn">Submit</button>
+    </form>
+    {{/if}}
+    {{#each this.commentList}}
+    <div class="card-full" id="white-card">
+        <p class="p_inline"><a href="../users/{{this.user._id}}">{{this.user.firstName}} {{this.user.lastName}}</a></p>
+        <p id="comment-value-tag-{{@index}}">{{this.commentText}}</p>
+        {{#if this.isCommenter}}
+        <form id="comment-form-{{@index}}" name="loginForm" class="comment-container"
+            action="/comments/{{this.restaurantId}}/{{this._id}}/edit" method="POST">
+            <label>
+                <input type="textarea" name="commentValue" id="commentValue" class="inputFields"
+                    placeholder="Edit your comment..." required />
+            </label>
+            <button type="submit" class="btn">Post!</button>
+            <button type="button" class="btn cancel"
+                onclick="javascript:commentBoxEditForm('{{@index}}');">Cancel</button>
+        </form>
+        <div class="dropdown">
+            <button class="dropbtn">Options</button>
+            <div class="dropdown-content">
+                <p><a href="javascript:commentBoxEditForm('{{@index}}');">Edit Comment</a></p>
+                <p><a href="/comments/{{this.salonId}}/{{this._id}}/delete">Delete Comment</a></p>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    {{/each}}
+</div> --}}

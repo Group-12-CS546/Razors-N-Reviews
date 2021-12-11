@@ -23,7 +23,7 @@ function displayRadioValue() {
 	let result = section1Total / multiple;
 	let percentage = result * 100;
 	percentage = percentage.toFixed(2);
-
+	
 	//Section 1
 	result1 += "<b>Results:</b><br>";
 	result1 += "Total: " + section1Total + "<br>";

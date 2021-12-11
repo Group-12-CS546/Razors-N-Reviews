@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const data = require("../data/");
 const comments = data.comments;
+const customer= data.customers;
+
 
 router.get("/:id", async (req, res) => {
 	if (!req.params.id) {
@@ -28,24 +30,44 @@ router.get("/", async (req, res) => {
 	}
 });
 
-router.post("/:customerId/:reviewId/:salonId/add", async (req, res) => {
-	if (!req.params.reviewId || !req.params.customerId) {
+router.post("/add/:reviewId", async (req, res) => {
+	//console.log(req.session.user.id);
+	console.log(req.params.reviewId);
+	//console.log(req.body,"from comment routes");
+	console.log(req.params.customerId,req.params.reviewId,req.params.salonId,"Parameters")
+	  if (!req.session.AuthCookie){
+        res.redirect("/");
+      } 
+	  console.log(req.session);
+	console.log("Kjhsfoiuhweo");
+	const user = req.session.user.id;
+	console.log(user, 'user.id');
+
+	if (!req.params.reviewId) {
 		res.status(400).json({ error: "You must Supply an ID to add comment to!" });
 		return;
 	}
+	/* const user = req.session.user
+	console.log(user.id, 'user.id') */
+	//req.session.user = {id: testid}
+	//console.log(req.session.user.id);
 	const commentVal = req.body.commentText;
 	try {
 		addCommentOnReview = await comments.addComment(
-			req.params.customerId,
+			user,
 			req.params.reviewId,
 			commentVal
 		);
 		if (addCommentOnReview) {
-			return res.redirect("/salons/new" + req.params.salonId); // Ask Shraddha
+			console.log("ERROR");
+			return res.render("comments/success", { userId : addCommentOnReview.user,message: "Sucessfully added comment" }); 
+			//return res.json({addCommentOnReview});
 		} else {
+			console.log("Error from else");
 			return res.status(404).send();
 		}
 	} catch (e) {
+		console.log(e);
 		res.status(500).json({ error: e });
 	}
 });

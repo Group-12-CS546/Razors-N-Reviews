@@ -1,26 +1,60 @@
-<h1>Characters Found</h1>
+<h1></h1>
 <main>
-    Hello
-    <input type="text" id="search" />
-        <button type="submit">Search Show
-    {{!-- <form id="searchForm">
-        <label for="search">Search Term</label>
-        <input type="text" id="search" />
-        <button type="submit">Search Shows</button>
-        <div class="error" id="errorDiv"></div>
-    </form> --}}
+    {{!-- <h2>{{data.name}}</h2> --}}
+    {{!-- <h1>{{this.data}}</h1> --}}
+    {{#each data}}
+    {{!-- <span>{{this.name}}</span>
+    <span>{{this.address}}</span>
+    <span>{{this.city}}</span>
+    <span>{{this.rating}}</span> --}}
 
-    <h2>{{this.demo.title}}</h2>
+
+
+
+    <div class="card-deck">
+        <div class="col-sm-6">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.name}}</h5>
+                    {{!-- <p>{{this.salonId}}</p> --}}
+                    <p class="card-text">{{this.address}}</p>
+                    <p class="card-text">{{this.city}}</p>
+                    <p class="card-text">{{this.rating}}</p>
+                    {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                </div>
+            </div>
+
+
+            {{!-- <h1>{{this.name}}</h1>
+            <p>{{this.address}}</p>
+            <p>{{this.city}} &nbsp;&nbsp;&nbsp;&nbsp;Rating: {{this.rating}}</p> --}}
+        </div>
+    </div>
+    {{/each}}
+
+
+
+
+
+
+
+
+
+
+
+
+
     {{#if data}}
     <ul>
         {{#each data}}
         <li>
-            <a href="/name/{{this.id}}">{{this.name}}</a>
+            <a style="color: white;" href="/salons/">******{{this.data}}</a>
         </li>
         {{/each}}
     </ul>
     {{else}}
-    <p class="not-found">We're sorry, but no results were found for {{this.demo.title}}.</p>
+    <p class="not-found">We're sorry, but no results were found for {{this.data.name}}.</p>
     {{/if}}
 
 

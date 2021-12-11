@@ -1,0 +1,58 @@
+<main>
+    <div class="center">
+
+        <div class="center padding">
+            <h1>Salon Sign Up </h1>
+            <form id="salon-signup-form" class="center padding" action="/post" method="POST">
+                <label>
+                    <p>Name :</p>
+                    <input id="name" name="name" placeholder="name" />
+                </label>
+                <label>
+                    <p> website:</p>
+                    <input id="website" name="website" placeholder="website" />
+                </label>
+                <label>
+                    <p> service :</p>
+                    <input id="service" name="service" placeholder="service" />
+                </label>
+
+                <label>
+                    <p> address :</p>
+                    <input id="address" name="address" placeholder="address" />
+                </label>
+
+                <label>
+                    <p> city :</p>
+                    <input id="city" name="city" type="city" placeholder="city" />
+                </label>
+                <label>
+                    <p> state:</p>
+                    <input id="state" name="state" placeholder="state" />
+                </label>
+
+                <label>
+                    <p>zip :</p>
+                    <input id="zip" name="zip" placeholder="zip" />
+                </label>
+                <label>
+                    <p>longitude :</p>
+                    <input id="longitude" name="longitude" placeholder="longitude" />
+                </label>
+
+                <label>
+                    <p> latitude :</p>
+                    <input id="latitude" name="latitude" placeholder="latitude" />
+                </label>
+
+                <button type="submit" id="btn-id">Submit</button>
+
+                {{!-- <a href="/">Already have an salon? Click here to log-in</a> --}}
+            </form>
+        </div>
+        {{#if errorcode}}
+        <p class="error">{{message}}</p>
+        {{/if}}
+    </div>
+
+</main>
