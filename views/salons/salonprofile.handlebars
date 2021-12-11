@@ -31,8 +31,53 @@
                 <img class="card-img-top">
                 <div class="card-body">
                     {{!-- <h5 class="card-title"><a href="/salons/{{salonId._id}}">{{this.name}}</a></h5> --}}
-                    {{#each getReviews}}
-                    <p class="card-text">Review: {{this}}</p>
+                    {{#each this.getReviews}}
+                    <p class="card-text">reviewText: {{this.reviewText}}</p>
+                    <p class="card-text">rating: {{this.rating}}</p>
+                    <script src="https://use.fontawesome.com/fe459689b4.js"></script>
+
+                    {{!-- <button class="like" id="green"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></button>
+  <button class="dislike" id="red"><i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></button> --}}
+
+                    {{!-- <div class="container"><a class="like">Like</a> 
+  <a class="dislike">Dislike</a> 
+  <input class="qty" name="qty" readonly="readonly" type="text" value="0" /></div> --}}
+
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                    <div class="container">
+                        <a class="like"><i class="fa fa-thumbs-o-up"></i>
+                            Like <input class="qty1" name="qty1" readonly="readonly" type="text" value="0" />
+                        </a>
+                        <a class="dislike"><i class="fa fa-thumbs-o-down"></i>
+                            Dislike <input class="qty2" name="qty2" readonly="readonly" type="text" value="0" />
+                        </a>
+                    </div>
+
+                    <script src="/public/javascript/like.js"></script>
+                    <p><a href="/reviews/reviews/updatereview/{{this._id}}">Edit Review</a></p>
+                    <p><a href="/reviews/reviews/deletereview/{{this._id}}">Delete Review</a></p>
+
+
+                    <div class="card-text">
+                        <p class="card-text">Comments</p>
+                        {{#each this.commentTexts}}
+                        <p>{{this}}</p>
+                        {{/each}}
+                        <div class="center">
+                            <h4>Post a comment</h4>
+                            <form action="/comments/add/{{this._id}}" method="POST" class="new-comment-form">
+                                <div class="form-group">
+                                    <label for="commentText">Comment:</label>
+                                    <input type="text" class="form-control" id="commentText" name="commentText"
+                                        aria-describedby="commentText" placeholder="Enter a comment....">
+
+                                </div>
+                                <button type="submit">Submit</button>
+                            </form>
+                        </div>
+
+                    </div>
+
                     {{/each}}
                     {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
                 </div>
@@ -41,23 +86,12 @@
     </div>
 
 
-    <button type="submit" class="btn btn-primary">delete</button>
+    {{!-- <button type="submit" class="btn btn-primary">delete</button> --}}
 
     {{!-- <button type="submit" class="btn btn-primary">review
         <a href=""></a>
     </button> --}}
 
-    {{!-- <form method="post" action="/salons/{{salonId}}/delete?_method=DELETE">
-        <input type="hidden" name="_method" value="DELETE">
-        <div class="dropdown">
-            <button class="dropbtn">Options</button>
-            <div class="dropdown-content">
-                {{!-- <p><a href="/reviews/{{this.review._id}}/edit">Edit Review</a></p> --}}
-    {{!-- <p><a href="../sal/{{this.restaurant._id}}/{{this.review._id}}/delete">Delete Review</a></p> --}}
-    {{!-- <p><a href="/salons/{{this.salonId}}/delete">Delete Review</a></p>
-            </div>
-        </div>
-    </form> --}}
 
 
     <form id="login" action="/salons/{{this.salonId}}/delete" method="POST">

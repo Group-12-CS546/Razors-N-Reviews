@@ -8,10 +8,10 @@ const customer = mongoCollections.customers;
 module.exports = {
     async create(salonId, customersId, reviewText, rating) //, comments, upvote, downvote)
     {
-        console.log(salonId, 'salonId')
-        console.log(customersId, 'customersId')
-        console.log(reviewText, 'reviewText')
-        console.log(rating, 'rating')
+        // console.log(salonId, 'salonId')
+        // console.log(customersId, 'customersId')
+        // console.log(reviewText, 'reviewText')
+        // console.log(rating, 'rating')
         salonId = salonId.toString();
         customersId = customersId.toString();
         if (typeof salonId != 'string') throw 'No Salon with proper type has been provided'
@@ -26,17 +26,9 @@ module.exports = {
         if (reviewText == null || reviewText.length == 0) throw 'Review is not provided'
         if (reviewText.trim() == '') throw 'Review provided only contains blank spaces'
 
-        // if (typeof rating != 'number') throw 'Rating provided is not a number'
-        // if (rating.length == 0 || rating == null) throw 'Rating is not provided'
-        // if (rating <= 0 || rating >= 10) throw 'Rating must be between 0-10'
-
-        //  if(comments)
-        //  {
-        //      if(comments.length == 0 || comments == null) throw 'Comments are not provided'
-        //      if(comments.trim() == '') throw 'Only Blank spaces are provided in Comments'
-        //      if(typeof comments!= 'string') throw 'Comments are not of appropriate type'
-
-        //  }
+        if (typeof rating != 'string') throw 'Rating provided is not a string'
+        if (rating.length == 0 || rating == null) throw 'Rating is not provided'
+        if (rating <= 0 || rating > 11) throw 'Rating must be between 0-10'
 
         const reviewCollection = await reviews();
         const sal = await salons();
@@ -70,7 +62,7 @@ module.exports = {
         const insertInfo = await reviewCollection.insertOne(newReview);
         if (insertInfo.insertedCount === 0) throw 'Could not add new Review';
 
-        console.log(newReview, 'newReview')
+        // console.log(newReview, 'newReview')
         var demo
         var sum = 0
             //const OverallRatingNew = await sal.updateOne({ _id: parsedId }, { $addToSet: { reviews: newReview } })
@@ -82,20 +74,20 @@ module.exports = {
 
         // const reviewofOneSal = await sal.findOne({ _id: parsedId });
         const reviewofOneSal = await sal.findOne({ _id: ObjectID(salonId) });
-        console.log(reviewofOneSal, 'Review of one sal')
+        // console.log(reviewofOneSal, 'Review of one sal')
         var demo = 0
         var sum = 0
 
         if (reviewofOneSal) {
             for (var i = 0; i < reviewofOneSal.reviewId.length; i++) {
                 const reviewcaught = await this.getReviewId((reviewofOneSal.reviewId[i]));
-                console.log(reviewcaught, 'reviewcaught')
+                // console.log(reviewcaught, 'reviewcaught')
                 demo = reviewcaught.rating
-                console.log(demo, 'demo')
+                    // console.log(demo, 'demo')
                 sum = sum + demo
-                console.log(sum, 'sum')
+                    // console.log(sum, 'sum')
             }
-            console.log(sum, 'sum')
+            // console.log(sum, 'sum')
             var newOverallRating = Number((sum / (reviewofOneSal.reviewId.length)).toFixed(2))
         }
 
@@ -140,7 +132,7 @@ module.exports = {
 
     //all reviews of one salon
     async getAllreviewsofSalon(salonId) {
-        console.log(salonId, 'id from data')
+        // console.log(salonId, 'id from data')
         if (salonId == null || salonId.length == 0) throw 'You must provide a Salon ID '
         if (typeof salonId !== 'string') throw 'Not valid type of SalonID provided';
         if (salonId.trim() == '') throw 'Blank spaces are provided in SalonID'
@@ -154,17 +146,19 @@ module.exports = {
         const sal = await salons();
 
         const AllReviewsofaSal = await sal.findOne({ _id: parsedId });
-        console.log(AllReviewsofaSal, 'all reveiws of a sal')
+        // console.log(AllReviewsofaSal, 'all reveiws of a sal')
         if (AllReviewsofaSal == null) throw 'Salon ID is not present'
 
         var ReviewList = []
             //console.log(AllReviewsofaSal.reviews.length, 'AllReviewsofaSal.reviews.length')
+            // console.log('reivewId', AllReviewsofaSal.reviewId)
         for (var i = 0; i < AllReviewsofaSal.reviewId.length; i++) {
             var reviewcaught = await this.getReviewId(AllReviewsofaSal.reviewId[i])
-            ReviewList[i] = reviewcaught.reviewText
-            console.log(ReviewList, 'review list')
+                // console.log(reviewcaught)
+            ReviewList.push(reviewcaught)
+                // console.log(ReviewList, 'review list')
         }
-        console.log(ReviewList, 'review list')
+        // console.log(ReviewList, 'review list')
 
         //var ReviewList = AllReviewsofaSal.reviews
         if (!ReviewList) throw 'Reviews of this salon not found';
@@ -182,20 +176,21 @@ module.exports = {
         const reviewCollection = await reviews();
         const reviewList = await reviewCollection.find({ 'customersId': customersId }).toArray();
 
-        console.log(reviewList, 'reviewList')
-        var customerReviews = []
+        console.log(reviewList, 'reviewList from data')
+            // var customerReviews = []
 
-        for (var i = 0; i < reviewList.length; i++) {
-            customerReviews[i] = reviewList[i].reviewText
-        }
+        // for (var i = 0; i < reviewList.length; i++) {
+        //   customerReviews[i] = reviewList[i].reviewText
+        // }
         //console.log(customerReviews, 'customerReviews')
 
-        if (!customerReviews) throw "No Reviews in the system for this customer";
+        //if (!customerReviews) throw "No Reviews in the system for this customer";
+        if (!reviewList) throw "No Reviews in the system for this customer";
         //  reviewList.forEach((val) => {
         //      val._id = (val._id).toString();
         //  })
 
-        return customerReviews;
+        return reviewList;
     },
 
 
@@ -214,7 +209,7 @@ module.exports = {
         const reviewCollection = await reviews();
 
         const reviewcaught = await reviewCollection.findOne(parsedId);
-        //console.log(reviewcaught, 'reviewcaught')
+        // console.log(reviewcaught, 'reviewcaught')
         const onereview = reviewcaught.reviewText
         if (!onereview) throw 'No review found with the supplied review ID'
         return onereview;
@@ -240,14 +235,14 @@ module.exports = {
 
         const reviewcaught = await reviewCollection.findOne(parsedId);
         //console.log(reviewcaught, 'reviewcaught')
-        console.log(reviewcaught, 'reviewcaught from getreviewId func')
+        //console.log(reviewcaught, 'reviewcaught from getreviewId func')
 
         return JSON.parse(JSON.stringify(reviewcaught))
     },
 
 
     async removeReview(reviewId) {
-        console.log(reviewId, 'Review ID')
+        // console.log(reviewId, 'Review ID')
         if (reviewId == null || reviewId.length == 0) throw 'Reviw ID is null'
         if (typeof reviewId != 'string') throw 'Review ID is not of proper type'
         if (reviewId.trim() == '') throw 'Blank spaces are provided in Review Id'
@@ -264,13 +259,13 @@ module.exports = {
             //var review = await reviewCollection.findOne({"review._id": parsedId})
 
         // var review = await this.getReviewById(reviewId)
-        console.log(review, 'review')
+        //console.log(review, 'review')
 
 
         const sal = await salons();
         const getSal = await sal.findOne(ObjectId(review.salonId));
-        console.log(getSal, 'get sal')
-            //return
+        //console.log(getSal, 'get sal')
+        //return
         var demoTest
         var test
             //console.log(getSal, 'getsal')
@@ -281,7 +276,7 @@ module.exports = {
                     //console.log(demoTest._id, 'demoTest._id')
                 if (demoTest == reviewId) {
                     test = demoTest
-                    console.log(test, 'test')
+                        //console.log(test, 'test')
                     break;
                 }
             }
@@ -291,30 +286,30 @@ module.exports = {
         }
 
         var ReviewList = getSal.reviewId
-        console.log(ReviewList, 'ReviewList')
+            //console.log(ReviewList, 'ReviewList')
         var sum = 0;
         var demo = 0;
 
 
         if (ReviewList != null && ReviewList.length > 0) {
             for (var i = 0; i < ReviewList.length; i++) {
-                console.log(ReviewList[i], 'Should returns')
+                //console.log(ReviewList[i] , 'Should returns')
                 if (ReviewList[i] != reviewId) {
-                    console.log(ReviewList[i], 'ReviewList[i]')
+                    //console.log(ReviewList[i], 'ReviewList[i]')
 
                     var reviewcaught = await this.getReviewId(ReviewList[i]);
-                    console.log(reviewcaught, 'review caught')
+                    // console.log(reviewcaught, 'review caught')
                     demo = reviewcaught.rating
                     console.log(demo, 'demo')
-                    sum = sum + demo
-                    console.log(sum, 'sum')
+                        // sum = sum + demo
+                        //console.log(sum , 'sum')
                         //reviewcaught = null
                 }
 
             }
 
-            console.log(sum, 'sum')
-                //Number((sum / (ReviewList.length - 1)).toFixed(2));
+            //console.log(sum, 'sum')
+            //Number((sum / (ReviewList.length - 1)).toFixed(2));
 
             var avgRating = Number(sum / (ReviewList.length - 1).toFixed(2))
                 //avgRating = Number(avgRating.toFixed(2));
@@ -327,7 +322,7 @@ module.exports = {
         const deleteInfo = await reviewCollection.removeOne({ _id: parsedId });
         if (deleteInfo.deletedCount === 0) throw `Could not delete review with id of ${parsedId}`;
 
-        console.log(avgRating, 'avgRating')
+        //console.log(avgRating, 'avgRating')
         await sal.updateOne({ _id: getSal._id }, { $set: { rating: avgRating } })
 
         let SalUpdate = await sal.updateOne({ _id: ObjectID(review.salonId) }, { $pull: { reviewId: reviewId } })
@@ -358,13 +353,13 @@ module.exports = {
 
         let review = await reviewCollection.findOne(parsedID);
         if (review === null) throw 'No review with that id';
-        console.log(review, 'review')
+        // console.log(review, 'review')
 
         if (reviewText.length !== 0) {
             const updatedInfo = await reviewCollection.updateOne({ _id: parsedID }, { $set: { reviewText: reviewText } });
             if (!updatedInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed';
         }
-        return await this.getReviewById(reviewId);
+        return await this.getReviewId(reviewId);
     },
 
 

@@ -1,0 +1,30 @@
+<main>
+    <div>
+         <p><a href="/salons/{{this._id}}">Go back to the Salon page!</a></p>
+    <h3>Edit Review</h3>
+    <form method="POST" action="/reviews/reviews/updatereview/{{this.id}}">
+    <label for="reviewText"><h4>Review Text</h4>
+            <p>Please note: You can only edit the review</p>
+                <input id="reviewText" name="reviewText" value="{{testreview}}">
+            </label>
+        <button type="submit" id="btn-id">Edit Review</button>
+        <p>{{message}}</p>
+        {{!-- <p><a href="/reviews/reviews/deletereview/{{this._id}}">Delete Review</a></p> --}}
+    </form>
+    
+</div>
+    <div>
+        
+        {{#if hasError}}
+        <div class="error">
+            <ul>
+                {{#each error}}
+                    <li>
+                        {{this}}
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+        {{/if}}
+    </div>
+</main>
