@@ -9,7 +9,7 @@ const salonsData = data.salons;
 const main = async() => {
 
     const db = await dbConnection();
-     //await db.dropDatabase();
+     await db.dropDatabase();
 
      const DreamZ = await salonsData.create("DreamZ Beauty Salon", "http://www.dreamzbeautys.com", "hair", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "70.7", "50.9")
      console.log(DreamZ, "DreamZ has been added successfully")
@@ -37,6 +37,15 @@ const main = async() => {
 
      const Hudson = await salonsData.create("Hudson Sqaure Salon", "http://www.hudsonsqaure.com", "waxing", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "74.3", "82.3")
      console.log(Hudson, "Hudson has been added successfully")
+
+     const Sole = await salonsData.create("Sole Salon", "http://www.solesalonhudson.com", "spa", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "71.3", "81.3")
+     console.log(Sole, "Sole has been added successfully")
+
+     const UpOut = await salonsData.create("Up & Out Salon", "http://www.upnoutsalon.com", "makeup", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "61.3", "89.3")
+     console.log(UpOut, "UpOut has been added successfully")
+
+     const Sorella = await salonsData.create("Sorella Mia", "http://www.sorellamia.com", "makeup", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "89.3", "99.3")
+     console.log(Sorella, "Sorella has been added successfully")
 
     // const olivebistro = await salonsData.create("The Punjabi Affair", "http://www.olivebistro.com", "hair", "New York City, New York", "New York", " NJ", "08820", "40.732628", "-74.037628");
     // console.log(olivebistro);

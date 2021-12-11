@@ -272,7 +272,8 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
           res.status(400).render("reviews/error", { message: "You cant delete this review as you did not post it!" })
         }
         else{
-          await reviewsData.removeReview(req.params.reviewId);
+          const deletereview = await reviewsData.removeReview(req.params.reviewId);
+          res.status(200).render('reviews/deletereview', {message: 'Deleted your review successfully'})
           // console.log("successfully deleted")
         }
       }catch(e)
