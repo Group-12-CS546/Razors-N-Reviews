@@ -1,408 +1,427 @@
-const mongoCollections = require('../config/mongoCollections')
-let { ObjectID } = require("mongodb");
-const reviews = mongoCollections.reviews;
+const mongoCollections = require('../config/mongoCollections');
 const salons = mongoCollections.salons;
-const customer = mongoCollections.customers;
+let { ObjectId } = require('mongodb');
 
+const create = async function create(name, website, service, address, city, state, zip, longitude, latitude) {
+    if (!name) throw 'You must provide a name for your salon';
+    if (!website) throw 'You must provide a website for your salon';
+    if (!service) throw 'You must provide a service for your salon';
+    if (!address) throw 'You must provide a address for your salon';
+    if (!city) throw 'You must provide a city for your salon';
+    if (!state) throw 'You must provide a state for your salon';
+    if (!zip) throw 'You must provide a zip for your salon';
+    if (!longitude) throw 'You must provide a longitude for your salon';
+    if (!latitude) throw 'You must provide a latitude for your salon';
 
-module.exports = {
-  async create(salonId, customersId, reviewText, rating) //, comments, upvote, downvote)
-  {
-    // console.log(salonId, 'salonId')
-    // console.log(customersId, 'customersId')
-    // console.log(reviewText, 'reviewText')
-    // console.log(rating, 'rating')
-    salonId = salonId.toString();
-    customersId = customersId.toString();
-    if (typeof salonId != 'string') throw 'No Salon with proper type has been provided'
-    if (salonId == null || salonId.length == 0) throw 'No Salon has been selected'
-    if (salonId.trim() == '') throw 'Salon Id provided contains only empty spaces'
-
-    if (customersId == null || customersId.length == 0) throw 'Customer ID has not been entered for Review'
-    if (typeof customersId != 'string') throw 'No customer with proper type has been provided'
-    if (customersId.trim() == '') throw 'Customer ID is provided contains only empty spaces'
-
-    if (typeof reviewText != 'string') throw 'Review is not of appropriate type'
-    if (reviewText == null || reviewText.length == 0) throw 'Review is not provided'
-    if (reviewText.trim() == '') throw 'Review provided only contains blank spaces'
-
-    if (typeof rating != 'number') throw 'Rating provided is not a number'
-    if (rating.length == 0 || rating == null) throw 'Rating is not provided'
-    if (rating <= 0 || rating > 11) throw 'Rating must be between 0-10'
-
-    const reviewCollection = await reviews();
-    const sal = await salons();
-
-    const cust = await customer();
-
-    let { ObjectId } = require('mongodb');
-    let newObjId = ObjectId();
-    if (!ObjectId.isValid(newObjId)) throw 'Object id is not valid'
-    let x = newObjId.toString();
-    let parsedId = ObjectId(salonId);
-
-    const checkSal = await sal.findOne({ _id: parsedId })
-    if (checkSal === null) throw 'No Salon is present with that id'
-
-    let parsedId1 = ObjectId(customersId);
-    const checkCust = await cust.findOne({ _id: parsedId1 })
-    if (checkCust === null) throw 'No Customer is present with that id'
-
-    let newReview = {
-      _id: ObjectId(),
-      salonId: salonId,
-      customersId: customersId,
-      reviewText: reviewText,
-      rating: rating,
-      upvote: [],
-      downvote: []
-      //comments: comments
+    //To check name is null or empty
+    if (name.length == 0) {
+        throw 'Name cannot be null or empty'
+    }
+    //To check name is string
+    if (typeof name != 'string') {
+        throw 'The entered name must be a string'
+    }
+    //To check address is null or empty
+    if (address.length == 0) {
+        throw 'address cannot be null or empty'
+    }
+    //To check address is string
+    if (typeof address != 'string') {
+        throw 'The entered address must be a string'
+    }
+    //To check city is null or empty
+    if (city.length == 0) {
+        throw 'city cannot be null or empty'
+    }
+    //To check city is string
+    if (typeof city != 'string') {
+        throw 'The entered city must be a string'
+    }
+    //To check state is null or empty
+    if (state.length == 0) {
+        throw 'state cannot be null or empty'
+    }
+    //To check state is string
+    if (typeof state != 'string') {
+        throw 'The entered state must be a string'
+    }
+    //To check zip is null or empty
+    if (zip.length == 0) {
+        throw 'stzipate cannot be null or empty'
+    }
+    //To check zip is string
+    if (typeof zip != 'string') {
+        throw 'The entered zip must be a string'
+    }
+    //To check longitude is null or empty
+    if (longitude.length == 0) {
+        throw 'longitude cannot be null or empty'
+    }
+    // To check longitude is string
+    if (typeof longitude != 'string') {
+        throw 'The entered longitude must be a string'
     }
 
-    const insertInfo = await reviewCollection.insertOne(newReview);
-    if (insertInfo.insertedCount === 0) throw 'Could not add new Review';
+    var decimal = /^[-+]?[0-9]+\.[0-9]+$/;
 
-    // console.log(newReview, 'newReview')
-    var demo
-    var sum = 0
-    //const OverallRatingNew = await sal.updateOne({ _id: parsedId }, { $addToSet: { reviews: newReview } })
-    //console.log(OverallRatingNew, 'Overall new rating')
-
-    let updateSal = await salons();
-
-    let SalUpdate = await updateSal.updateOne({ _id: ObjectID(newReview.salonId) }, { $push: { reviewId: (newReview._id).toString() } })
-
-    // const reviewofOneSal = await sal.findOne({ _id: parsedId });
-    const reviewofOneSal = await sal.findOne({ _id : ObjectID(salonId) });
-    // console.log(reviewofOneSal, 'Review of one sal')
-    var demo = 0
-    var sum = 0
-
-    if(reviewofOneSal){
-      for(var i=0; i<reviewofOneSal.reviewId.length; i++)
-      {
-        const reviewcaught = await this.getReviewId((reviewofOneSal.reviewId[i]));
-        // console.log(reviewcaught, 'reviewcaught')
-        demo = reviewcaught.rating
-        // console.log(demo, 'demo')
-        sum = sum + demo
-        // console.log(sum, 'sum')
-      }
-      // console.log(sum, 'sum')
-      var newOverallRating = Number((sum/(reviewofOneSal.reviewId.length)).toFixed(2))
+    if (!longitude.match(decimal)) {
+        // alert('Please enter valid float');
+        throw 'The entered longitude must be a float'
     }
 
-    // if (reviewofOneSal) {
-    //   const ReviewList =  await this.getAllreviewsofSalon(salonId)
-    //   //var ReviewList = reviewofOneSal.reviews
-    //   console.log(ReviewList, 'Review list')
-    //   console.log(ReviewList.reviewId.length, 'ReviewList.reviewId.length')
-    //   for (var i = 0; i < ReviewList.reviewId.length; i++) {
-    //     demo = ReviewList[i].rating
-    //     sum = sum + demo
-
-    //   }
-    //   console.log(sum, 'sum')
-    //   //var newSum = sum + rating
-    //   var newLength = ReviewList.length
-    //   //console.log(newLength,'newLength')
-    //   var newOverallRating = Number((sum / newLength).toFixed(2));
-    //   console.log(newOverallRating, 'new overall rating')
-    // }
-    else {
-      var newOverallRating = rating
+    if (!latitude.match(decimal)) {
+        // alert('Please enter valid float');
+        throw 'The entered latitude must be a float'
     }
 
-    let updateCustomer = await customer();
-    let custUpdate = await updateCustomer.updateOne({ _id: ObjectID(newReview.customersId) }, { $push: { reviewId: (newReview._id).toString() } });
-    //console.log(custUpdate, 'Custupdate')
-
-
-    
-    //let SalUpdate = await updateSal.updateOne({ _id: ObjectID(newReview.salonId) }, { $push: { reviewId: (newReview._id).toString() } })
-    let SalUpdate1 = await updateSal.updateOne({ _id: ObjectID(newReview.salonId) }, { $set: { rating: newOverallRating } })
-
-    //console.log(SalUpdate, 'Sal update')
-
-    //await reviewCollection.updateOne({_id: parsedId},{$set: {overallRating: newOverallRating}});
-
-    return JSON.parse(JSON.stringify(newReview))
-
-
-  },
-
-  //all reviews of one salon
-  async getAllreviewsofSalon(salonId) {
-    // console.log(salonId, 'id from data')
-    if (salonId == null || salonId.length == 0) throw 'You must provide a Salon ID '
-    if (typeof salonId !== 'string') throw 'Not valid type of SalonID provided';
-    if (salonId.trim() == '') throw 'Blank spaces are provided in SalonID'
-
-    let { ObjectId } = require('mongodb');
-    let newObjId = ObjectId();
-    if (!ObjectId.isValid(newObjId)) throw 'Object id is not valid'
-    let x = newObjId.toString();
-    let parsedId = ObjectId(salonId);
-
-    const sal = await salons();
-
-    const AllReviewsofaSal = await sal.findOne({ _id: parsedId });
-    // console.log(AllReviewsofaSal, 'all reveiws of a sal')
-    if (AllReviewsofaSal == null) throw 'Salon ID is not present'
-
-    var ReviewList = []
-    //console.log(AllReviewsofaSal.reviews.length, 'AllReviewsofaSal.reviews.length')
-    // console.log('reivewId', AllReviewsofaSal.reviewId)
-    for (var i = 0; i < AllReviewsofaSal.reviewId.length; i++) {
-      var reviewcaught = await this.getReviewId(AllReviewsofaSal.reviewId[i])
-      // console.log(reviewcaught)
-      ReviewList.push(reviewcaught)
-      // console.log(ReviewList, 'review list')
+    //To check latitude is null or empty
+    if (latitude.length == 0) {
+        throw 'latitude cannot be null or empty'
     }
-    // console.log(ReviewList, 'review list')
+    //To check latitude is string
+    if (typeof latitude != 'string') {
+        throw 'The entered latitude must be a string'
+    }
 
-    //var ReviewList = AllReviewsofaSal.reviews
-    if (!ReviewList) throw 'Reviews of this salon not found';
-    return ReviewList//JSON.parse(JSON.stringify(ReviewList));
+    //To check website is null or empty
+    if (website.length == 0) {
+        throw 'website cannot be null or empty'
+    }
+    //To check website is string
+    if (typeof website != 'string') {
+        throw 'The entered website must be a string'
+    }
 
-  },
+    if (service.length === 0) throw 'You must provide a service.';
+    if (typeof service != 'string') {
+        throw 'The entered service must be a string'
+    }
 
+    if (name.trim().length == 0) {
+        throw "name cannot have spaces"
+    }
+    if (website.trim().length == 0) {
+        throw "website cannot have spaces"
+    }
+    if (service.trim().length == 0) {
+        throw "website cannot have spaces"
+    }
+    if (address.trim().length == 0) {
+        throw "address cannot have spaces"
+    }
+    if (city.trim().length == 0) {
+        throw "city cannot have spaces"
+    }
+    if (state.trim().length == 0) {
+        throw "state cannot have spaces"
+    }
+    if (zip.trim().length == 0) {
+        throw "zip cannot have spaces"
+    }
+    if (latitude.trim().length == 0) {
+        throw "zip cannot have spaces"
+    }
+    if (longitude.trim().length == 0) {
+        throw "zip cannot have spaces"
+    }
+    var subStringHttp = "http://www."
+    var subStringCom = ".com"
+    if (subStringHttp == website.substr(0, subStringHttp.length)) {
+        if (subStringCom == website.substr((website.length - 4), subStringCom.length)) {
+            var strLength = website.length - (subStringHttp.length + subStringCom.length)
+            if (strLength >= 5) {
+                console.log("valid url")
+            } else {
+                throw 'Entered url should have atleast 5 char'
+            }
+        } else {
+            throw 'Entered url should end with .com'
+        }
+    } else {
+        throw 'Entered url should start with http://www.'
+    }
 
-  //get review by customer
-  async getReviewsPerCustomer(customersId) {
-    customersId = customersId.toString();
-    if (!customersId) throw "Pass id to fetch the data";
-    if (typeof customersId !== 'string' || customersId.length === 0 || customersId.length !== 24) throw "The id should be an non empty string";
+    const salonsCollection = await salons();
 
-    const reviewCollection = await reviews();
-    const reviewList = await reviewCollection.find({ 'customersId': customersId }).toArray();
+    let newsalons = {
+        name: name,
+        website: website,
+        service: service,
+        address: address,
+        city: city,
+        state: state,
+        zip: zip,
+        longitude: parseFloat(longitude),
+        latitude: parseFloat(latitude),
+        rating: 0,
+        covidRating: 0,
+        reviewId: []
+    };
 
-    console.log(reviewList, 'reviewList from data')
-    // var customerReviews = []
+    // const salonAvailable = await salonsCollection.findOne({ name: newsalons.name });
+    // if (salonAvailable) throw "salon name already in use";
 
-    // for (var i = 0; i < reviewList.length; i++) {
-    //   customerReviews[i] = reviewList[i].reviewText
-    // }
-    //console.log(customerReviews, 'customerReviews')
-
-    //if (!customerReviews) throw "No Reviews in the system for this customer";
-    if (!reviewList) throw "No Reviews in the system for this customer";
-    //  reviewList.forEach((val) => {
-    //      val._id = (val._id).toString();
-    //  })
-
-    return reviewList;
-  },
-
-
-  //get review by id
-  async getReviewById(reviewId) {
-    if (reviewId == null || reviewId.length == 0) throw 'Reviw ID is null'
-    if (typeof reviewId != 'string') throw 'Review ID is not of proper type'
-    if (reviewId.trim() == '') throw 'Blank spaces are provided in Review Id'
-
-    let { ObjectId } = require('mongodb');
-    let newObjId = ObjectId();
-    if (!ObjectId.isValid(newObjId)) throw 'Object id is not valid'
-    let x = newObjId.toString();
-    let parsedId = ObjectId(reviewId);
-
-    const reviewCollection = await reviews();
-
-    const reviewcaught = await reviewCollection.findOne(parsedId);
-    // console.log(reviewcaught, 'reviewcaught')
-    const onereview = reviewcaught.reviewText
-    if (!onereview) throw 'No review found with the supplied review ID'
-    return onereview;
-    // if (!reviewcaught) throw 'No review found with the supplied review ID'
-    // return reviewcaught;
-
-  },
-
-//NA for route
-  async getReviewId(reviewId)
-  {
-    //console.log(reviewId, 'reviewId from getreviewID')
-    if (reviewId == null || reviewId.length == 0) throw 'Reviw ID is null'
-    if (typeof reviewId != 'string') throw 'Review ID is not of proper type'
-    if (reviewId.trim() == '') throw 'Blank spaces are provided in Review Id'
-
-    let { ObjectId } = require('mongodb');
-    let newObjId = ObjectId();
-    if (!ObjectId.isValid(newObjId)) throw 'Object id is not valid'
-    let x = newObjId.toString();
-    let parsedId = ObjectId(reviewId);
-
-    const reviewCollection = await reviews();
-
-    const reviewcaught = await reviewCollection.findOne(parsedId);
-    //console.log(reviewcaught, 'reviewcaught')
-    //console.log(reviewcaught, 'reviewcaught from getreviewId func')
-
-    return JSON.parse(JSON.stringify(reviewcaught))
-  },
-
-
-  async removeReview(reviewId) {
-    // console.log(reviewId, 'Review ID')
-    if (reviewId == null || reviewId.length == 0) throw 'Reviw ID is null'
-    if (typeof reviewId != 'string') throw 'Review ID is not of proper type'
-    if (reviewId.trim() == '') throw 'Blank spaces are provided in Review Id'
-
-    let { ObjectId } = require('mongodb');
-    let newObjId = ObjectId();
-    if (!ObjectId.isValid(newObjId)) throw 'Object id is not valid'
-    let x = newObjId.toString();
-    let parsedId = ObjectId(reviewId);
-
-    const reviewCollection = await reviews();
-
-    var review = await this.getReviewId(reviewId)
-    //var review = await reviewCollection.findOne({"review._id": parsedId})
-
-    // var review = await this.getReviewById(reviewId)
-    //console.log(review, 'review')
-
-
-    const sal = await salons();
-    const getSal = await sal.findOne(ObjectId(review.salonId));
-    //console.log(getSal, 'get sal')
-    //return
-    var demoTest
-    var test
-    //console.log(getSal, 'getsal')
-    if(getSal != null){
-        for(var i = 0; i < getSal.reviewId.length ; i++) {
-            demoTest = getSal.reviewId[i]
-            //console.log(demoTest, 'demoTest')
-            //console.log(demoTest._id, 'demoTest._id')
-            if(demoTest == reviewId ){
-                test = demoTest
-                //console.log(test, 'test')
-                break;
+    const allSalons = await this.getAll();
+    allSalons.forEach(element => {
+        for (var i = 0; i < element.name.length; i++) {
+            if (element.name === name) {
+                throw "Salon name already in use"
             }
         }
-    }
-    if(test == null) {
-        throw 'Review ID cannot be found'
-    }
-    
-    var ReviewList = getSal.reviewId
-    //console.log(ReviewList, 'ReviewList')
-    var sum = 0;
-    var demo = 0;
-    
-    
-    if (ReviewList != null && ReviewList.length > 0) {
-        for (var i = 0; i < ReviewList.length; i++) {
-          //console.log(ReviewList[i] , 'Should returns')
-          if (ReviewList[i] != reviewId) {
-                  //console.log(ReviewList[i], 'ReviewList[i]')
+    });
+    const insertInfo = await salonsCollection.insertOne(newsalons);
+    if (insertInfo.insertedCount === 0) throw 'Could not add salons';
 
-                  var reviewcaught = await this.getReviewId(ReviewList[i]);
-                  // console.log(reviewcaught, 'review caught')
-                  demo = reviewcaught.rating
-                  console.log(demo,'demo')
-                  // sum = sum + demo
-                  //console.log(sum , 'sum')
-                  //reviewcaught = null
-                }
-            
+    const newId = insertInfo.insertedId;
+    const salon = await this.get(newId.toString());
+    return JSON.parse(JSON.stringify(salon));
+}
+
+const get = async function get(salonId) {
+    if (!salonId) throw 'You must provide an salonId to search for';
+    if (salonId.length == 0) {
+        throw "salonId cannot be null or empty"
+    }
+    if (typeof salonId != 'string') {
+        throw 'Entered salonId should be string'
+    }
+    let newObjId = ObjectId();
+    if (!ObjectId.isValid(newObjId)) {
+        throw 'Not valid ObjectID'
+    }
+    let x = newObjId.toString();
+
+    let parsedId = ObjectId(salonId);
+
+    const salonCollection = await salons();
+    const salonDetails = await salonCollection.findOne({ _id: parsedId });
+    if (salonDetails === null) throw 'No salon found with that id';
+
+    return JSON.parse(JSON.stringify(salonDetails));
+}
+
+const getAll = async function getAll() {
+    const salonCollection = await salons();
+
+    const salonList = await salonCollection.find({}).toArray();
+    return JSON.parse(JSON.stringify(salonList));
+}
+
+const remove = async function remove(salonId) {
+    if (!salonId) throw 'You must provide an salonId to search for';
+    if (salonId.length == 0) {
+        throw 'Entered salonId cannot be empty'
+    }
+    if (typeof salonId != 'string') {
+        throw 'Entered salonId should be string'
+    }
+    let newObjId = ObjectId();
+    if (!ObjectId.isValid(newObjId)) {
+        throw 'Not valid ObjectID'
+    }
+    let x = newObjId.toString();
+    let parsedId = ObjectId(salonId);
+
+    const salonCollection = await salons();
+    const deletionInfo = await salonCollection.deleteOne({ _id: parsedId });
+
+    if (deletionInfo.deletedCount === 0) {
+        throw `Could not delete salon with id of ${salonId}`;
+    }
+    return { deleted: true };
+}
+
+const update = async function update(salonId, name, website, service, address, city, state, zip, longitude, latitude) {
+
+    if (!name) throw 'You must provide a name for your salon';
+    if (!website) throw 'You must provide a website for your salon';
+    if (!service) throw 'You must provide a service for your salon';
+    if (!address) throw 'You must provide a address for your salon';
+    if (!city) throw 'You must provide a city for your salon';
+    if (!state) throw 'You must provide a state for your salon';
+    if (!zip) throw 'You must provide a zip for your salon';
+    if (!longitude) throw 'You must provide a longitude for your salon';
+    if (!latitude) throw 'You must provide a latitude for your salon';
+
+    //To check name is null or empty
+    if (name.length == 0) {
+        throw 'Name cannot be null or empty'
+    }
+    //To check name is string
+    if (typeof name != 'string') {
+        throw 'The entered name must be a string'
+    }
+    //To check address is null or empty
+    if (address.length == 0) {
+        throw 'address cannot be null or empty'
+    }
+    //To check address is string
+    if (typeof address != 'string') {
+        throw 'The entered address must be a string'
+    }
+    //To check city is null or empty
+    if (city.length == 0) {
+        throw 'city cannot be null or empty'
+    }
+    //To check city is string
+    if (typeof city != 'string') {
+        throw 'The entered city must be a string'
+    }
+    //To check state is null or empty
+    if (state.length == 0) {
+        throw 'state cannot be null or empty'
+    }
+    //To check state is string
+    if (typeof state != 'string') {
+        throw 'The entered state must be a string'
+    }
+    //To check zip is null or empty
+    if (zip.length == 0) {
+        throw 'stzipate cannot be null or empty'
+    }
+    //To check zip is string
+    if (typeof zip != 'string') {
+        throw 'The entered zip must be a string'
+    }
+    //To check longitude is null or empty
+    if (longitude.length == 0) {
+        throw 'longitude cannot be null or empty'
+    }
+    // To check longitude is string
+    if (typeof longitude != 'string') {
+        throw 'The entered longitude must be a string'
+    }
+
+    var decimal = /^[-+]?[0-9]+\.[0-9]+$/;
+
+    if (!longitude.match(decimal)) {
+        // alert('Please enter valid float');
+        throw 'The entered longitude must be a float'
+    }
+
+    if (!latitude.match(decimal)) {
+        // alert('Please enter valid float');
+        throw 'The entered latitude must be a float'
+    }
+
+    //To check latitude is null or empty
+    if (latitude.length == 0) {
+        throw 'latitude cannot be null or empty'
+    }
+    //To check latitude is string
+    if (typeof latitude != 'string') {
+        throw 'The entered latitude must be a string'
+    }
+
+    //To check website is null or empty
+    if (website.length == 0) {
+        throw 'website cannot be null or empty'
+    }
+    //To check website is string
+    if (typeof website != 'string') {
+        throw 'The entered website must be a string'
+    }
+
+    if (service.length === 0) throw 'You must provide a service.';
+    if (typeof service != 'string') {
+        throw 'The entered service must be a string'
+    }
+
+    if (name.trim().length == 0) {
+        throw "name cannot have spaces"
+    }
+    if (website.trim().length == 0) {
+        throw "website cannot have spaces"
+    }
+    if (service.trim().length == 0) {
+        throw "website cannot have spaces"
+    }
+    if (address.trim().length == 0) {
+        throw "address cannot have spaces"
+    }
+    if (city.trim().length == 0) {
+        throw "city cannot have spaces"
+    }
+    if (state.trim().length == 0) {
+        throw "state cannot have spaces"
+    }
+    if (zip.trim().length == 0) {
+        throw "zip cannot have spaces"
+    }
+    if (latitude.trim().length == 0) {
+        throw "zip cannot have spaces"
+    }
+    if (longitude.trim().length == 0) {
+        throw "zip cannot have spaces"
+    }
+    var subStringHttp = "http://www."
+    var subStringCom = ".com"
+    if (subStringHttp == website.substr(0, subStringHttp.length)) {
+        if (subStringCom == website.substr((website.length - 4), subStringCom.length)) {
+            var strLength = website.length - (subStringHttp.length + subStringCom.length)
+            if (strLength >= 5) {
+                console.log("valid url")
+            } else {
+                throw 'Entered url should have atleast 5 char'
+            }
+        } else {
+            throw 'Entered url should end with .com'
         }
-        
-        //console.log(sum, 'sum')
-        //Number((sum / (ReviewList.length - 1)).toFixed(2));
- 
-        var avgRating = Number(sum / (ReviewList.length - 1).toFixed(2))
-        //avgRating = Number(avgRating.toFixed(2));
-        
- 
     } else {
-        avgRating = 0
+        throw 'Entered url should start with http://www.'
     }
-
-    const deleteInfo = await reviewCollection.removeOne({ _id: parsedId });
-    if (deleteInfo.deletedCount === 0) throw `Could not delete review with id of ${parsedId}`;
-    
-    //console.log(avgRating, 'avgRating')
-    await sal.updateOne({ _id: getSal._id }, { $set: { rating: avgRating } })
-
-    let SalUpdate = await sal.updateOne({ _id: ObjectID(review.salonId) }, { $pull: { reviewId: reviewId } })
-
-    let updateCustomer = await customer();
-    let custUpdate = await updateCustomer.updateOne({ _id: ObjectID(review.customersId) }, { $pull: { reviewId: reviewId } });
-
-    return { reviewiD: reviewId, deleted: true };
-  },
-
-
-  async update(reviewId, reviewText) {
-    
-    if (!reviewId) throw 'ID not provided';
-    if (typeof reviewId !== 'string' || reviewId.length === 0) throw 'Id should be a non empty string';
-
-    if(reviewText.trim() == '') throw 'Blank spaces are provided in Review to be updated'
-    if(reviewText.length == 0 || !reviewText) throw 'Review Text is not provided'
-    if (typeof reviewText !== 'string') throw 'Review should be text'
-    
-    let { ObjectId } = require('mongodb');
     let newObjId = ObjectId();
-    if (!ObjectId.isValid(newObjId)) throw 'Object id is not valid'
-    let x = newObjId.toString();
-    let parsedID = ObjectID(reviewId);
-
-    const reviewCollection = await reviews();
-
-    let review = await reviewCollection.findOne(parsedID);
-    if (review === null) throw 'No review with that id';
-   // console.log(review, 'review')
-
-    if (reviewText.length !== 0) {
-      const updatedInfo = await reviewCollection.updateOne({ _id: parsedID }, { $set: { reviewText: reviewText } });
-      if (!updatedInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed';
+    if (!ObjectId.isValid(newObjId)) {
+        throw 'Not valid ObjectID'
     }
-    return await this.getReviewId(reviewId);
-  },
-
-
-  async updateReviewLike(reviewId, customersId, isLike){
-    if (reviewId == null || reviewId.length == 0) throw 'Reviw ID is null'
-    if (typeof reviewId != 'string') throw 'Review ID is not of proper type'
-    if (reviewId.trim() == '') throw 'Blank spaces are provided in Review Id'
-
-    if (customersId == null || customersId.length == 0) throw 'Customer ID has not been entered for Review'
-    if (typeof customersId != 'string') throw 'No customer with proper type has been provided'
-    if (customersId.trim() == '') throw 'Customer ID is provided contains only empty spaces'
-
-    let { ObjectId } = require('mongodb');
-    let newObjId = ObjectId();
-    if (!ObjectId.isValid(newObjId)) throw 'Object id is not valid'
     let x = newObjId.toString();
-    const parsedId = ObjectId(reviewId);
-    const custid = ObjectId(customersId)
 
-    const reviewCollection = await reviews();
-    let review = await reviewCollection.findOne({ _id: parsedId });
-      if (review === null) throw 'No review with that id.';
+    let parsedId = ObjectId(salonId);
+    if (parsedId === null) throw 'No salon found with that id';
 
-      if (isLike == null) {
-          await reviewCollection.updateOne({_id: parsedId},{$pull: {upvote: custid}});
-      await reviewCollection.updateOne({_id: parsedId},{$pull: {downvote: custid}});
-          return true;
-          
-      } else if(isLike) {
-      const updateInfo = await reviewCollection.updateOne({_id: parsedId},{$addToSet: {upvote: custid}});
-      await reviewCollection.updateOne({_id: parsedId},{$pull: {downvote: custid}});
-      if (!updateInfo.matchedCount && !updateInfo.modifiedCount) return false;
-      return true;
+    const salonCollection = await salons();
 
-    } else {
-      const updateInfo = await reviewCollection.updateOne({_id: parsedId},{$addToSet: {downvote: custid}});
-      await reviewCollection.updateOne({_id: parsedId},{$pull: {upvote: custid}});
-      if (!updateInfo.matchedCount && !updateInfo.modifiedCount) return false;
-          return true;      
-    }
-  }
+    const updatedSalonInfo = {
+        name: name,
+        website: website,
+        service: service,
+        address: address,
+        city: city,
+        state: state,
+        zip: zip,
+        longitude: parseFloat(longitude),
+        latitude: parseFloat(latitude)
+    };
+
+    const updateSalonInfo = await salonCollection.updateOne({ _id: parsedId }, { $set: updatedSalonInfo });
+
+    if (!updateSalonInfo.matchedCount && !updateSalonInfo.modifiedCount)
+        throw 'Update failed';
+
+    var getParsedID = await this.get(salonId);
+    const objCmp = JSON.parse(JSON.stringify(getParsedID));
+    return objCmp;
+}
 
 
+const getSalonViaSearch = async function getSalonViaSearch(search) {
+    console.log("search*********", search)
+    if (!search) throw "Error (getSalonViaSearch): Must provide search.";
+    if (typeof(search) !== "string") throw "Error (getSalonViaSearch): Search must be a string.";
+    const salonCollection = await salons();
+    console.log("salonCollection***", salonCollection.length)
+    const query = new RegExp(search, "i");
+    console.log("query", query)
+    const salonList = await salonCollection.find({ $or: [{ service: { $regex: query } }, { name: { $regex: query } }] }).toArray();
+    console.log("salonList", salonList);
+    return salonList;
+}
+
+module.exports = {
+    create,
+    get,
+    getAll,
+    remove,
+    update,
+    getSalonViaSearch
 }

@@ -17,29 +17,6 @@ router.get('/salons', async(req, res) => {
     }
 });
 
-// router.get('/salons/:salonId', async(req, res) => {
-//     console.log("salon if to print*************************", req.params.salonId);
-//     // if (!req.params.salonId) {
-//     //     res.status(400).json({ error: "should provide valid salons Id" });
-//     //     return;
-//     // }
-//     // if (typeof req.params.salonId != 'string') {
-//     //     res.status(400).json({ error: 'Id should be in string' })
-//     // }
-//     try {
-//         let salonsId = await salonsData.get(req.params.salonId);
-//         console.log("salonsId", salonsId)
-//             // res.status(200).json(salonsId);
-//         let getReviews = await reviewsData.getAllreviewsofSalon(req.params.salonId)
-//         console.log("getReviews", getReviews)
-
-//         res.status(200).render("salons/salonprofile", { salonId: salonsId._id, name: salonsId.name, website: salonsId.website, service: salonsId.service, address: salonsId.address, city: salonsId.city, state: salonsId.state, zip: salonsId.zip, rating: salonsId.rating, covidRating: salonsId.covidRating, longitude: salonsId.longitude, latitude: salonsId.latitude, getReviews: getReviews });
-//     } catch (e) {
-//         console.log("e**", e)
-//         res.status(404).json({ error: "not found**********" });
-//     }
-// });
-
 router.get('/salons/:salonId', async(req, res) => {
     console.log("salon if to print*************************", req.params.salonId);
     // if (!req.params.salonId) {
@@ -55,14 +32,13 @@ router.get('/salons/:salonId', async(req, res) => {
             // res.status(200).json(salonsId);
         let getReviews = await reviewsData.getAllreviewsofSalon(req.params.salonId)
         console.log("getReviews", getReviews)
- 
+
         res.status(200).render("salons/salonprofile", { salonId: salonsId._id, name: salonsId.name, website: salonsId.website, service: salonsId.service, address: salonsId.address, city: salonsId.city, state: salonsId.state, zip: salonsId.zip, rating: salonsId.rating, covidRating: salonsId.covidRating, longitude: salonsId.longitude, latitude: salonsId.latitude, getReviews: getReviews });
     } catch (e) {
         console.log("e**", e)
         res.status(404).json({ error: "not found**********" });
     }
 });
-
 
 router.get("/manage", async(req, res) => {
     if (!req.session.AuthCookie) {
@@ -73,7 +49,8 @@ router.get("/manage", async(req, res) => {
         // console.log("salonsList***", salonsList)
         // const userLoggedIn = (req.session.AuthCookie) ? true : false;
         // res.status(200).render("", { restaurants: restaurantList, userLoggedIn: true })
-        res.status(200).render("salons/salonsignup", { message: "You have p", salonsList: salonsList });
+        // res.status(200).render("salons/salonsignup", { message: "You have p", salonsList: salonsList });
+        res.status(200).render("salons/salonsignup", { salonsList: salonsList });
     } catch (e) {
         console.log(e);
         // res.status(200).render("management", { restaurants: [], userLoggedIn: true })
@@ -130,10 +107,11 @@ router.post('/post', async(req, res) => {
         res.status(400);
         return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a valid service name" });
     }
-    // if (!Array.isArray(salonInfo.service)) {
-    //     res.status(400).json({ error: "service should be an array" });
-    //     return;
-    // }
+    if (typeof salonInfo.service != 'string') {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a service name in string" });
+    }
     if (!salonInfo.address) {
         errorcode = true;
         res.status(400);
@@ -179,10 +157,10 @@ router.post('/post', async(req, res) => {
         res.status(400);
         return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a valid longitude" });
     }
-    if (typeof salonInfo.longitude != 'number') {
+    if (typeof salonInfo.longitude != 'string') {
         errorcode = true;
         res.status(400);
-        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a longitude in number format" });
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a longitude in string" });
     }
     if (!salonInfo.latitude) {
         errorcode = true;
@@ -190,11 +168,37 @@ router.post('/post', async(req, res) => {
         return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a valid latitude" });
 
     }
-    if (typeof salonInfo.latitude != 'number') {
+    if (typeof salonInfo.latitude != 'string') {
         errorcode = true;
         res.status(400);
-        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a latitude in number format" });
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Please provide a latitude in string" });
     }
+    var subStringHttp = "http://www."
+    var subStringCom = ".com"
+    if (subStringHttp == salonInfo.website.substr(0, subStringHttp.length)) {
+        if (subStringCom == salonInfo.website.substr((salonInfo.website.length - 4), subStringCom.length)) {
+            var strLength = salonInfo.website.length - (subStringHttp.length + subStringCom.length)
+            if (strLength >= 5) {
+                console.log("valid url")
+            } else {
+                // throw 'Entered url should have atleast 5 char'
+                errorcode = true;
+                res.status(400);
+                return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Entered url should have atleast 5 char" });
+            }
+        } else {
+            // throw 'Entered url should end with .com'
+            errorcode = true;
+            res.status(400);
+            return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Entered url should end with .com" });
+        }
+    } else {
+        // throw 'Entered url should start with http://www.'
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Entered url should start with http://www." });
+    }
+
 
     try {
         const newSalon = await salonsData.create(
@@ -210,8 +214,10 @@ router.post('/post', async(req, res) => {
         );
         console.log("newSalon", newSalon)
             // res.status(200).json(newSalon);
-        res.status(200).json({ message: "You have successfully created new salon" });
-        res.redirect("/manage");
+            // res.status(200).json({ message: "You have successfully created new salon" });
+            // res.status(200).json({ message: "You have successfully created new salon" });
+            // res.redirect("/manage/message");
+        res.status(200).render("salons/message", { message: "Salon created successfully" });
     } catch (e) {
         res.status(404).json({ error: e });
         res.status(404).render("salons/error", { message: "not created", error: e });
@@ -220,6 +226,9 @@ router.post('/post', async(req, res) => {
 
 router.get('/salons/:salonId/delete', async(req, res) => {
     console.log("*delete********", req.params.salonId)
+    if (!req.session.AuthCookie) {
+        res.status(401).render("salons/routemessage", { message: "Please you will have to login for deleting a salon" });
+    }
     if (!req.params.salonId) {
         res.status(400).json({ error: "should provide valid salon Id to delete" });
         return;
@@ -248,20 +257,159 @@ router.get('/salons/:salonId/delete', async(req, res) => {
     }
 });
 
-router.put('/salons/:salonId', async(req, res) => {
+router.post('/salons/:salonId/edit', async(req, res) => {
     const updatedData = req.body;
     console.log("updatedData", updatedData)
+
+    let errorcode = false;
+    const errors = [];
+    if (!req.session.AuthCookie) {
+        res.status(401).render("salons/routemessage", { message: "Please you will have to login for editing a salon" });
+    }
     if (!req.params.salonId) {
-        res.status(400).json({ error: "should provide valid Salon Id" });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "should provide valid Salon Id" });
     }
     if (typeof req.params.salonId != 'string') {
-        res.status(400).json({ message: 'Id should be in string' })
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Id should be in string" });
     }
+
+    if (!updatedData) {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please enter all the fields" });
+    }
+    if (!updatedData.name) {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a valid name" });
+
+    }
+    if (typeof updatedData.name != 'string') {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a name in string format" });
+    }
+    if (!updatedData.website) {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a valid website" });
+    }
+    if (typeof updatedData.website != 'string') {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a website in string" });
+    }
+    if (!updatedData.service) {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a valid service name" });
+    }
+    if (typeof updatedData.service != 'string') {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a service name in string" });
+    }
+    if (!updatedData.address) {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a valid address" });
+    }
+    if (typeof updatedData.address != 'string') {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a address in string" });
+    }
+    if (!updatedData.city) {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a city name" });
+    }
+    if (typeof updatedData.city != 'string') {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a city name in string" });
+    }
+    if (!updatedData.state) {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a state" });
+    }
+    if (typeof updatedData.state != 'string') {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a state name in string" });
+    }
+    if (!updatedData.zip) {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a zip code" });
+    }
+    if (typeof updatedData.zip != 'string') {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a zip code in string" });
+    }
+    if (!updatedData.longitude) {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a valid longitude" });
+    }
+    if (typeof updatedData.longitude != 'string') {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a longitude in string" });
+    }
+    if (!updatedData.latitude) {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a valid latitude" });
+
+    }
+    if (typeof updatedData.latitude != 'string') {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please provide a latitude in string" });
+    }
+
+
     if (!updatedData.name || !updatedData.website || !updatedData.service || !updatedData.address || !updatedData.city || !updatedData.state || !updatedData.zip || !updatedData.longitude || !updatedData.latitude) {
-        res.status(400).json({ error: 'You must Supply All fields' });
-        return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Please enter all the fields" });
     }
+
+
+    var subStringHttp = "http://www."
+    var subStringCom = ".com"
+    if (subStringHttp == updatedData.website.substr(0, subStringHttp.length)) {
+        if (subStringCom == updatedData.website.substr((updatedData.website.length - 4), subStringCom.length)) {
+            var strLength = updatedData.website.length - (subStringHttp.length + subStringCom.length)
+            if (strLength >= 5) {
+                console.log("valid url")
+            } else {
+                // throw 'Entered url should have atleast 5 char'
+                errorcode = true;
+                res.status(400);
+                return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Entered url should have atleast 5 char" });
+            }
+        } else {
+            // throw 'Entered url should end with .com'
+            errorcode = true;
+            res.status(400);
+            return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Entered url should end with .com" });
+        }
+    } else {
+        // throw 'Entered url should start with http://www.'
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Entered url should start with http://www." });
+    }
+
+
     try {
         console.log(await salonsData.get(req.params.salonId));
     } catch (e) {
@@ -270,12 +418,58 @@ router.put('/salons/:salonId', async(req, res) => {
     }
 
     try {
+        // const allSalons = await salonsData.getAll();
+        // allSalons.forEach(element => {
+        //     for (var i = 0; i < element.name.length; i++) {
+        //         if (element.name === updatedData.name) {
+        //             throw "Salon name already in use"
+        //         }
+        //     }
+        // });
         const updatedSalon = await salonsData.update(req.params.salonId, updatedData.name, updatedData.website, updatedData.service, updatedData.address, updatedData.city, updatedData.state, updatedData.zip, updatedData.longitude, updatedData.latitude);
-        res.status(200).json(updatedSalon);
+        // res.status(200).json(updatedSalon);
+        // res.render('salons/editsalon', { message: "Updated successfully", updatedSalon: updatedSalon });
+        res.render('salons/message', { message: "Updated successfully", updatedSalon: updatedSalon });
+        // res.redirect("/manage");
     } catch (e) {
-        res.status(404).json({ error: e });
+        console.log(e)
+            // res.status(404).json({ error: e });
+        res.status(404).render("salons/error", { error: e });
     }
 });
+
+
+router.get('/salons/:salonId/edit', async(req, res) => {
+    console.log("salon if to print*************************", req.params.salonId);
+    let errorcode = false;
+    const errors = [];
+    if (!req.session.AuthCookie) {
+        res.status(401).redirect("/");
+    }
+    if (!req.params.salonId) {
+        // res.status(400).json({ error: "should provide valid salons Id" });
+        // return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "should provide valid salons Id" });
+    }
+    if (typeof req.params.salonId != 'string') {
+        // res.status(400).json({ error: 'Id should be in string' })
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Id should be in string" });
+    }
+    try {
+        let salonsId = await salonsData.get(req.params.salonId);
+        console.log("salonsId", salonsId)
+            // res.status(200).json(salonsId);
+        res.status(200).render("salons/editsalon", { salonId: salonsId._id, name: salonsId.name, website: salonsId.website, service: salonsId.service, address: salonsId.address, city: salonsId.city, state: salonsId.state, zip: salonsId.zip, rating: salonsId.rating, covidRating: salonsId.covidRating, longitude: salonsId.longitude, latitude: salonsId.latitude });
+    } catch (e) {
+        console.log("e**", e)
+        res.status(404).json({ error: "not found**********" });
+    }
+});
+
 
 router.post('/search', async(req, res) => {
     try {

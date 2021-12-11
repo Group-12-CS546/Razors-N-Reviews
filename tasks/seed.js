@@ -11,10 +11,37 @@ const main = async() => {
     const db = await dbConnection();
      //await db.dropDatabase();
 
-    const olivebistro = await salonsData.create("The Punjabi Affair", "http://www.olivebistro.com", "hair", "New York City, New York", "New York", " NJ", "08820", "40.732628", "-74.037628");
-    console.log(olivebistro);
-    console.log('olivebistro restaurant has been added successfully!');
-    console.log(olivebistro._id, 'Salon id')
+     const DreamZ = await salonsData.create("DreamZ Beauty Salon", "http://www.dreamzbeautys.com", "hair", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "70.7", "50.9")
+     console.log(DreamZ, "DreamZ has been added successfully")
+
+     const Telogen = await salonsData.create("Telogen Salon & Spa", "http://www.telogenspa.com", "nail", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "74.76", "54.99")
+     console.log(Telogen, "Telogen has been added successfully")
+
+     const Roger = await salonsData.create("Roger Markel Salon", "http://www.rogermarkel.com", "hair", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "67.3", "45.3")
+     console.log(Roger, "Roger has been added successfully")
+
+     const Bloom = await salonsData.create("Bloom beauty lounge", "http://www.bloombeautylounge.com", "foot", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "80.98", "70.76")
+     console.log(Bloom, "Bloom has been added successfully")
+
+     const Aerea = await salonsData.create("The Aerea Salon", "http://www.aereasalon.com", "hair", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "72.8", "56.7")
+     console.log(Aerea, "Aerea has been added successfully")
+
+     const Madison = await salonsData.create("Madison Reed Hair Color Bar", "http://www.madisonreedhaircolor.com", "hair", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "90.75", "70.3")
+     console.log(Madison, "Madison has been added successfully")
+
+     const Caru = await salonsData.create("The Salon Caru", "http://www.saloncaru.com", "nail", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "68.4", "59.45")
+     console.log(Caru, "Caru has been added successfully")
+
+     const Phoenix = await salonsData.create("Salon Phoenix", "http://www.salonpheonix.com", "waxing", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "76.63", "76.75")
+     console.log(Phoenix, "Phoenix has been added successfully")
+
+     const Hudson = await salonsData.create("Hudson Sqaure Salon", "http://www.hudsonsqaure.com", "waxing", "Washington Street Hoboken", "Hoboken", "New Jersey", "07030", "74.3", "82.3")
+     console.log(Hudson, "Hudson has been added successfully")
+
+    // const olivebistro = await salonsData.create("The Punjabi Affair", "http://www.olivebistro.com", "hair", "New York City, New York", "New York", " NJ", "08820", "40.732628", "-74.037628");
+    // console.log(olivebistro);
+    // console.log('olivebistro restaurant has been added successfully!');
+    // console.log(olivebistro._id, 'Salon id')
 
     // const user1 = await customersData.createUser("savleen","lastname","email","savleen","password","profilePicture","city","state","age");
     // console.log('************* User has been Added **********************');
@@ -73,9 +100,9 @@ const main = async() => {
     // console.log(timeLaunge);
     // console.log('timeLaunge salon has been added successfully!');
  
-    const getAllSalons = await salonsData.getAll();
-    console.log('The List of Restaurants are:');
-    console.log(getAllSalons);
+    // const getAllSalons = await salonsData.getAll();
+    // console.log('The List of Restaurants are:');
+    // console.log(getAllSalons);
  
     // const getSalonId = await salonsData.get(safrronLounge._id);
     // console.log("The Salon Id is:", getSalonId);

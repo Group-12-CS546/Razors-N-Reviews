@@ -9,6 +9,7 @@ body {
   background-size: 100%;
   background-attachment: fixed;
 }
+
 .center {
   display: flex;
   flex-direction: column;
@@ -21,51 +22,37 @@ body {
   padding: 20px;
 }
 
-#btn-id{
-  margin-left: 75px;
-  width: 115px;
-  height: 45px;
-}
 
-/* button{
-  cursor: pointer;
-  outline: 0;
-  color: #AAA;
-
-}
-
-.btn:focus {
-  outline: none;
-}
-
-.green{
-  color: green;
-}
-
-.red{
-  color: red;
+/* label {
+  margin: 4px;
+  padding: 20px;
 } */
 
-.container{
-  margin-top: 100px;
-  margin-bottom: 100px;
-  width: 100%;
-  /* height:100%; */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  background-clip: border-box;
-  border: 1px solid rgba(0,0,0,.125);
-  border-radius: 0.25rem;
-}
 
-h1{
+/* label p {
+  color: #ddd;
+} */
+
+
+/* form {
+  border: 5px solid salmon;
+  font-size: 20px;
+} */
+
+h1 {
   color: salmon;
 }
 
-.error{
+#error-box {}
+
+
+/* .error {
+  color: red;
+  font-size: 30px;
+  font-weight: 600;
+} */
+
+.error {
   background: #deffde;
   color: #ff1919;
   margin: 10px;
@@ -77,36 +64,134 @@ h1{
   align-items: center;
   padding: 7px;
 }
-/* 
-a{
+
+a {
   font-size: 20px;
-  font-weight:600;
-  background-color:rgb(233, 66, 144);
+  font-weight: 600;
+  /* background-color: rgb(233, 66, 144); */
 }
-dl{
+
+
+/* dl {
   color: wheat;
   text-align: center;
   font-weight: 600;
   font-size: 30px;
 }
-dd{
-  color: wheat;
-  text-align: center;
-  font-weight: 600;
-  font-size: 30px;
-}
-p.logout{
+dd {
   color: wheat;
   text-align: center;
   font-weight: 600;
   font-size: 30px;
 } */
 
-#state{
+p.logout {
+  color: wheat;
+  text-align: center;
+  font-weight: 600;
+  font-size: 30px;
+}
+
+.card-wide {
+  background-color: #fafafa;
+  box-sizing: border-box;
+  display: block;
+  text-align: center;
+  float: left;
+  width: 45%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 15px;
+  padding: 1%;
+  margin: 2%;
+}
+
+.card-deck {
+  display: inline-table;
+}
+
+#sticky {
+  position: fixed;
+  top: 10%;
+}
+
+.dropbtn {
+  background-color: #fafafa;
+  color: #558000;
+  font-size: large;
+  box-sizing: border-box;
+  border: 2px solid #558000;
+  border-radius: 5em;
+  padding: 8px;
+  margin: 15px;
+  text-align: center;
+}
+
+.dropbtn:hover {
+  color: #fafafa;
+  background-color: #6ca000;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #3e8e41;
+  color: #fafafa
+}
+
+#btn-id {
+  margin-left: 75px;
+  width: 115px;
+  height: 45px;
+}
+
+.container {
+  margin-top: 100px;
+  margin-bottom: 100px;
+  width: 100%;
+  /* height:100%; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, .125);
+  border-radius: 0.25rem;
+}
+
+#state {
   width: 263px;
 }
 
-#card-private{
+#card-private {
   margin: 20px;
   width: 100%;
   margin-top: 80px;
@@ -116,20 +201,19 @@ p.logout{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
 }
 
-.text-bold{
-font-weight:700;
+.text-bold {
+  font-weight: 700;
 }
 
-.btn-private{
+.btn-private {
   margin: 4px;
   margin-top: 15px;
 }
 
-
-/* .like, .dislike {    
+.like,
+.dislike {
   display: inline-block;
   margin-bottom: 0;
   font-weight: normal;
@@ -145,27 +229,9 @@ font-weight:700;
   border-radius: 4px;
 }
 
-.qty {border: none;} */
-
-.like,
-.dislike {
-    display: inline-block;
-    margin-bottom: 0;
-    font-weight: normal;
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-    background: lightgreen;
-    border: 1px solid transparent;
-    white-space: nowrap;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.428571429;
-    border-radius: 4px;
-}
 .qty1,
 .qty2 {
-    border: none;
-    width:20px;
-    background: transparent;
+  border: none;
+  width: 20px;
+  background: transparent;
 }

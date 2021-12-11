@@ -57,13 +57,10 @@ const create = async function create(name, website, service, address, city, stat
     if (longitude.length == 0) {
         throw 'longitude cannot be null or empty'
     }
-    //To check longitude is string
-    // if (typeof longitude != 'number') {
-    //     throw 'The entered longitude must be a number'
-    // }
-    // if (!isNaN(longitude % 1) && longitude % 1 !== 0) {
-    //     throw 'The entered longitude must be a number'
-    // }
+    // To check longitude is string
+    if (typeof longitude != 'string') {
+        throw 'The entered longitude must be a string'
+    }
 
     var decimal = /^[-+]?[0-9]+\.[0-9]+$/;
 
@@ -82,13 +79,9 @@ const create = async function create(name, website, service, address, city, stat
         throw 'latitude cannot be null or empty'
     }
     //To check latitude is string
-    // if (typeof latitude != 'number') {
-    //     throw 'The entered latitude must be a number'
-    // }
-
-    // if (!isNaN(latitude % 1) && latitude % 1 !== 0) {
-    //     throw 'The entered latitude must be a number'
-    // }
+    if (typeof latitude != 'string') {
+        throw 'The entered latitude must be a string'
+    }
 
     //To check website is null or empty
     if (website.length == 0) {
@@ -99,20 +92,18 @@ const create = async function create(name, website, service, address, city, stat
         throw 'The entered website must be a string'
     }
 
-    if (service.length === 0) throw 'You must provide at least one service.';
-
-    // if (!service || !Array.isArray(service))
-    //     throw 'You must provide an array of service';
-
-    for (var k = 0; k < service.length; k++) {
-        if (typeof service[k] != 'string') {
-            throw 'service should be string'
-        }
+    if (service.length === 0) throw 'You must provide a service.';
+    if (typeof service != 'string') {
+        throw 'The entered service must be a string'
     }
+
     if (name.trim().length == 0) {
         throw "name cannot have spaces"
     }
     if (website.trim().length == 0) {
+        throw "website cannot have spaces"
+    }
+    if (service.trim().length == 0) {
         throw "website cannot have spaces"
     }
     if (address.trim().length == 0) {
@@ -125,6 +116,12 @@ const create = async function create(name, website, service, address, city, stat
         throw "state cannot have spaces"
     }
     if (zip.trim().length == 0) {
+        throw "zip cannot have spaces"
+    }
+    if (latitude.trim().length == 0) {
+        throw "zip cannot have spaces"
+    }
+    if (longitude.trim().length == 0) {
         throw "zip cannot have spaces"
     }
     var subStringHttp = "http://www."
@@ -149,7 +146,7 @@ const create = async function create(name, website, service, address, city, stat
     let newsalons = {
         name: name,
         website: website,
-        service: [service],
+        service: service,
         address: address,
         city: city,
         state: state,
@@ -290,18 +287,32 @@ const update = async function update(salonId, name, website, service, address, c
     if (longitude.length == 0) {
         throw 'longitude cannot be null or empty'
     }
-    //To check longitude is string
-    if (typeof longitude != 'number') {
-        throw 'The entered longitude must be a number'
+    // To check longitude is string
+    if (typeof longitude != 'string') {
+        throw 'The entered longitude must be a string'
     }
+
+    var decimal = /^[-+]?[0-9]+\.[0-9]+$/;
+
+    if (!longitude.match(decimal)) {
+        // alert('Please enter valid float');
+        throw 'The entered longitude must be a float'
+    }
+
+    if (!latitude.match(decimal)) {
+        // alert('Please enter valid float');
+        throw 'The entered latitude must be a float'
+    }
+
     //To check latitude is null or empty
     if (latitude.length == 0) {
         throw 'latitude cannot be null or empty'
     }
     //To check latitude is string
-    if (typeof latitude != 'number') {
-        throw 'The entered latitude must be a number'
+    if (typeof latitude != 'string') {
+        throw 'The entered latitude must be a string'
     }
+
     //To check website is null or empty
     if (website.length == 0) {
         throw 'website cannot be null or empty'
@@ -311,20 +322,18 @@ const update = async function update(salonId, name, website, service, address, c
         throw 'The entered website must be a string'
     }
 
-    if (service.length === 0) throw 'You must provide at least one service.';
-
-    if (!service || !Array.isArray(service))
-        throw 'You must provide an array of service';
-
-    for (var k = 0; k < service.length; k++) {
-        if (typeof service[k] != 'string') {
-            throw 'service should be string'
-        }
+    if (service.length === 0) throw 'You must provide a service.';
+    if (typeof service != 'string') {
+        throw 'The entered service must be a string'
     }
+
     if (name.trim().length == 0) {
         throw "name cannot have spaces"
     }
     if (website.trim().length == 0) {
+        throw "website cannot have spaces"
+    }
+    if (service.trim().length == 0) {
         throw "website cannot have spaces"
     }
     if (address.trim().length == 0) {
@@ -337,6 +346,12 @@ const update = async function update(salonId, name, website, service, address, c
         throw "state cannot have spaces"
     }
     if (zip.trim().length == 0) {
+        throw "zip cannot have spaces"
+    }
+    if (latitude.trim().length == 0) {
+        throw "zip cannot have spaces"
+    }
+    if (longitude.trim().length == 0) {
         throw "zip cannot have spaces"
     }
     var subStringHttp = "http://www."
@@ -355,7 +370,6 @@ const update = async function update(salonId, name, website, service, address, c
     } else {
         throw 'Entered url should start with http://www.'
     }
-
     let newObjId = ObjectId();
     if (!ObjectId.isValid(newObjId)) {
         throw 'Not valid ObjectID'
@@ -375,8 +389,8 @@ const update = async function update(salonId, name, website, service, address, c
         city: city,
         state: state,
         zip: zip,
-        longitude: longitude,
-        latitude: latitude
+        longitude: parseFloat(longitude),
+        latitude: parseFloat(latitude)
     };
 
     const updateSalonInfo = await salonCollection.updateOne({ _id: parsedId }, { $set: updatedSalonInfo });
