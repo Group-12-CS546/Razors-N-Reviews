@@ -159,7 +159,7 @@
 
                     <div class="card-text">
                         <p class="card-text">Comments</p>
-                        {{#each this.comments}}
+                        {{#each this.commentTexts}}
                         <p>{{this}}</p>
                         {{/each}}
                         <div class="center">
@@ -260,14 +260,39 @@
                 <label for="rating">Rating:</label>
                 <input type="text" class="form-control" id="rating" name="rating" aria-describedby="rating"
                     placeholder="Rating">
-
             </div>
             <div class="form-group">
                 <label for="reviewText">ReviewText:</label>
                 <input type="text" class="form-control" id="reviewText" name="reviewText" aria-describedby="reviewText"
                     placeholder="reviewText">
-
             </div>
+            {{!-- <div class="form-group">
+                <label for="reviewText">Parameter 1:</label>
+                <input type="text" class="form-control" id="Parameter1" name="Parameter1" aria-describedby="Parameter1"
+                    placeholder="Enter value between 1 to 10">
+            </div>
+
+            <div class="form-group">
+                <label for="reviewText">Parameter 2:</label>
+                <input type="text" class="form-control" id="Parameter2" name="Parameter2" aria-describedby="Parameter2"
+                    placeholder="Enter value between 1 to 10">
+            </div>
+            <div class="form-group">
+                <label for="reviewText">Parameter 3:</label>
+                <input type="text" class="form-control" id="Parameter2" name="Parameter2" aria-describedby="Parameter2"
+                    placeholder="Enter value between 1 to 10">
+            </div>
+            <div class="form-group">
+                <label for="reviewText">Parameter 4:</label>
+                <input type="text" class="form-control" id="Parameter2" name="Parameter2" aria-describedby="Parameter2"
+                    placeholder="Enter value between 1 to 10">
+            </div>
+            <div class="form-group">
+                <label for="reviewText">Parameter 5:</label>
+                <input type="text" class="form-control" id="Parameter2" name="Parameter2" aria-describedby="Parameter2"
+                    placeholder="Enter value between 1 to 10">
+            </div>
+            --}}
             <button type="submit" id="btn-id" class="btn btn-primary">Submit</button>
             <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
         </form>

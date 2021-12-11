@@ -32,9 +32,9 @@ router.get("/", async (req, res) => {
 
 router.post("/add/:reviewId", async (req, res) => {
 	//console.log(req.session.user.id);
-	console.log(req.params.reviewId);
+	//console.log(req.params.reviewId);
 	//console.log(req.body,"from comment routes");
-	console.log(req.params.customerId,req.params.reviewId,req.params.salonId,"Parameters")
+	//console.log(req.params.customerId,req.params.reviewId,req.params.salonId,"Parameters")
 	  if (!req.session.AuthCookie){
         res.redirect("/");
       } 
@@ -58,9 +58,10 @@ router.post("/add/:reviewId", async (req, res) => {
 			req.params.reviewId,
 			commentVal
 		);
-		if (addCommentOnReview) {
-			console.log("ERROR");
-			return res.render("comments/success", { userId : addCommentOnReview.user,message: "Sucessfully added comment" }); 
+		const getComment = await comments.getComment(addCommentOnReview._id)
+        console.log("getComment", getComment.commentText)
+        if (addCommentOnReview) {
+            res.render("comments/success", { userId: addCommentOnReview.user, text: getComment.commentText, message: "Sucessfully added comment" });
 			//return res.json({addCommentOnReview});
 		} else {
 			console.log("Error from else");

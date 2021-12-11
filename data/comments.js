@@ -39,7 +39,7 @@ module.exports = {
 		const finComment = await this.getComment(newId.toString());
 		const updatedInfo = await revCollection.updateOne(
 			{ _id: parsedId2 },
-			{ $push: { comments: newComment._id } }
+			{ $push: { comments: newComment._id,commentTexts: newComment.commentText } }
 		);
 		if (updatedInfo.modifiedCount === 0) {
 			throw "Could not update Review Collection with Review Data!";
@@ -50,7 +50,7 @@ module.exports = {
 		//const finComment2 = await this.getComment(newId2.toString());
 		const updatedInfo2 = await customerCollection.updateOne(
 			{ _id: parsedId },
-			{ $push: { commentIds: newComment._id } }
+			{ $push: { commentIds: newComment._id  } }
 		);
 		//const newId = insertInfo.insertedId;
 		//const newIDString = String(newId);

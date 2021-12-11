@@ -9,9 +9,16 @@ const testData = data.test;
 
 const main = async () => {
 	const db = await dbConnection();
-	await db.dropDatabase();
+	const olivebistro = await salonsData.create("The Punjabi Affair", "http://www.olivebistro.com", "hair", "New York City, New York", "New York", " NJ", "08820", "40.732628", "-74.037628");
+    console.log(olivebistro);
+    console.log('olivebistro restaurant has been added successfully!');
+    console.log(olivebistro._id, 'Salon id')
 
-	const safrronLounge = await salonsData.create(
+
+
+	//await db.dropDatabase();
+
+	/* const safrronLounge = await salonsData.create(
 		"The Saffron Lounge",
 		"http://www.saffronlounge.com",
 		"Makeup",
@@ -91,7 +98,7 @@ const main = async () => {
 	console.log(comment1._id);
 	console.log(getComment);
 	console.log("get comment working successfully");
-
+ */
 	/* const updatedComment = await commentsData.updateComment(
 		getComment._id,
 		"New updated comment"
@@ -99,11 +106,11 @@ const main = async () => {
 	console.log(updatedComment);
 	console.log("Comment updated"); */
 
-	const commentsforCustomer = await commentsData.getCommentsForCustomer(
+	/* const commentsforCustomer = await commentsData.getCommentsForCustomer(
 		user1._id
 	);
 	console.log(commentsforCustomer);
-	console.log("Comments for customer working");
+	console.log("Comments for customer working"); */
 
 	//const commentsforReviews= await commentsData.getCommentsForReview()
 
@@ -116,8 +123,8 @@ const main = async () => {
 		4
 	); */
 
-	const covidRating = await testData.addCovidReview(user1._id, test1._id, 4);
-	console.log(covidRating);
+	/* const covidRating = await testData.addCovidReview(user1._id, test1._id, 4);
+	console.log(covidRating); */
 	console.log("Done seeding database");
 
 	await db.serverConfig.close();
