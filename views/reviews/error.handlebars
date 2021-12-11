@@ -4,7 +4,7 @@
     </div>
     <div class="container">
         <ul class="list-group">
-            {{#each errors}}
+            {{#each message}}
                 <li class="list-group-item">
                     {{this}}
                 </li>
@@ -12,3 +12,8 @@
         </ul>
     </div>
 </div> --}}
+<main>
+    <h2>Error</h2>
+<p><a href="/salons">Go back to Salon list page</a></p> 
+<p class="{{className}}">{{message}}</p>
+</main>

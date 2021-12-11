@@ -11,10 +11,10 @@ const main = async() => {
     const db = await dbConnection();
      //await db.dropDatabase();
 
-    // const olivebistro = await salonsData.create("The Punjabi Affair", "http://www.olivebistro.com", "hair", "New York City, New York", "New York", " NJ", "08820", 3, 3, "Shraddha");
-    // console.log(olivebistro);
-    // console.log('olivebistro restaurant has been added successfully!');
-    // console.log(olivebistro._id, 'Salon id')
+    const olivebistro = await salonsData.create("The Punjabi Affair", "http://www.olivebistro.com", "hair", "New York City, New York", "New York", " NJ", "08820", "40.732628", "-74.037628");
+    console.log(olivebistro);
+    console.log('olivebistro restaurant has been added successfully!');
+    console.log(olivebistro._id, 'Salon id')
 
     // const user1 = await customersData.createUser("savleen","lastname","email","savleen","password","profilePicture","city","state","age");
     // console.log('************* User has been Added **********************');

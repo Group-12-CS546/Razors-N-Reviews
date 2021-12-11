@@ -17,32 +17,42 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
   console.log(req.params.salonId, 'id from routes')
     if(!req.params.salonId)
     {
-      res.status(400).json({ error: 'You must provide a valid Salon ID for review'});
-      //res.status(400).render("reviews/error", "You must provide a valid Salon ID for review")
+      //res.status(400).json({ error: 'You must provide a valid Salon ID for review'});
+      res.status(400).render("reviews/error", {message: "You must provide a valid Salon ID for review"})
+      return;
+    }
+    if(req.params.salonId == null || req.params.salonId.length == 0)
+    {
+      res.status(400).render("reviews/error", {message: "You must provide a Salon Id that is not null for review"})
+      return;
+    }
+    if(req.params.salonId.trim() == '')
+    {
+      res.status(400).render("reviews/error", {message: "Blank spaces are provided in SalonID"})
       return;
     }
     try {
       const salData = await salons.get(req.params.salonId)
       const salonList = await reviewsData.getAllreviewsofSalon(req.params.salonId); 
-      console.log(salonList, 'SalonList')
+      //console.log(salonList, 'SalonList')
       //res.status(200).json(salonList);
-      console.log(salonList, 'salonList.reviewText')
+      //console.log(salonList, 'salonList.reviewText')
       var demo1 = {}
       for(var i =0 ; i<salonList.length; i++){
         demo1[i] = salonList[i]
-            console.log("demo3333333333333", demo1[i])
+            //console.log("demo3333333333333", demo1[i])
 
       }
-      console.log(demo1, 'demo1')
+      //console.log(demo1, 'demo1')
       var test = Object.values(demo1)
-      console.log(test, 'test')
+      //console.log(test, 'test')
 
       // res.status(200).render("reviews/salonreview", {test: test}) //{name: salData.name, reviews: test})
       res.status(200).render("salons/salonprofile", {test: test})
     } catch (e) {
-      console.log('Hi I am savleen')
+      //console.log('Hi I am savleen')
       //res.status(404).json({ error: e });
-      res.status(400).render("reviews/error", { error: e })
+      res.status(400).render("reviews/error", { message: e })
     }
   });
 
@@ -54,7 +64,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
     if(!req.params.reviewId)
     {
       //res.status(404).json({ error: 'You must provide a Review ID for review'})
-      res.status(400).render("reviews/error", "You must provide a Review ID for review")
+      res.status(400).render("reviews/error", {message: "You must provide a Review ID for review"})
       return;
     }
     try {//getReviewId
@@ -67,7 +77,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
           //res.status(200).json(reviewList);
           //res.status(200).render("reviews/reviewbyid", )
       } catch (e) {
-        res.status(404).render("reviews/error", { error: e})
+        res.status(404).render("reviews/error", { message: e})
         //res.status(404).json({message: e});
       }
     });
@@ -77,17 +87,24 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
       if (!req.session.AuthCookie){
         res.redirect("/");
       }
+      if(!req.params.reviewId)
+    {
+      //res.status(404).json({ error: 'You must provide a Review ID for review'})
+      res.status(400).render("reviews/error", {message: "You must provide a Review ID for review"})
+      return;
+    }
       try {
         const reviewList = await reviewsData.getReviewId(req.params.reviewId)
           //const salonsList = await salonsData.getAll();
           // res.status(200).json(salonsList)
-          console.log("reviewList***", reviewList)
+          //console.log("reviewList***", reviewList)
           //res.status(200).json(reviewList);
           //  res.status(200).render("reviews/reviewbyId", { message: "You have successfully signed up", name: reviewList });
           // res.status(200).render("reviews/reviewbyid", { message: "You have successfully signed up", name: reviewList });
           res.status(200).render("reviews/review", { reviewList });
       } catch (e) {
-          res.status(404).json({ error: e });
+          //res.status(404).json({ error: e });
+          res.status(404).render("reviews/error", { message: e})
       }
   });
 
@@ -97,6 +114,12 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
       if (!req.session.AuthCookie){
         res.redirect("/");
        }
+    if(req.params.customersId.length === 0 || req.params.customersId.length !== 24)
+    {
+      res.status(404).render("reviews/error", { message: 'Customer id should be a non empty string'})
+      return;
+    }
+
        console.log(req.session, 'req.session')
        console.log(session_user_id, 'session_user_id form review route')
        const user = session_user_id
@@ -104,7 +127,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
       if(!req.params.customersId)
     {
       // res.status(404).json({ error: 'You must provide a Customer ID for review'})
-      res.status(404).render("reviews/error", { error: 'You must provide a Customer ID for review'})
+      res.status(404).render("reviews/error", { message: 'You must provide a Customer ID for review'})
       return;
     }
     try {
@@ -118,7 +141,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
     }catch (e)
     {
       //console.log('rgsnlb')
-      res.status(404).render("reviews/error", { error: e})
+      res.status(404).render("reviews/error", { message: e})
       //res.status(404).json({message: e});
     }
     });
@@ -161,40 +184,50 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
       if (!req.session.AuthCookie){
         res.redirect("/");
       }
-      console.log(req.params.salonId, 'req.paramss')
-      console.log(req.body, 'req.body')
+      // console.log(req.params.salonId, 'req.paramss')
+      // console.log(req.body, 'req.body')
       let reviewData = req.body;
-      console.log(reviewData, "reviewData")
-      console.log(req.session, 'req.session')
+      // console.log(reviewData, "reviewData")
+      // console.log(req.session, 'req.session')
       const user = req.session.user
-      console.log(user, 'user: post review')
-    
-      // const salData = await salons.get(newPost.salonId)
-      //   const custData = await customers.getCustomerById(newPost.customersId)
-      // const redirectURL = "/salons/" + salonId;
-      //   return res.redirect(redirectURL);
-      
-      // if(!req.params.salonId)
-      // {
-      //   res.status(400).json({ error: 'You must provide a valid Salon ID for review'});
-      //   return;
-      // }
+      // console.log(user, 'user: post review')
+
+      if(!req.params.salonId || req.params.salonId.length == 0 || req.params.salonId.trim() == '')
+      {
+        res.status(400).render("reviews/error" , { message: 'You must provide a valid Salon ID for review'});
+        return;
+      }
+      if(typeof req.params.salonId != 'string')
+      {
+        res.status(400).render("reviews/error" , { message: 'No Salon with proper type has been provided'});
+        return;
+      }
       // if (!user.id) {
       //   res.status(400).json({ error: 'You must provide customer ID for review'});
       //   return;
       // }
-      // if (!reviewData.reviewText) {
-      //   res.status(400).json({ error: 'You must provide a reviewer' });
-      //   return;
-      // }
-      // if (!reviewData.rating) {
-      //   res.status(400).json({ error: 'You must provide a rating' });
-      //   return;
-      // }
-      console.log(req.session.AuthCookie, 'req.session.AuthCookie')
-    console.log(reviewData.rating, 'reviewData.rating')
-    console.log(reviewData.reviewText, ' reviewText')
-    console.log(user.id, 'user.id')
+      if (!reviewData.reviewText || reviewData.reviewText.trim() == '' || reviewData.reviewText == null) {
+        res.status(400).render("reviews/error", { message: 'You must provide a review' });
+        return;
+      }
+      if(typeof reviewData.reviewText!= 'string')
+      {
+        res.status(400).render("reviews/error", { message: 'You must provide a string for review' });
+        return;
+      }
+      if (!reviewData.rating) {
+        res.status(400).render("reviews/error", { message: 'You must provide a rating' });
+        return;
+      }
+      if(reviewData.rating<1 || reviewData.rating > 11)
+      {
+        res.status(400).render("reviews/error", { message: 'Rating cannot be less than 1 or greater than 10' });
+        return;
+      }
+      //console.log(req.session.AuthCookie, 'req.session.AuthCookie')
+    //console.log(reviewData.rating, 'reviewData.rating')
+    //console.log(reviewData.reviewText, ' reviewText')
+    //console.log(user.id, 'user.id')
       try {
         const newPost = await reviewsData.create(
           req.params.salonId,
@@ -203,18 +236,17 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
           reviewData.rating,
           //reviewData.rating
         );
-        console.log(newPost, "For new Post")
+        //console.log(newPost, "For new Post")
         const salData = await salons.get(newPost.salonId)
           const custData = await customers.getCustomerById(newPost.customersId)
         // var test = (newPost._id).toString()
         // console.log(test, 'test')
         // res.redirect("/manage/test")
         res.status(200).render("reviews/salonreview", {salonId : newPost.salonId, name: salData.name, username: custData.username, customersId: newPost.customersId,  reviewText: newPost.reviewText, rating: newPost.rating, _id: req.params.reviewId });
-      
-        res.status(200).json(newPost);
+        // res.status(200).json(newPost);
        } catch (e) {
-        res.status(400).render("reviews/error", { error: e})
-        res.status(400).json({ error: e });
+        res.status(400).render("reviews/error", { message: e})
+        //res.status(400).json({ error: e });
       }
     });
 
@@ -224,24 +256,28 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
         res.redirect("/");
       }
       if (!req.params.reviewId) {
-        res.status(400).json({ error: 'You must Supply an ID to delete' });
+        // res.status(400).json({ error: 'You must Supply an ID to delete' });
+        res.status(400).render("reviews/error" , { message: 'You must Supply an ID to delete' });
         return;
       }
+      // console.log(req.session, 'req.session')
+      const user = req.session.user
+      // console.log(user, 'user: post review')
+      // console.log("hi from get")
       try {
-        var reviewtoDelete = await reviewsData.getReviewById(req.params.reviewId);
+        var reviewtoDelete = await reviewsData.getReviewId(req.params.reviewId);
+        // console.log(reviewtoDelete, 'reviewtoDelete from delete get route')
+        if(user.id != reviewtoDelete.customersId)
+        {
+          res.status(400).render("reviews/error", { message: "You cant delete this review as you did not post it!" })
+        }
+        else{
+          await reviewsData.removeReview(req.params.reviewId);
+          // console.log("successfully deleted")
+        }
       }catch(e)
       {
-        res.json({message: e});
-        return;
-      }
-      try{
-        await reviewsData.removeReview(req.params.reviewId);
-        // res.status(200).json({ reviewId: reviewtoDelete._id , deleted: true });
-        res.status(200).render("reviews/deletereview", { message: "Deleted your review!" });
-      }catch (e) {
-        // res.status(404).json({ error: e });
-        res.status(404).render("reviews/error",{ error: e });
-        return;
+        res.status(404).render("reviews/error",{message: e});
       }
     });
 
@@ -249,7 +285,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
     //get to edit the review
     router.get('/reviews/updatereview/:reviewId', async (req, res) => {
       //console.log(req.body, 'req.body from get')
-      console.log(req.params.reviewId, 'id from get')
+      // console.log(req.params.reviewId, 'id from get')
       if (!req.session.AuthCookie){
         res.redirect("/");
       }
@@ -264,45 +300,57 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
       //   return;
         
       // }
-      console.log("hi from get")
+      // console.log(req.session, 'req.session')
+      const user = req.session.user
+      // console.log(user, 'user: post review')
+      // console.log("hi from get")
       try {
         const testreview = await reviewsData.getReviewId(req.params.reviewId)
+        // console.log(testreview, 'testreview')
+        if(user.id != testreview.customersId)
+        {
+          res.status(400).render("reviews/error", { message: "You can't edit this review as you did not post it!" })
+          // return;
+        }
+        else{
+          res.status(200).render('reviews/editreview', {id: testreview._id ,testreview: testreview.reviewText})
+        }
         //const testreview = await reviewsData.getReviewId(RestInfo.reviewId);
-        console.log(testreview, 'testreview')
+        
         //let updatereview = await reviewsData.update(req.params.reviewId, RestInfo.reviewText)
       //console.log(updatereview, 'updatereview')
-      res.status(200).render('reviews/editreview', {id: testreview._id ,testreview: testreview.reviewText})
+      // res.status(200).render('reviews/editreview', {id: testreview._id ,testreview: testreview.reviewText})
       } catch (error) {
-        console.log(error, 'error')
-        req.status(400).render("reviews/error", { error: error })
+        // console.log(error, 'error')
+        res.status(400).render("reviews/error", { message: error })
       }
     })
 
 
     //update a review
     router.post('/reviews/updatereview/:reviewId', async (req, res) => {
-      console.log(req.params.reviewId, 'id from post')
+      // console.log(req.params.reviewId, 'id from post')
       if (!req.session.AuthCookie){
         res.redirect("/");
       }
-      console.log(req.body, 'req.body from post')
+      // console.log(req.body, 'req.body from post')
       let RestInfo = req.body;
       if(!req.params.reviewId)
       {
         // res.status(400).json({error: 'You must provide id'});
-        res.status(400).render("reviews/error", {error: 'You must provide id'});
+        res.status(400).render("reviews/error", {message: 'You must provide id'});
         return;
       }
     
       if (!RestInfo) {
         // res.status(400).json({ error: 'You must provide data to update the review' });
-        res.status(400).render("reviews/error", { error: 'You must provide data to update the review' });
+        res.status(400).render("reviews/error", { message: 'You must provide data to update the review' });
         return;
       }
     
       if (!RestInfo.reviewText) {
         // res.status(400).json({ error: 'You must provide a text to update' });
-        res.status(400).render("reviews/error", { error: 'You must provide a text to update' });
+        res.status(400).render("reviews/error", { message: 'You must provide a text to update' });
         return;
       }
     
@@ -315,7 +363,7 @@ router.get('/reviews/salons/:salonId', async (req, res) => {
       }
       try {
         const updateSal = await reviewsData.update(req.params.reviewId, RestInfo.reviewText);
-        console.log(updateSal, 'Update sal')
+        // console.log(updateSal, 'Update sal')
         // res.status(200).json(updateSal);
         res.status(200).render("reviews/editreview", {message: "Updated your review successfully" ,updateSal: updateSal});
       } catch (e) {

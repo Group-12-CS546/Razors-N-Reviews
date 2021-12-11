@@ -155,6 +155,26 @@
                     {{#each this.getReviews}}
                     <p class="card-text">reviewText: {{this.reviewText}}</p>
                     <p class="card-text">rating: {{this.rating}}</p>
+                   <script src="https://use.fontawesome.com/fe459689b4.js"></script>
+
+  {{!-- <button class="like" id="green"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i></button>
+  <button class="dislike" id="red"><i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i></button> --}}
+
+  {{!-- <div class="container"><a class="like">Like</a> 
+  <a class="dislike">Dislike</a> 
+  <input class="qty" name="qty" readonly="readonly" type="text" value="0" /></div> --}}
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<div class="container"> 
+    <a class="like"><i class="fa fa-thumbs-o-up"></i>  
+        Like <input class="qty1" name="qty1" readonly="readonly" type="text" value="0" />
+    </a>
+    <a class="dislike"><i class="fa fa-thumbs-o-down"></i> 
+        Dislike <input class="qty2"  name="qty2" readonly="readonly" type="text" value="0" />
+    </a>
+</div>
+  
+  <script src="/public/javascript/like.js"></script>
                     <p><a href="/reviews/reviews/updatereview/{{this._id}}">Edit Review</a></p>
                     <p><a href="/reviews/reviews/deletereview/{{this._id}}">Delete Review</a></p>
                     {{/each}}
@@ -163,43 +183,6 @@
             </div>
         </div>
     </div>
-
-    {{!-- <div class = "dblclick container">
-                                {{#if (checkListMem ../customer._id this.likes)}}
-                                <i class = "likebtn fa fa-thumbs-up filled" data-rid = "{{this.id}}" data-uid = "{{../customer._id}}"></i>
-                                {{else}}
-                                <i class = "likebtn fa fa-thumbs-up" data-rid = "{{this.id}}" data-uid = "{{../customer._id}}"></i>
-                                {{/if}}
-                                <span class = "like">{{this.like.length}}</span>
-
-                                {{#if (checkListMem ../customer._id this.dislikes)}}
-                                <i class = "dislikebtn fa fa-thumbs-down filled" data-rid = "{{this.id}}" data-uid = "{{../customer._id}}"></i>
-                                {{else}}
-                                <i class = "dislikebtn fa fa-thumbs-down" data-rid = "{{this.id}}" data-uid = "{{../customer._id}}"></i>
-                                {{/if}}
-                                <span class = "dislike">{{this.dislike.length}}</span>
-    </div> --}}
-
-
-
-    {{!-- *************** --}}
-    {{!-- <div class="card-deck">
-        <div class="col-sm-6">
-            <div class="card" style="width: 18rem;">
-                <img class="card-img-top">
-                <div class="card-body">
-                    {{!-- <h5 class="card-title"><a href="/salons/{{salonId._id}}">{{this.name}}</a></h5> --}}
-                    {{!-- {{#each this.getReviews}}
-                    <p class="card-text">reviewText: {{this.reviewText}}</p>
-                    <p class="card-text">rating: {{this.rating}}</p>
-                    <p><a href="/reviews/reviews/updatereview/{{this._id}}">Edit Review</a></p>
-                    {{/each}}
-                    {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
-                </div>
-            </div>
-        </div>
-    </div> --}}
- 
  
     {{!-- <button type="submit" class="btn btn-primary">delete</button> --}}
  
