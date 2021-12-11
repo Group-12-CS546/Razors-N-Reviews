@@ -236,3 +236,57 @@ p.logout {
     width: 20px;
     background: transparent;
 }
+
+
+/* .imgStyle {
+    /* background-image: url('../image/salon_img.jpeg'); */
+
+
+/* width: 100%; */
+
+
+/* position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgb(117, 114, 114);
+    color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    opacity: 0.6;
+    width: 94%;
+} */
+
+
+/* .imgStyle h1,
+p,
+h3 {
+    text-align: center;
+} */
+
+div.imgStyle {
+    margin: 30px;
+    background-color: #ffffff;
+    border: 1px solid black;
+    opacity: 0.6;
+    text-align: center;
+}
+
+div.imgStyle {
+    margin: 5%;
+    font-weight: bold;
+    color: #000000;
+}
+
+
+/* div.transbox {
+    margin: 30px;
+    background-color: #ffffff;
+    border: 1px solid black;
+    opacity: 0.6;
+}
+
+div.transbox p {
+    margin: 5%;
+    font-weight: bold;
+    color: #000000;
+} */

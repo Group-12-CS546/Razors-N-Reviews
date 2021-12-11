@@ -24,6 +24,18 @@ module.exports = {
         }
         return 1;
     },
+    async addUserProfilePicture(id, profilePicture) {
+        if (!id) throw "User id is missing";
+        var objRevId = ""
+        if (typeof(id) === "string") objRevId = ObjectId.createFromHexString(id);
+        const customerCollection = await customers();
+        let updatedUserData = {};
+        let gotten = await this.getCustomerById(objRevId);
+        updatedUserData.profilePicture = profilePicture;
+        const updateInfoUser = await customerCollection.updateOne({ _id: objRevId }, { $set: updatedUserData });
+        if (updateInfoUser.modifiedCount === 0 && updateInfoUser.deletedCount === 0) throw "Could not update customer";
+        return await this.getCustomerById(id);
+    },
 
     /*
      ************* All Get functions **********************
@@ -54,6 +66,59 @@ module.exports = {
      ************* Get customers by ID**********************
      */
 
+    async updateUser(id, cust_info) {
+        if (!id) throw "id is missing";
+        if (!cust_info) {
+            return await this.getCustomerById(id);
+        }
+        if (typeof(id) === "string") id = ObjectId.createFromHexString(id);
+        const userCollection = await customers();
+        let newuserinfo = {};
+        let gotten = await this.getCustomerById(id);
+        if (JSON.stringify(cust_info) == JSON.stringify(gotten)) {
+            return await this.getCustomerById(id);
+        }
+
+        if (cust_info.firstname) {
+            newuserinfo.firstname = cust_info.firstname;
+        }
+        if (cust_info.lastname) {
+            newuserinfo.lastname = cust_info.lastname;
+        }
+        if (cust_info.username) {
+
+            newuserinfo.username = cust_info.username;
+        }
+        if (cust_info.email) {
+            newuserinfo.email = cust_info.email;
+        }
+        if (cust_info.city) {
+            newuserinfo.city = cust_info.city;
+        }
+        if (cust_info.state) {
+            newuserinfo.state = cust_info.state;
+        }
+        if (cust_info.age) {
+            newuserinfo.age = cust_info.age;
+        }
+        if (cust_info.profilePicture) {
+            newuserinfo.profilePicture = cust_info.profilePicture;
+        }
+        if (cust_info.password) {
+            const plainTextPassword = cust_info.password;
+            const hash = await bcrypt.hash(plainTextPassword, saltRounds);
+            password = hash;
+            newuserinfo.password = password;
+        }
+
+        if (newuserinfo == {}) {
+            return await this.getCustomerById(id);
+        }
+        const updateInfoUser = await userCollection.updateOne({ _id: id }, { $set: newuserinfo });
+        if (updateInfoUser.modifiedCount === 0 && updateInfoUser.deletedCount === 0) throw "Could not update your details ";
+        return await this.getCustomerById(id);
+    },
+
 
     async getCustomerById(id) {
         if (!id) throw 'No id entered';
@@ -75,11 +140,8 @@ module.exports = {
     },
 
 
-    async deleteCustomerbyId(id) {
 
 
-
-    },
 
     async deleteCustomerbyId(id) {
 
@@ -92,6 +154,7 @@ module.exports = {
         if (!ObjectId.isValid(id)) {
             throw 'Not a valid ObjectId';
         }
+
         /* delete review from DB */
         const reviewCollection = await customers();
         const customerCollection = await customers();
@@ -105,14 +168,16 @@ module.exports = {
 
 
 
+
     async createUser(firstname, lastname, email, username, password, profilePicture, state, city, age) {
 
 
 
         /*
-          TODO
-          : How to check if no parameter provided??
-         */
+        TODO
+        : How to check if no parameter provided??
+ 
+       */
 
 
 
@@ -157,7 +222,7 @@ module.exports = {
 
         function isCharacterALetter(char) {
             char = firstname
-            value = /^[a-zA-Z]+$/.test(char);
+            var value = /^[a-zA-Z]+$/.test(char);
             // console.log(value);  
             return value
         }
@@ -194,8 +259,8 @@ module.exports = {
             throw 'Lastname not of type string'
         }
 
-        /*             
-        
+        /*            
+       
         ************* Lastname is lowercase  and trimmed**********************
         */
 

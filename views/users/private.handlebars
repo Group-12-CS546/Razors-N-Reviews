@@ -1,60 +1,168 @@
-{{!-- <main>
-<dl>
-<dt>First Name:</dt>
-<dd>{{firstname}}</dd>
-<dt>Last Name:</dt>
-<dd>{{lastname}}</dd>
-<dt>Username:</dt>
-<dd>{{username}}</dd>
-<dt>Email:</dt>
-<dd>{{email}}</dd>
-<dt>State:</dt>
-<dd>{{state}}</dd>
-<dt>City:</dt>
-<dd>{{city}}</dd>
-<dt>Age:</dt>
-<dd>{{age}}</dd>
-</dl>
-<a href="/logout">logout</a>
-{{#if errorcode}}
-{{#each errors}}
-<li>
-{{this}}
-</li>
-{{/each}}
-{{/if}}
-</main> --}}
 <main>
-<div class="container">
-<div  id="card-private" class="card" style="width: 18rem;">
-  <img src="../../public/img/default-user.png" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title"><span class="text-bold">{{firstname}} {{lastname}}</h5>
+
+  <div class="container-private">
     <div class="card" style="width: 18rem;">
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item"><span class="text-bold">Username:</span>{{username}}</li>
-    <li class="list-group-item"><span class="text-bold">Email:</span>{{email}}</li>
-    <li class="list-group-item"><span class="text-bold">State:</span>{{state}}</li>
-    <li class="list-group-item"><span class="text-bold">City:</span>{{city}}</li>
-    <li class="list-group-item"><span class="text-bold">Age:</span>{{age}}</li>
-  </ul>
-</div>
-<div>
-     <a href="#"  class="btn-private btn btn-primary">Change Details</a>
-     <a href="#"  class="btn-private btn btn-primary">Delete Account</a>
-</div>
+      <h3>Your Current User Details</h3>
+      <img src="/profilepic/{{id}}" onerror="../../public/image/default-user.png" class="card-img-top"
+        alt="Profile Picture" class="profilePic">
+      <div class="card-body">
+        <h5 class="card-title">{{firstname}} {{lastname}}</h5>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Email:{{email}}</li>
+        <li class="list-group-item">Username:{{username}}</li>
+        <li class="list-group-item">State:{{state}}</li>
+        <li class="list-group-item">City:{{city}}</li>
+        <li class="list-group-item">Age:{{age}}</li>
+      </ul>
+      <div>
+        <a href="/delete" class="btn-private btn btn-primary">Delete Account</a>
+      </div>
+    </div>
+    <div id="card-private" class="card" style="width: 18rem;">
+
+      <h3>Change Your Details</h3>
+      <form action="/upload/profilepic" enctype="multipart/form-data" method="POST">
+        <input type="file" name="picture" accept="image/*" class="btn" required />
+        <input type="submit" class="btn" value="Upload Photo" />
+      </form>
+      {{!-- <img src="../../public/img/default-user.png" class="card-img-top" alt="..."> --}}
+      <div class="card-body">
+        <h5 class="card-title">{{firstname}} {{lastname}}</h5>
+      </div>
+
+      <form id="signup-form" class="center padding" action="/update" method="POST">
+        {{!-- First Name  --}}
+        <div class="form-group">
+          <label for="firstname">Firstname:</label>
+          <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter your First Name"
+            value="{{firstname}}">
+        </div>
+        {{!-- LastName --}}
+        <div class="form-group">
+          <label for="lastname">Lastname:</label>
+          <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter your Last Name"
+            value="{{lastname}}">
+        </div>
+        {{!-- Email --}}
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email" name="email" aria-describedby="email"
+            placeholder="Enter your Email" value="{{email}}">
+
+        </div>
+        {{!-- Username --}}
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input type="text" class="form-control" id="username" name="username" aria-describedby="username"
+            placeholder="Enter your Username" value="{{username}}">
+          <small id="username" class="form-text text-muted">We'll never share your details with anyone else.</small>
+        </div>
+        {{!-- Password --}}
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter your Password">
+          <small id="username" class="form-text text-muted">Write your original password or new password to
+            change.</small>
+        </div>
+
+        {{!-- Profile Picture --}}
+        {{!-- <div class="form-group">
+        <label for="profilePicture">Profile Picture:</label>
+        <input type="text" class="form-control" id="profilePicture" name="profilePicture" placeholder="Enter your Profile Picture">
+      </div> --}}
+
+        <div class="form-group">
+          <label for="state">
+            State:
+
+            <select name="state" class="form-control" id="state">
+              <option value="{{state}}" selected>{{state}}</option>
+              <option value="AL">Alabama</option>
+              <option value="AK">Alaska</option>
+              <option value="AZ">Arizona</option>
+              <option value="AR">Arkansas</option>
+              <option value="CA">California</option>
+              <option value="CO">Colorado</option>
+              <option value="CT">Connecticut</option>
+              <option value="DE">Delaware</option>
+              <option value="DC">District of Columbia</option>
+              <option value="FL">Florida</option>
+              <option value="GA">Georgia</option>
+              <option value="HI">Hawaii</option>
+              <option value="ID">Idaho</option>
+              <option value="IL">Illinois</option>
+              <option value="IN">Indiana</option>
+              <option value="IA">Iowa</option>
+              <option value="KS">Kansas</option>
+              <option value="KY">Kentucky</option>
+              <option value="LA">Louisiana</option>
+              <option value="ME">Maine</option>
+              <option value="MD">Maryland</option>
+              <option value="MA">Massachusetts</option>
+              <option value="MI">Michigan</option>
+              <option value="MN">Minnesota</option>
+              <option value="MS">Mississippi</option>
+              <option value="MO">Missouri</option>
+              <option value="MT">Montana</option>
+              <option value="NE">Nebraska</option>
+              <option value="NV">Nevada</option>
+              <option value="NH">New Hampshire</option>
+              <option value="NJ">New Jersey</option>
+              <option value="NM">New Mexico</option>
+              <option value="NY">New York</option>
+              <option value="NC">North Carolina</option>
+              <option value="ND">North Dakota</option>
+              <option value="OH">Ohio</option>
+              <option value="OK">Oklahoma</option>
+              <option value="OR">Oregon</option>
+              <option value="PA">Pennsylvania</option>
+              <option value="RI">Rhode Island</option>
+              <option value="SC">South Carolina</option>
+              <option value="SD">South Dakota</option>
+              <option value="TN">Tennessee</option>
+              <option value="TX">Texas</option>
+              <option value="UT">Utah</option>
+              <option value="VT">Vermont</option>
+              <option value="VA">Virginia</option>
+              <option value="WA">Washington</option>
+              <option value="WV">West Virginia</option>
+              <option value="WI">Wisconsin</option>
+              <option value="WY">Wyoming</option>
+            </select>
+          </label>
+
+        </div>
+
+        {{!-- City  --}}
+        <div class="form-group">
+          <label for="city">City:</label>
+          <input type="text" class="form-control" id="city" name="city" placeholder="Enter your City" value="{{city}}">
+        </div>
+
+
+        {{!-- Age  --}}
+        <div class="form-group">
+          <label for="age">Age:</label>
+          <input type="number" class="form-control" id="age" name="age" placeholder="Enter your Age" value="{{age}}">
+        </div>
+
+
+
+        <button type="submit" id="btn-id-private " class="btn-private btn btn-primary">Change Details</button>
+      </form>
+    </div>
+
 
 
   </div>
-</div>
-</div>
 
-<a href="/logout">logout</a>
-{{#if errorcode}}
-{{#each errors}}
-<li>
-{{this}}
-</li>
-{{/each}}
-{{/if}}
+  {{#if errorcode}}
+
+  <p class="error">{{message}}</p>
+  {{/if}}
+
+
+  <a href="/logout">Logout</a>
+
 </main>

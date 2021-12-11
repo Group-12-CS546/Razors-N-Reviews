@@ -1,12 +1,61 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
 const router = express.Router();
 const users = require('../data/customers');
 const mongoCollections = require('../config/mongoCollections');
 const users1 = mongoCollections.customers;
 const customers = mongoCollections.customers;
 let { ObjectId } = require('mongodb');
+const xss = require('xss');
 
+const bcrypt = require('bcrypt');
+const saltRounds = 16;
+const multer = require('multer');
+const path = require('path');
+
+var fs = require('fs');
+// SET STORAGE
+var storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads')
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+})
+
+var upload = multer({ storage: storage })
+
+router.post('/upload/profilepic', upload.single('picture'), async(req, res) => {
+    console.log("Hello from the other sidess ssssssssssss")
+    var img = fs.readFileSync(req.file.path);
+    var encode_image = img.toString('base64');
+    let userId = req.session.user.id;
+    var finalImg = {
+        contentType: req.file.mimetype,
+        image: Buffer.from(encode_image, 'base64')
+    };
+
+    const addingProfilePicture = await users.addUserProfilePicture(userId, finalImg);
+    console.log("")
+    console.log(addingProfilePicture);
+    res.redirect("/private");
+});
+
+router.get('/profilepic/:id', async(req, res) => {
+    console.log("iiiiiiiiiiiiiiiiiiiiii")
+    const getUser = await users.getCustomerById(req.params.id);
+    console.log("iiiiiiiiiiiiiiiiiiiiii")
+    console.log(getUser)
+    const profilepicData = getUser.profilePicture;
+    if (profilepicData == "") {
+        return res.status(400).send({
+            message: 'No Profile Pic Found!'
+        })
+    } else {
+        res.contentType('image/jpeg');
+        res.send(profilepicData.image.buffer);
+    }
+});
 
 
 router.get("/signup", (req, res) => {
@@ -16,22 +65,68 @@ router.get("/signup", (req, res) => {
         res.redirect("/private");
 });
 
+router.get("/login", (req, res) => {
+    if (!req.session.AuthCookie)
+        res.render("users/login", { title: "Signup", heading: "Signup" });
+    else
+        res.redirect("/private");
+});
+router.get("/update", (req, res) => {
+    if (!req.session.AuthCookie)
+        res.render("users/login", { title: "Signup", heading: "Signup" });
+    else
+    // res.redirect("/private");
+        res.render('users/private', {
+        username: req.session.newcustomer.username,
+        firstname: req.session.newcustomer.firstname,
+        lastname: req.session.newcustomer.lastname,
+        age: req.session.newcustomer.age,
+        state: req.session.newcustomer.state,
+        city: req.session.newcustomer.city,
+        email: req.session.newcustomer.email,
+        password: req.session.newcustomer.password,
+        profilePicture: req.session.newcustomer.profilePicture,
+        // firstName: currentUser.firstname,
+        // lastName: currentUser.lastname,
+    });
+});
 /*
 TODO:Delete Routes
 */
+router.get('/delete', async(req, res) => {
+    if (!req.session.AuthCookie) {
 
-router.delete("/private/:id", (req, res) => {
-
-    if (!req.session.AuthCookie)
         res.render("users/signup", { title: "Signup", heading: "Signup" });
-    else {
-        res.json("hello")
+
+    } else {
+        let errorcode = false;
+        console.log("helooooooooooooooooooooooooooooooooooooooooooooooo")
+        let tempId = req.session.user.id
+        tempId = tempId.toString(tempId);
+        console.log(tempId, "00000000000000000")
+            // if (!req.params.userId) {
+            //  res.status(400)
+            //     res.render("users/signup", { title: "Signup", heading: "Signup" });
+            //  return;
+            // }
+        try {
+
+            deleteuser = await users.deleteCustomerbyId(tempId);
+            if (deleteuser) {
+                errorcode = true;
+                res.status(500);
+                return res.render("users/signup", { title: "Signup", heading: "Signup", errorcode: errorcode, message: "Your account has been delete successfully,Please create  an account again." });
+
+            } else {
+                return res.render("users/private", { title: "Signup", heading: "Signup", errorcode: errorcode, message: "User not deleted" });
+            }
+            //res.json({deleted: true, data: toBeDeletedReview});
+        } catch (e) {
+            return res.render("users/private", { errorcode: errorcode, message: "User not deleted" });
+        }
     }
+});
 
-
-
-
-})
 
 
 router.get("/", (req, res) => {
@@ -121,6 +216,7 @@ router.post("/login", async(req, res) => {
             console.log("req.session.AuthCookie", req.session.AuthCookie)
             console.log("userdata******", userData);
             req.session.user = { Username: userData.username, Password: userData.password };
+            req.session.credentials = { Username: userData.username, Password: userData.password };
             console.log(req.session.user.Username, "=================")
             const customerCollection = await customers();
             customer_name = req.session.user.Username;
@@ -128,10 +224,26 @@ router.post("/login", async(req, res) => {
 
             const customer_details = await customerCollection.findOne({ username: req.session.user.Username });
             console.log("*********", customer_details)
+            console.log("*********", customer_details._id)
+            userid = customer_details._id
+            session_user_id = userid.toString()
+
+            /*
+            TODO:REMAINING
+            */
             const testid = customer_details._id
             req.session.user = { id: testid }
+
             console.log(req.session.user, "req.session.user")
-            res.status(200).render("users/private", { age: customer_details.age, state: customer_details.state, city: customer_details.city, email: customer_details.email, email: customer_details.email, firstname: customer_details.firstname, lastname: customer_details.lastname, username: customer_details.username, title: "Login", heading: "Login" });
+
+            // req.session.user = { Username: userData.username, Password: userData.password,cust_id:session_user_id };
+            req.session.customer = { age: customer_details.age, state: customer_details.state, city: customer_details.city, email: customer_details.email, email: customer_details.email, firstname: customer_details.firstname, lastname: customer_details.lastname, username: customer_details.username, password: customer_details.password };
+
+            console.log("............", req.session.customer)
+
+            console.log("req session 733333333333333333337333333333333333333", req.session.user)
+            console.log(req.session.user, "req.session.user")
+            res.status(200).render("users/private", { age: customer_details.age, state: customer_details.state, city: customer_details.city, email: customer_details.email, email: customer_details.email, firstname: customer_details.firstname, lastname: customer_details.lastname, username: customer_details.username, password: customer_details.password, title: "Login", heading: "Login" });
         } else {
             errorcode = true;
             res.status(400);
@@ -146,7 +258,77 @@ router.post("/login", async(req, res) => {
 
 });
 
+// Update users
+router.post("/update", async(req, res) => {
+    let errorcode = false;
+    let editedUser;
+    let hashedPassword;
+    const user_info = req.body;
+    console.log(req.body)
+    const firstname = user_info.firstname;
+    const lastname = user_info.lastname;
+    const email = user_info.email;
+    const username = req.session.customer.username;
+    const city = user_info.city;
+    const state = user_info.state;
+    const age = user_info.age;
+    const password = user_info.password;
+    const profilePicture = user_info.profilePicture;
 
+    if (password) {
+        // hashedPassword = bcrypt.hashSync(password, 10);
+        let plainTextPassword = password;
+        const hash = await bcrypt.hash(plainTextPassword, saltRounds);
+        //  password = hash;
+        hashedPassword = hash;
+        editedUser = {
+            hashedPassword: hashedPassword,
+            firstname: firstname,
+            lastname: lastname,
+            username: username,
+            email: email,
+            password: password,
+            city: city,
+            state: state,
+            age: age,
+            profilePicture: profilePicture
+        }
+        req.session.newcustomer = { age: editedUser.age, state: editedUser.state, city: editedUser.city, email: editedUser.email, email: editedUser.email, firstname: editedUser.firstname, lastname: editedUser.lastname, username: editedUser.username, profilePicture: editedUser.profilePicture };
+    } else {
+        editedUser = {
+            firstname: firstname,
+            lastname: lastname,
+            username: username,
+            email: email,
+            password: password,
+            city: city,
+            state: state,
+            age: age
+        }
+        req.session.newcustomer = { age: editedUser.age, state: editedUser.state, city: editedUser.city, email: editedUser.email, email: editedUser.email, firstname: editedUser.firstname, lastname: editedUser.lastname, username: editedUser.username, password: editedUser.password, profilePicture: editedUser.profilePicture };
+    }
+
+    //   req.session.updateUser={editedUser.firstName, editedUser.lastName, editedUser.email}
+    //   req.session.newcustomer = { age:editedUser.age,state:editedUser.state,city:editedUser.city,email:editedUser.email,email:editedUser.email,firstname: editedUser.firstname,lastname: editedUser.lastname, username: editedUser.username,password: editedUser.password};
+    try {
+        const updatedUser = await users.updateUser(req.session.user.id, editedUser);
+        return res.render('users/private', {
+            id: req.session.user.id,
+            firstname: updatedUser.firstname,
+            lastname: updatedUser.lastname,
+            username: username,
+            email: updatedUser.email,
+            password: updatedUser.password,
+            city: updatedUser.city,
+            profilePicture: updatedUser.profilePicture,
+            state: updatedUser.state,
+            age: updatedUser.age,
+            isUpdated: true,
+        })
+    } catch (e) {
+        res.status(404).json({ message: "Could not update user!" });
+    }
+});
 
 
 router.post("/signup", async(req, res) => {
@@ -267,24 +449,23 @@ router.get("/logout", (req, res) => {
 
 router.get("/private", async(req, res) => {
 
-
-    console.log("req.body", req.session.user.Username)
-
-    let user = req.session.user;
-    console.log("user******", user)
-    const currentUser = await users.getCustomerById(req.session.user);
-    console.log("################################################")
-    console.log(currentUser)
-    if (!req.session.user) {
+    if (!req.session.AuthCookie) {
         res.redirect('/');
     } else {
         res.render('users/private', {
-            username: req.session.user.Username,
-            firstName: currentUser.firstname,
-            lastName: currentUser.lastname,
+            id: req.session.user.id,
+            username: req.session.customer.username,
+            firstname: req.session.customer.firstname,
+            lastname: req.session.customer.lastname,
+            age: req.session.customer.age,
+            state: req.session.customer.state,
+            city: req.session.customer.city,
+            email: req.session.customer.email,
+            password: req.session.customer.password,
+            // firstName: currentUser.firstname,
+            // lastName: currentUser.lastname,
         });
     }
-
 
 
 
