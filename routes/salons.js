@@ -3,6 +3,7 @@ const router = express.Router();
 const data = require('../data');
 const salonsData = data.salons;
 const reviewsData = data.reviews;
+const customers = data.customers;
 
 router.get('/salons', async(req, res) => {
     try {
@@ -226,35 +227,49 @@ router.post('/post', async(req, res) => {
 
 router.get('/salons/:salonId/delete', async(req, res) => {
     console.log("*delete********", req.params.salonId)
+    let errorcode = false;
+    const errors = [];
     if (!req.session.AuthCookie) {
-        res.status(401).render("salons/routemessage", { message: "Please you will have to login for deleting a salon" });
+        return res.render("salons/error", { errorcode: errorcode, errors: errors, message: "You cant delete this salon as you are not loggedIn!" });
     }
     if (!req.params.salonId) {
-        res.status(400).json({ error: "should provide valid salon Id to delete" });
-        return;
+        // res.status(400).json({ error: "should provide valid salon Id to delete" });
+        // return;
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/error", { errorcode: errorcode, errors: errors, message: "should provide valid salon Id to delete" });
     }
     if (typeof req.params.salonId != 'string') {
-        res.status(400).json({ message: 'Salon ID should be in string' })
+        // res.status(400).json({ message: 'Salon ID should be in string' })
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/error", { errorcode: errorcode, errors: errors, message: "Salon ID should be in string" });
     }
+
+    const user = req.session.user
+    console.log("user", user.id)
+
     try {
-        await salonsData.get(req.params.salonId);
-    } catch (e) {
-        res.status(404).json({ error: 'Salon not found11111' });
-        return;
-    }
-    try {
-        // const getSalonId = await salonsData.get(req.params.salonId);
-        deleteSalon = await salonsData.remove(req.params.salonId);
-        // res.status(200).json({ getSalonId: getSalonId._id, deleted: true });
-        if (deleteSalon) {
-            return res.render("salons/delete", { message: "deleted" });
-            // res.status(200).json({ getSalonId: getSalonId._id, deleted: true });
+        var getId = await salonsData.get(req.params.salonId);
+        console.log("getId", getId);
+        if (user.id == null || !user.id) {
+            errorcode = true;
+            res.status(400);
+            return res.render("salons/error", { errorcode: errorcode, errors: errors, message: "You cant delete this salon as you are not loggedIn!" });
         } else {
-            res.status(400).render("salons/error", { error: 'not deleted' });
+            var deleteSalon = await salonsData.remove(req.params.salonId);
+            if (deleteSalon) {
+                return res.render("salons/delete", { message: "deleted" });
+                // res.status(200).json({ getSalonId: getSalonId._id, deleted: true });
+            } else {
+                res.status(400).render("salons/error", { message: 'not deleted' });
+            }
         }
     } catch (e) {
-        res.status(404).render("salons/error", { error: e });
+        res.status(404).render("salons/error", { error: 'Salon not found' });
+        return;
     }
+
 });
 
 router.post('/salons/:salonId/edit', async(req, res) => {
@@ -508,7 +523,7 @@ router.post('/search', async(req, res) => {
         console.log(test)
         res.render('salons/searchterm', { data: test, demo });
     } catch (error) {
-        errorDescription = {
+        var errorDescription = {
             className: "No name supplied",
             message: `No name was supplied *******`,
             hasErrors: "Error",
