@@ -1,16 +1,7 @@
 <main>
-    <!-- We should consider having review titles, otherwise rating will be header -->
     <div class="card-full">
-        {{!-- <h1><a href="../reviews/{{reviewList.reviewId}}">{{this}}</a></h1> --}}
+        <p><a href="/salons">Go back to Salon list page</a></p> 
         <p>Customer {{this.username}} has given the following reviews:</p>
-        {{!-- {{#each reviews}} --}}
         <span>{{this.reviews}}</span>
-        {{!-- {{/each}} --}}
-        {{!-- <p>Rating: {{newPost.rating}}/10</p> --}}
-        {{!-- <img src="/reviews/reviewPic/{{review._id}}" onerror="this.style.display='none'" alt="Review Picture" class="reviewImgIcon"> --}}
-        {{!-- <p>{{newPost.reviewText}}</p> --}}
-        {{!-- {{#if isReviewer}}
-            <p><a href="/reviews/{{id}}/edit">Edit Review</a></p>
-        {{/if}} --}}
     </div>
 </main>

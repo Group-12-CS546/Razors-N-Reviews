@@ -43,7 +43,8 @@ router.get('/salons/:salonId', async(req, res) => {
 
 router.get("/manage", async(req, res) => {
     if (!req.session.AuthCookie) {
-        res.status(401).redirect("/salons");
+        // res.status(401).redirect("/salons");
+        res.status(401).render("salons/error", { message: "Please login to post a salon!!" });
     }
     try {
         const salonsList = await salonsData.getAll();

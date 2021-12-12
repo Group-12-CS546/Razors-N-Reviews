@@ -290,3 +290,19 @@ div.transbox p {
     font-weight: bold;
     color: #000000;
 } */
+
+#login {
+    display: block;
+}
+
+#signup-form {
+    display: block;
+}
+
+.anchorDemo {
+    margin-left: -966px;
+}
+
+.logoutShiftLine {
+    color: wheat;
+}

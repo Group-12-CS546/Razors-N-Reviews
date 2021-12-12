@@ -6,6 +6,8 @@ const users1 = mongoCollections.customers;
 const customers = mongoCollections.customers;
 let { ObjectId } = require('mongodb');
 const xss = require('xss');
+const reviewsData = require('../data/reviews');
+const salData = require('../data/salons')
 
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
@@ -243,7 +245,11 @@ router.post("/login", async(req, res) => {
 
             console.log("req session 733333333333333333337333333333333333333", req.session.user)
             console.log(req.session.user, "req.session.user")
-            res.status(200).render("users/private", { age: customer_details.age, state: customer_details.state, city: customer_details.city, email: customer_details.email, email: customer_details.email, firstname: customer_details.firstname, lastname: customer_details.lastname, username: customer_details.username, password: customer_details.password, title: "Login", heading: "Login" });
+
+            const getReviews = await reviewsData.getReviewsPerCustomer(req.session.user.id);
+            console.log(getReviews, 'getReviews************')
+
+            res.status(200).render("users/private", { age: customer_details.age, state: customer_details.state, city: customer_details.city, email: customer_details.email, email: customer_details.email, firstname: customer_details.firstname, lastname: customer_details.lastname, username: customer_details.username, password: customer_details.password, getReviews: getReviews, title: "Login", heading: "Login" });
         } else {
             errorcode = true;
             res.status(400);

@@ -19,6 +19,19 @@
         <a href="/delete" class="btn-private btn btn-primary">Delete Account</a>
       </div>
     </div>
+
+    <div class="container">
+           <div class="card" style="width: 18rem;">
+               <img class="card-img-top">
+               <div class="card-body">
+                   {{#each this.getReviews}}
+                   <p class="card-text">reviewText: {{this.reviewText}}</p>
+                   <p class="card-text">rating: {{this.rating}}</p>
+                   {{/each}}
+               </div>
+           </div>
+   </div>
+
     <div id="card-private" class="card" style="width: 18rem;">
 
       <h3>Change Your Details</h3>
@@ -155,8 +168,9 @@
 
 
 
-  </div>
 
+  </div>
+  
   {{#if errorcode}}
 
   <p class="error">{{message}}</p>

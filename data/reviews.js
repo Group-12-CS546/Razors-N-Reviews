@@ -8,10 +8,11 @@ const customer = mongoCollections.customers;
 module.exports = {
     async create(salonId, customersId, reviewText, rating) //, comments, upvote, downvote)
     {
-        // console.log(salonId, 'salonId')
-        // console.log(customersId, 'customersId')
-        // console.log(reviewText, 'reviewText')
-        // console.log(rating, 'rating')
+        rating = Number(rating)
+            // console.log(salonId, 'salonId')
+            // console.log(customersId, 'customersId')
+            // console.log(reviewText, 'reviewText')
+            // console.log(rating, 'rating')
         salonId = salonId.toString();
         customersId = customersId.toString();
         if (typeof salonId != 'string') throw 'No Salon with proper type has been provided'
@@ -26,7 +27,7 @@ module.exports = {
         if (reviewText == null || reviewText.length == 0) throw 'Review is not provided'
         if (reviewText.trim() == '') throw 'Review provided only contains blank spaces'
 
-        if (typeof rating != 'string') throw 'Rating provided is not a string'
+        if (typeof rating != 'number') throw 'Rating provided is not a string'
         if (rating.length == 0 || rating == null) throw 'Rating is not provided'
         if (rating <= 0 || rating > 11) throw 'Rating must be between 0-10'
 
@@ -68,9 +69,9 @@ module.exports = {
             //const OverallRatingNew = await sal.updateOne({ _id: parsedId }, { $addToSet: { reviews: newReview } })
             //console.log(OverallRatingNew, 'Overall new rating')
 
-        let updateSal = await salons();
+        //let updateSal = await salons();
 
-        let SalUpdate = await updateSal.updateOne({ _id: ObjectID(newReview.salonId) }, { $push: { reviewId: (newReview._id).toString() } })
+        let SalUpdate = await sal.updateOne({ _id: ObjectID(newReview.salonId) }, { $push: { reviewId: (newReview._id).toString() } })
 
         // const reviewofOneSal = await sal.findOne({ _id: parsedId });
         const reviewofOneSal = await sal.findOne({ _id: ObjectID(salonId) });
@@ -119,7 +120,7 @@ module.exports = {
 
 
         //let SalUpdate = await updateSal.updateOne({ _id: ObjectID(newReview.salonId) }, { $push: { reviewId: (newReview._id).toString() } })
-        let SalUpdate1 = await updateSal.updateOne({ _id: ObjectID(newReview.salonId) }, { $set: { rating: newOverallRating } })
+        let SalUpdate1 = await sal.updateOne({ _id: ObjectID(newReview.salonId) }, { $set: { rating: newOverallRating } })
 
         //console.log(SalUpdate, 'Sal update')
 
@@ -264,6 +265,7 @@ module.exports = {
 
         const sal = await salons();
         const getSal = await sal.findOne(ObjectId(review.salonId));
+        const salid = review.salonId;
         //console.log(getSal, 'get sal')
         //return
         var demoTest
@@ -285,50 +287,70 @@ module.exports = {
             throw 'Review ID cannot be found'
         }
 
-        var ReviewList = getSal.reviewId
-            //console.log(ReviewList, 'ReviewList')
-        var sum = 0;
-        var demo = 0;
-
-
-        if (ReviewList != null && ReviewList.length > 0) {
-            for (var i = 0; i < ReviewList.length; i++) {
-                //console.log(ReviewList[i] , 'Should returns')
-                if (ReviewList[i] != reviewId) {
-                    //console.log(ReviewList[i], 'ReviewList[i]')
-
-                    var reviewcaught = await this.getReviewId(ReviewList[i]);
-                    // console.log(reviewcaught, 'review caught')
-                    demo = reviewcaught.rating
-                    console.log(demo, 'demo')
-                        // sum = sum + demo
-                        //console.log(sum , 'sum')
-                        //reviewcaught = null
-                }
-
-            }
-
-            //console.log(sum, 'sum')
-            //Number((sum / (ReviewList.length - 1)).toFixed(2));
-
-            var avgRating = Number(sum / (ReviewList.length - 1).toFixed(2))
-                //avgRating = Number(avgRating.toFixed(2));
-
-
-        } else {
-            avgRating = 0
-        }
-
         const deleteInfo = await reviewCollection.removeOne({ _id: parsedId });
         if (deleteInfo.deletedCount === 0) throw `Could not delete review with id of ${parsedId}`;
-
-        //console.log(avgRating, 'avgRating')
-        await sal.updateOne({ _id: getSal._id }, { $set: { rating: avgRating } })
 
         let SalUpdate = await sal.updateOne({ _id: ObjectID(review.salonId) }, { $pull: { reviewId: reviewId } })
 
         let updateCustomer = await customer();
         let custUpdate = await updateCustomer.updateOne({ _id: ObjectID(review.customersId) }, { $pull: { reviewId: reviewId } });
+        // salid
+        console.log('looks okay now')
+        const getSal1 = await sal.findOne(ObjectId(salid));
+
+        var ReviewList = getSal1.reviewId
+        console.log(ReviewList, 'ReviewList')
+        var sum = 0;
+        var demo = 0;
+
+        if (ReviewList != null && ReviewList.length > 0) {
+            for (var i = 0; i < ReviewList.length; i++) {
+                var reviewcaught = await this.getReviewId(ReviewList[i]);
+                demo = reviewcaught.rating + demo
+                console.log(demo, 'demo from data delete')
+            }
+            console.log(demo, 'demo from data delete')
+            var avgRating = Number(demo / (ReviewList.length).toFixed(2))
+            console.log(avgRating, 'avgRating from data delete')
+        }
+
+
+        // if (ReviewList != null && ReviewList.length > 0) {
+        //     for (var i = 0; i < ReviewList.length; i++) {
+        //         //console.log(ReviewList[i] , 'Should returns')
+        //         if (ReviewList[i] != reviewId) {
+        //             //console.log(ReviewList[i], 'ReviewList[i]')
+
+        //             var reviewcaught = await this.getReviewId(ReviewList[i]);
+        //             // console.log(reviewcaught, 'review caught')
+        //             demo = reviewcaught.rating
+        //             console.log(demo, 'demo')
+        //                 // sum = sum + demo
+        //                 //console.log(sum , 'sum')
+        //                 //reviewcaught = null
+        //         }
+
+        //     }
+
+        //     //console.log(sum, 'sum')
+        //     //Number((sum / (ReviewList.length - 1)).toFixed(2));
+
+        //     var avgRating = Number(sum / (ReviewList.length - 1).toFixed(2))
+        //avgRating = Number(avgRating.toFixed(2));
+        else {
+            var avgRating = 0
+        }
+
+        // const deleteInfo = await reviewCollection.removeOne({ _id: parsedId });
+        // if (deleteInfo.deletedCount === 0) throw `Could not delete review with id of ${parsedId}`;
+
+        //console.log(avgRating, 'avgRating')
+        await sal.updateOne({ _id: getSal._id }, { $set: { rating: avgRating } })
+
+        // let SalUpdate = await sal.updateOne({ _id: ObjectID(review.salonId) }, { $pull: { reviewId: reviewId } })
+
+        // let updateCustomer = await customer();
+        // let custUpdate = await updateCustomer.updateOne({ _id: ObjectID(review.customersId) }, { $pull: { reviewId: reviewId } });
 
         return { reviewiD: reviewId, deleted: true };
     },
@@ -401,6 +423,5 @@ module.exports = {
             return true;
         }
     }
-
 
 }
