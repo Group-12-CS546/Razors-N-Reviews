@@ -24,27 +24,71 @@ const calculate = data.calculate;
 	}
 }); */
 
-router.post("/covid", async (req, res) => {
-	console.log("*********************");
-	let reviewData = req.body;
-	console.log(reviewData);
+router.post("/:reviewId/add", async (req, res) => {
+	console.log("HIi from covidReview");
+	console.log(req.body,"*********************");
+	const review= await reviewsData.getReviewId(req.params.reviewId);
+	console.log(review);
+	if(review.covidRating)
+	{
+		console.log("IF condition working");
+		res.status(400).render("covidReview/error", {message: "You cannot give covidRating twice!!!"});
+	}
+	 let a = parseInt(req.body.Parameter1);
+	let b = parseInt(req.body.Parameter2);
+	let c = parseInt(req.body.Parameter3);
+	let d = parseInt(req.body.Parameter4);
+	let e = parseInt(req.body.Parameter5);
+	if(a<=1||a>=6)
+	{
+		res.status(400).render("covidReview/error", {message: "Ratings provided should be in the range 1-5"})
+	}
+	if(b<=1||b>=6)
+	{
+		res.status(400).render("covidReview/error", {message: "Ratings provided should be in the range 1-5"})
+	}
+	if(c<=1||c>=6)
+	{
+		res.status(400).render("covidReview/error", {message: "Ratings provided should be in the range 1-5"})
+	}
+	if(d<=1||d>=6)
+	{
+		res.status(400).render("covidReview/error", {message: "Ratings provided should be in the range 1-5"})
+	}
+	if(e<=1||e>=6)
+	{
+		res.status(400).render("covidReview/error", {message: "Ratings provided should be in the range 1-5"})
+	}
+	let result= (a+b+c+d+e)/5;
+	//let x=req.session.user.id;
+	//console.log(req.session);
+	console.log(result,"This is the final covid rating");
+	/* const review= await reviewsData.getReviewId(req.params.reviewId);
+	console.log(review);
+	if(review.covidRating)
+	{
+		res.status(400).render("covidReview/error", {message: "You cannot give covidRating twice!!!"});
+	} */
+	//console.log(reviewData);
 	try {
-		//let covidRating1 = await calculate.displayRadioValue();
 		const newPost = await covidReview.addCovidReview(
-			req.params.customerId,
 			req.params.reviewId,
-			reviewData.covidRating1
+			review.salonId,
+			result
 		);
 		console.log(newPost, "For new covid review ");
 
 		res.status(200).render("covidReview/covid", {
-			covidRating: covidRating1
+			message: "Sucessfully added CovidReview", salonId: review.salonId 
 		});
 	} catch (e) {
 		res.status(400).json({ error: e });
 	}
 });
-router.get("/salonId/add", async (req, res) => {
+
+
+
+/* router.get("/salonId/add", async (req, res) => {
 	let reviewData = req.body;
 	try {
 		//let covidRating1 = await calculate.displayRadioValue();
@@ -61,7 +105,7 @@ router.get("/salonId/add", async (req, res) => {
 	} catch (e) {
 		res.status(400).json({ error: e });
 	}
-});
+}); */
 
 
 module.exports = router;

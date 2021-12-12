@@ -1,24 +1,14 @@
 <main>
-    <!-- We should consider having review titles, otherwise rating will be header -->
+    <p><a href="/salons">Go back to Salon list page</a></p>
     <div class="card-full">
-        {{!-- <h1><a href="../reviews/{{reviewList.reviewId}}">{{this}}</a></h1> --}}
-        <p>Reviews of the Salon are:</p>
-        {{!-- <p>{{test}}</p> --}}
-        {{#each this.test}}
+        {{!-- <p><a href="/salons">Go back to Salon list page</a></p> --}}
+        <p>Reviews of the Salon {{this.name}} are:</p>
         <p class="card-text">reviewText: {{this.reviewText}}</p>
         <p class="card-text">rating: {{this.rating}}</p>
-        {{!-- <p{{this.reviewText}}>
-            </p>; --}}
-            {{!-- <p{{this.rating}}>
-                </p> --}}
-                {{/each}}
-                {{!-- <p>{{this.reviews}}</p> --}}
-                {{!-- <p>Rating: {{newPost.rating}}/10</p> --}}
-                {{!-- <img src="/reviews/reviewPic/{{review._id}}" onerror="this.style.display='none'"
-                    alt="Review Picture" class="reviewImgIcon"> --}}
-                {{!-- <p>{{newPost.reviewText}}</p> --}}
-                {{!-- {{#if isReviewer}}
-                <p><a href="/reviews/{{id}}/edit">Edit Review</a></p>
-                {{/if}} --}}
+        <p>Published your reviews for {{this.name}}</p>
+        <br>
+        <p>
+            Please go back to the salon profile and give the covid reviews!!
+        </p>
     </div>
 </main>

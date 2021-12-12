@@ -61,7 +61,7 @@ router.post("/add/:reviewId", async (req, res) => {
 		const getComment = await comments.getComment(addCommentOnReview._id)
         console.log("getComment", getComment.commentText)
         if (addCommentOnReview) {
-            res.render("comments/success", { userId: addCommentOnReview.user, text: getComment.commentText, message: "Sucessfully added comment" });
+            res.render("comments/success", { userId: addCommentOnReview.user, text: getComment.commentText, message: "Sucessfully added comment", salonId:getComment.salonID });
 			//return res.json({addCommentOnReview});
 		} else {
 			console.log("Error from else");

@@ -1,58 +1,14 @@
-{{!-- <main>
-    <!-- We should consider having review titles, otherwise rating will be header -->
-    <div class="card-full">
-        <h1><a href="../salons/{{newPost.salonId}}">{{this}}</a></h1>
-        <p>{{newPost.firstname}} {{customers.lastname}}</p>
-        <p>Rating: {{newPost.rating}}/10</p>
-        {{!-- <img src="/reviews/reviewPic/{{review._id}}" onerror="this.style.display='none'" alt="Review Picture"
-            class="reviewImgIcon"> --}}
-        {{!-- <p>{{newPost.reviewText}}</p>
-        {{#if isReviewer}}
-        <p><a href="/reviews/{{id}}/edit">Edit Review</a></p>
-        {{/if}}
-    </div> --}}
-    {{!--
-</main> --}}
-{{!-- <main>
-    <!-- We should consider having review titles, otherwise rating will be header -->
-    <div class="card-full">
-        <h1><a href="../salons/{{salon._id}}">{{salonId}}</a></h1>
-        <p>{{reviewList.reviewText}}</p>
-        {{!-- <p>Rating: {{newPost.rating}}/10</p> --}}
-        {{!-- <img src="/reviews/reviewPic/{{review._id}}" onerror="this.style.display='none'" alt="Review Picture"
-            class="reviewImgIcon"> --}}
-        {{!-- <p>{{newPost.reviewText}}</p> --}}
-        {{!-- {{#if isReviewer}}
-        <p><a href="/reviews/{{id}}/edit">Edit Review</a></p>
-        {{/if}} --}}
-        {{!--
-    </div> --}}
-    {{!--
-</main> --}}
 <main>
-    <!-- We should consider having review titles, otherwise rating will be header -->
+    <p><a href="/salons">Go back to Salon list page</a></p>
     <div class="card-full">
         <h1><a href="../reviews/{{reviewList._id}}">{{this}}</a></h1>
         <p>Salon Name:</p>
         <p>{{this.name}}</p><br>
-        {{!-- <p>Salon ID is:</p> --}}
-        {{!-- <p>{{this.salonId}}</p>><br> --}}
         <p>Customer username is:</p>
         <p>{{this.username}}</p>
-        {{!-- <p>Customer ID is:</p> --}}
-        {{!-- <p>{{this.customersId}}</p> --}}
-        {{!-- <p>Review ID is:</p> --}}
-        {{!-- <p>{{this._id}}</p> --}}
         <p>Review Text is:</p>
         <p>{{this.reviewText}}</p><br>
         <p>Rating is:</p>
         <p>{{this.rating}}</p>
-        {{!-- <p>Rating: {{newPost.rating}}/10</p> --}}
-        {{!-- <img src="/reviews/reviewPic/{{review._id}}" onerror="this.style.display='none'" alt="Review Picture"
-            class="reviewImgIcon"> --}}
-        {{!-- <p>{{newPost.reviewText}}</p> --}}
-        {{!-- {{#if isReviewer}}
-        <p><a href="/reviews/{{id}}/edit">Edit Review</a></p>
-        {{/if}} --}}
     </div>
 </main>
