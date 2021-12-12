@@ -1,0 +1,45 @@
+<h1></h1>
+<main>
+    {{#each data}}
+    <div class="card-deck">
+        <div class="col-sm-6">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="/salons/{{this._id}}">{{this.name}}</a></h5>
+                    <p class="card-text">{{this.address}}</p>
+                    <p class="card-text">{{this.city}}</p>
+                    <p class="card-text">{{this.rating}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+    {{#if data}}
+    <ul>
+        {{#each data}}
+        <li>
+            <a style="color: white;" href="/salons/">{{this.data}}</a>
+        </li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <p class="not-found">We're sorry, but no results were found for {{this.data.name}}.</p>
+    {{/if}}
+
+
+    {{#if hasErrors}}
+    {{#each errors}}
+    <li>
+        {{this}}
+    </li>
+    <div class="another">
+        <a href="/">Make another search</a>
+    </div>
+    {{/each}}
+    {{/if}}
+    <div class="another">
+        <a href="/">Make another search</a>
+    </div>
+
+</main>

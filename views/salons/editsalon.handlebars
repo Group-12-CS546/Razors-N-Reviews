@@ -1,0 +1,47 @@
+<div class="center padding">
+    <h3>Edit Salon</h3>
+    <form method="POST" action="/salons/{{this.salonId}}/edit">
+        <label>
+            <p>Name :</p>
+            <input id="name" name="name" placeholder="name" value="{{name}}"/>
+        </label>
+        <label>
+            <p> website:</p>
+            <input id="website" name="website" placeholder="website" value="{{website}}"/>
+        </label>
+        <label>
+            <p> service :</p>
+            <input id="service" name="service" placeholder="service" value="{{service}}"/>
+        </label>
+
+        <label>
+            <p> address :</p>
+            <input id="address" name="address" placeholder="address" value="{{address}}"/>
+        </label>
+
+        <label>
+            <p> city :</p>
+            <input id="city" name="city" type="city" placeholder="city" value="{{city}}"/>
+        </label>
+        <label>
+            <p> state:</p>
+            <input id="state" name="state" placeholder="state" value="{{state}}"/>
+        </label>
+
+        <label>
+            <p>zip :</p>
+            <input id="zip" name="zip" placeholder="zip" value="{{zip}}"/>
+        </label>
+        <label>
+            <p>longitude :</p>
+            <input id="number" name="longitude" placeholder="longitude" value="{{longitude}}"/>
+        </label>
+
+        <label>
+            <p> latitude :</p>
+            <input id="number" name="latitude" placeholder="latitude" value="{{latitude}}"/>
+        </label>
+        {{!-- <input type="submit" value="Edit Restaurant" class="btn" /> --}}
+        <button type="submit" id="btn-id">Edit Salon</button>
+    </form>
+</div>
