@@ -167,6 +167,183 @@ const main = async () => {
 	console.log(comment1)
 	console.log("Comment1 added successfully");
 
+	const comment2 = await commentsData.addComment(
+		user1._id,
+		review11._id,
+		"I liked it too."
+	);
+	console.log(comment2)
+	console.log("Comment2 added successfully");
+
+	const comment3 = await commentsData.addComment(
+		user2._id,
+		review12._id,
+		"I also did not like their service.."
+	);
+	console.log(comment3)
+	console.log("Comment3 added successfully");
+
+	const comment4 = await commentsData.addComment(
+		user2._id,
+		review21._id,
+		"I loved how they greet their customers!!"
+	);
+	console.log(comment4)
+	console.log("Comment4 added successfully");
+
+	const comment5 = await commentsData.addComment(
+		user3._id,
+		review21._id,
+		"I like how they clean all their rooms properly!"
+	);
+	console.log(comment5)
+	console.log("Comment5 added successfully");
+
+	const comment6 = await commentsData.addComment(
+		user4._id,
+		review22._id,
+		"Yes!!It smells really good."
+	);
+	console.log(comment6)
+	console.log("Comment6 added successfully");
+
+	const comment7 = await commentsData.addComment(
+		user5._id,
+		review31._id,
+		"I got really happy after getting their service!"
+	);
+	console.log(comment7)
+	console.log("Comment7 added successfully");
+
+	const comment8 = await commentsData.addComment(
+		user6._id,
+		review32._id,
+		"Specifically Brabara was too good!"
+	);
+	console.log(comment8)
+	console.log("Comment8 added successfully");
+
+	const comment9 = await commentsData.addComment(
+		user6._id,
+		review41._id,
+		"I really liked their interior."
+	);
+	console.log(comment9)
+	console.log("Comment9 added successfully");
+
+	const comment10 = await commentsData.addComment(
+		user7._id,
+		review42._id,
+		"They do not even clean their premises well."
+	);
+	console.log(comment10)
+	console.log("Comment10 added successfully");
+
+	const comment11 = await commentsData.addComment(
+		user8._id,
+		review43._id,
+		"Even their toilets smell extremely bad!!"
+	);
+	console.log(comment11)
+	console.log("Comment11 added successfully");
+
+	const comment12 = await commentsData.addComment(
+		user9._id,
+		review51._id,
+		"Very positive environment!!"
+	);
+	console.log(comment12)
+	console.log("Comment12 added successfully");
+
+	const comment13 = await commentsData.addComment(
+		user8._id,
+		review52._id,
+		"I loved how they painted their walls."
+	);
+	console.log(comment13)
+	console.log("Comment13 added successfully");
+
+	const comment14 = await commentsData.addComment(
+		user9._id,
+		review61._id,
+		"Yep, seems fair enough to say this."
+	);
+	console.log(comment14)
+	console.log("Comment14 added successfully");
+
+	const comment15 = await commentsData.addComment(
+		user8._id,
+		review62._id,
+		"The staff works really hard for their customers.."
+	);
+	console.log(comment15)
+	console.log("Comment15 added successfully");
+
+	const comment16 = await commentsData.addComment(
+		user10._id,
+		review71._id,
+		"They even offer coffee to their customer what else does a customer wants!"
+	);
+	console.log(comment16)
+	console.log("Comment16 added successfully");
+
+	const comment17 = await commentsData.addComment(
+		user9._id,
+		review72._id,
+		"True!!"
+	);
+	console.log(comment17)
+	console.log("Comment17 added successfully");
+
+	const comment18 = await commentsData.addComment(
+		user8._id,
+		review81._id,
+		"What other place can you go to have a haircut and get this chill environment!"
+	);
+	console.log(comment18)
+	console.log("Comment18 added successfully");
+
+	const comment19 = await commentsData.addComment(
+		user9._id,
+		review82._id,
+		"All is well when your customers are happy"
+	);
+	console.log(comment19)
+	console.log("Comment19 added successfully");
+
+	const comment20 = await commentsData.addComment(
+		user8._id,
+		review91._id,
+		"I would never recommend their service to anyone."
+	);
+	console.log(comment20)
+	console.log("Comment1 added successfully");
+
+	const comment21 = await commentsData.addComment(
+		user9._id,
+		review92._id,
+		"They even got a scar on my son's forehead..."
+	);
+	console.log(comment21)
+	console.log("Comment21 added successfully");
+
+	const comment22 = await commentsData.addComment(
+		user10._id,
+		review93._id,
+		"My apointment for haircut got delayed for more than 2 hours because of their unpunctuality!"
+	);
+	console.log(comment22)
+	console.log("Comment22 added successfully");
+
+
+
+
+
+	
+	
+
+
+
 
 
 
