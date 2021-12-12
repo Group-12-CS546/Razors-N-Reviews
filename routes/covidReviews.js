@@ -9,20 +9,8 @@ const salons = data.salons;
 const comments = data.comments;
 const covidReview = data.test;
 const calculate = data.calculate;
+const xss = require('xss');
 
-//Get data using salon id
-
-//get using review i
-/* router.get("/add", (req, res) => {
-	let user = req.session.user;
-	if (!req.session.user) {
-		res.redirect("/");
-	} else {
-		res.render("users/private", {
-			username: req.session.user.Username,
-		});
-	}
-}); */
 
 router.post("/:reviewId/add", async (req, res) => {
 	console.log("HIi from covidReview");
@@ -34,11 +22,16 @@ router.post("/:reviewId/add", async (req, res) => {
 		console.log("IF condition working");
 		res.status(400).render("covidReview/error", {message: "You cannot give covidRating twice!!!"});
 	}
-	 let a = parseInt(req.body.Parameter1);
-	let b = parseInt(req.body.Parameter2);
-	let c = parseInt(req.body.Parameter3);
-	let d = parseInt(req.body.Parameter4);
-	let e = parseInt(req.body.Parameter5);
+	let a =xss(req.body.Parameter1);
+	a=parseInt(a);
+	let b =xss(req.body.Parameter2);
+	b=parseInt(b);
+	let c =xss(req.body.Parameter3);
+	c=parseInt(c);
+	let d =xss(req.body.Parameter4);
+	d=parseInt(d);
+	let e =xss(req.body.Parameter5);
+	e=parseInt(e);
 	if(a<=1||a>=6)
 	{
 		res.status(400).render("covidReview/error", {message: "Ratings provided should be in the range 1-5"})
@@ -59,9 +52,8 @@ router.post("/:reviewId/add", async (req, res) => {
 	{
 		res.status(400).render("covidReview/error", {message: "Ratings provided should be in the range 1-5"})
 	}
+	console.log(a,b,c,d,e);
 	let result= (a+b+c+d+e)/5;
-	//let x=req.session.user.id;
-	//console.log(req.session);
 	console.log(result,"This is the final covid rating");
 	/* const review= await reviewsData.getReviewId(req.params.reviewId);
 	console.log(review);
@@ -82,30 +74,8 @@ router.post("/:reviewId/add", async (req, res) => {
 			message: "Sucessfully added CovidReview", salonId: review.salonId 
 		});
 	} catch (e) {
-		res.status(400).json({ error: e });
+		res.status(400).render("covidReview/error",{ error: e });
 	}
 });
-
-
-
-/* router.get("/salonId/add", async (req, res) => {
-	let reviewData = req.body;
-	try {
-		//let covidRating1 = await calculate.displayRadioValue();
-		// const newPost = await covidReview.addCovidReview(
-		// 	req.params.salonId,
-		// 	reviewData.customersId,
-		// 	reviewData.covidRating1
-		// );
-		// console.log(newPost, "For new covid review ");
-
-		res.status(200).render("covidReview/covid", {
-			// covidRating: covidRating1
-		});
-	} catch (e) {
-		res.status(400).json({ error: e });
-	}
-}); */
-
 
 module.exports = router;

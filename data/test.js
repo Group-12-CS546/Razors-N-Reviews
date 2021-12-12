@@ -29,23 +29,26 @@ module.exports = {
 		//console.log(covid);
 		const allCovidReviews= await covidReviewsCollection.find({}).toArray();
 		console.log(allCovidReviews,"All covid Reviews");
-		let arr=[];
+		let arr=[];let sum = 0,avg = 0;
 		for( i in allCovidReviews)
 		{
 			if(allCovidReviews[i].reviewId==reviewId)
 			{
 				arr[i]=allCovidReviews[i].covidRating;
+				console.log(arr[i]);
+				sum=sum+arr[i];
 			}
 		}
-		console.log(arr);
-		let sum = 0,avg = 0;
-		for( i in arr)
-		{
-			sum=sum+arr[i];
-		}
-		let x=arr.length;
+		var filtered = arr.filter(function (el) {
+			return el != null;
+		  });
+		
+		console.log(filtered);
+		console.log(sum,"Sum from function");
+		let x=filtered.length;
 		avg = sum / x;
 		avg= Math.floor(avg);
+		console.log(avg,"Average of all the reviews");
 		console.log("New Covid Review Added", newCovidReview);
 		if (insertInfo.insertedCount === 0) {
 			throw "Could not add new covidReview";
@@ -67,34 +70,26 @@ module.exports = {
 		const salCollection = await salons();
 		console.log(salonId);
 		let parsedId = ObjectId(salonId);
-		let arr2=[];
+		let arr2=[];let sum1 = 0,avg1 = 0;
 		for( i in allCovidReviews)
 		{
-			if(allCovidReviews[i].salonId==salonId)
+			if(allCovidReviews[i].salonId===salonId)
 			{
 				arr2[i]=allCovidReviews[i].covidRating;
+				sum1=sum1+arr2[i];
 			}
 		}
-		let sum1 = 0,avg1 = 0;
-		for( i in arr2)
-		{
-			sum1=sum1+arr2[i];
-		}
-		let y=arr2.length;
+		var filtered2 = arr2.filter(function (el) {
+			return el != null;
+		  });
+		
+		let y=filtered2.length;
 		avg1 = sum1 / y;
 		avg1= Math.floor(avg1);
-		//const newId = insertInfo.insertedId;
-		//const covRating = await this.getCovidReview(newId.toString());
-		//console.log(covRating);
-		//let demo =newCovidReviepw.covidRating;
 		const updatedInfo2 = await salCollection.updateOne(
 			{ _id: parsedId },
 			{ $set: { covidRating: avg1 } }
 		); 
-		/* let sum = 0,
-				avg = 0;
-				const revdata = await this.getAll(restaurantId);
-			for (let eachrest of revdata)  */
 		console.log(updatedInfo2.modifiedCount,"This is the updatedInfo***************66666")
 		if (updatedInfo2.modifiedCount ===0) {
 			throw "Could not update Salon Collection with Review Data!";
