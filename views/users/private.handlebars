@@ -50,21 +50,15 @@
     </div>
 
     <div class="container">
-        {{!-- <div class="col-sm-6"> --}}
             <div class="card" style="width: 18rem;">
                 <img class="card-img-top">
                 <div class="card-body">
-                    {{!-- <h5 class="card-title"><a href="/salons/{{salonId._id}}">{{this.name}}</a></h5> --}}
                     {{#each this.getReviews}}
                     <p class="card-text">reviewText: {{this.reviewText}}</p>
                     <p class="card-text">rating: {{this.rating}}</p>
-                    {{!-- <p><a href="/reviews/reviews/updatereview/{{this._id}}">Edit Review</a></p>
-                    <p><a href="/reviews/reviews/deletereview/{{this._id}}">Delete Review</a></p> --}}
                     {{/each}}
-                    {{!-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
                 </div>
             </div>
-        {{!-- </div> --}}
     </div>
 
 

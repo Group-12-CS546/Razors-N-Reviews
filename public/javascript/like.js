@@ -5,18 +5,18 @@
 // var click = 0;
 
 // btn1.addEventListener('click', function() {
-  
+
 //     if (btn2.classList.contains('red')) {
 //       btn2.classList.remove('red');
 //     } 
 //   this.classList.toggle('green');
 //   click += 1;
 // //   document.getElementById("clicks").innerHTML = clicks;
-  
+
 // });
 
 // btn2.addEventListener('click', function() {
-  
+
 //     if (btn1.classList.contains('green')) {
 //       btn1.classList.remove('green');
 //     } 
@@ -33,7 +33,7 @@
 $(function () {
     $(".like").click(function () {
         var input = $(this).find('.qty1');
-        input.val(parseInt(input.val())+ 1);
+        input.val(parseInt(input.val()) + 1);
     });
 
     $(".dislike").click(function () {

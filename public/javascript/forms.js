@@ -31,9 +31,9 @@ function commentBoxEditForm(index) {
 
     var x = document.getElementById(formElement);
     if (x.style.display === "none") {
-      x.style.display = "block";
+        x.style.display = "block";
     } else {
-      x.style.display = "none";
+        x.style.display = "none";
     }
 }
 
