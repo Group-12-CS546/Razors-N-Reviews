@@ -1,12 +1,12 @@
 const commentsRoutes = require('./comments');
-// const covidReviewsRoutes = require('./covidReviews');
+const covidReviewsRoutes = require('./covidReviews');
 const customersRoutes = require('./customers');
 const reviewsRoutes = require('./reviews');
 const salonsRoutes = require('./salons');
 
 const constructorMethod = (app) => {
     app.use('/comments', commentsRoutes);
-    // app.use('', covidReviewsRoutes);
+    app.use('/covidReviews', covidReviewsRoutes);
     app.use('', customersRoutes);
     app.use('/reviews', reviewsRoutes);
     app.use('/', salonsRoutes);

@@ -1,7 +1,7 @@
 <main>
 
   <div class="container-private">
-    <div class="card" style="width: 18rem;">
+    <div class="card card-private" style="width: 18rem;">
       <h3>Your Current User Details</h3>
       <img src="/profilepic/{{id}}" onerror="this.src='/public/image/default-user.png'" class="card-img-top"
         alt="Profile Picture" class="profilePic">
@@ -20,24 +20,12 @@
       </div>
     </div>
 
-    <div class="container">
-           <div class="card" style="width: 18rem;">
-               <img class="card-img-top">
-               <div class="card-body">
-                   {{#each this.getReviews}}
-                   <p class="card-text">reviewText: {{this.reviewText}}</p>
-                   <p class="card-text">rating: {{this.rating}}</p>
-                   {{/each}}
-               </div>
-           </div>
-   </div>
-
-    <div id="card-private" class="card" style="width: 18rem;">
+    <div id="card-private" class="card" style="width: 24rem;">
 
       <h3>Change Your Details</h3>
       <form action="/upload/profilepic" enctype="multipart/form-data" method="POST">
-        <input type="file" name="picture" accept="image/*" class="btn" required />
-        <input type="submit" class="btn" value="Upload Photo" />
+        <input type="file" name="picture" accept="image/*" class="btn-private btn btn-primary" required />
+        <input type="submit" class="btn-private btn btn-primary" value="Upload Photo" />
       </form>
       {{!-- <img src="../../public/img/default-user.png" class="card-img-top" alt="..."> --}}
       <div class="card-body">
@@ -170,12 +158,24 @@
 
 
   </div>
-  
+
   {{#if errorcode}}
 
   <p class="error">{{message}}</p>
   {{/if}}
 
+  <div class="container-review">
+    <h3>Reviews by You:</h3>
+    {{#each this.getReviews}}
+    <div class=" card card-getreviews" style="width: 18rem;">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{this.reviewText}}</li>
+        <li class="list-group-item">{{this.rating}}</li>
+      </ul>
+    </div>
+    {{/each}}
+
+  </div>
 
   <a href="/logout">Logout</a>
 

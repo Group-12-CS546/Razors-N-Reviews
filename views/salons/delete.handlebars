@@ -1,10 +1,12 @@
 <main>
-    <h1>Successfully deleted...........</h1>
+    <div class="card container" id="cont">
+        <h1>Successfully deleted</h1>
+        <h3>Salon will be deleted on Salon List page</h3>
     <div>
         <p>{{message}}</p>
-        <button type="submit" class="btn btn-primary">delete</button>
     </div>
     {{#if message}}
-    <a class="logoutShiftLine" href="/">Login</a>
+    <a class="logoutShiftLine" href="/salons">Go to the salons</a>
     {{/if}}
+    </div>
 </main>

@@ -37,12 +37,7 @@ module.exports = {
         let parsedId2 = ObjectId(reviewId);
         const newId = insertInfo.insertedId;
         const finComment = await this.getComment(newId.toString());
-        const updatedInfo = await revCollection.updateOne({ _id: parsedId2 }, {
-            $push: {
-                comments: newComment._id,
-                commentTexts: newComment.commentText
-            }
-        });
+        const updatedInfo = await revCollection.updateOne({ _id: parsedId2 }, { $push: { comments: newComment._id, commentTexts: newComment.commentText } });
         if (updatedInfo.modifiedCount === 0) {
             throw "Could not update Review Collection with Review Data!";
         }

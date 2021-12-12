@@ -1,4 +1,4 @@
-<div class="center padding">
+{{!-- <div class="center padding">
     <h3>Edit Salon</h3>
     <form method="POST" action="/salons/{{this.salonId}}/edit">
         <label>
@@ -44,4 +44,74 @@
         {{!-- <input type="submit" value="Edit Restaurant" class="btn" /> --}}
         <button type="submit" id="btn-id">Edit Salon</button>
     </form>
-</div>
+</div> --}}
+
+
+<main>
+    <div class="container">
+        <h1>Edit a Salon</h1>
+        <form id="salon-signup-form" class="center padding" action="/salons/{{this.salonId}}/edit" method="POST">
+            {{!-- First Name  --}}
+            <div class="form-group">
+                <label for="name">Salon Name:</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{name}}" placeholder="Enter Salon Name">
+            </div>
+            {{!-- LastName --}}
+            <div class="form-group">
+                <label for="website">Website:</label>
+                <input type="text" class="form-control" id="website" name="website" value="{{website}}"  placeholder="Enter your Website">
+                <small id="website" class="form-text text-muted">Enter the website in format start: http://www and end with .com</small>
+            </div>
+            <div class="form-group">
+                <label for="service">Services:</label>
+                <input type="text" class="form-control" id="service" name="service" value="{{service}}" placeholder="Service">
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" class="form-control" id="address" name="address" value="{{address}}"
+                    placeholder="Enter Address of salon">
+            </div>
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" class="form-control" id="city" name="city" value="{{city}}" placeholder="Enter your City">
+            </div>
+            <div class="form-group">
+                <label for="state">State:</label>
+                <input type="text" class="form-control" id="state" name="state" value="{{state}}" placeholder="Enter your State">
+            </div>
+            <div class="form-group">
+                <label for="zip">Zip:</label>
+                <input type="text" class="form-control" id="zip" name="zip" value="{{zip}}" placeholder="Enter Zip code">
+            </div>
+
+
+            <div class="form-group">
+                <label for="longitude">Longitude:</label>
+                <input type="text" class="form-control" id="longitude" name="longitude" value="{{longitude}}" placeholder="Enter  Longitude">
+                <small id="longitude" class="form-text text-muted">Enter the longitude in decimal format</small>
+            </div>
+
+            <div class="form-group">
+                <label for="latitude">Latitude:</label>
+                <input type="text" class="form-control" id="latitude" name="latitude" value="{{latitude}}" placeholder="Enter latitude">
+                <small id="latitude" class="form-text text-muted">Enter the longitude in decimal format</small>
+            </div>
+            <button type="submit" id="btn-id" class="btn btn-primary">Edit Salon</button>
+            {{!-- <button type="submit" id="btn-id">Submit</button> --}}
+            <h1><a class="logoutShiftLine" href="/salons">Go Back To Salons</a></h1>
+        </form>
+
+        {{#if errorcode}}
+
+        <p class="error">{{message}}</p>
+        {{/if}}
+
+
+    </div>
+
+
+    </div>
+
+
+
+</main>

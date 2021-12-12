@@ -22,6 +22,10 @@ body {
     padding: 20px;
 }
 
+.card {
+    width: 21rem;
+}
+
 
 /* label {
     margin: 4px;
@@ -78,7 +82,6 @@ a {
     font-weight: 600;
     font-size: 30px;
 }
-
 dd {
     color: wheat;
     text-align: center;
@@ -193,6 +196,7 @@ p.logout {
 }
 
 #card-private {
+    width: 21rem;
     margin: 20px;
     width: 100%;
     margin-top: 80px;
@@ -284,7 +288,6 @@ div.imgStyle {
     border: 1px solid black;
     opacity: 0.6;
 }
-
 div.transbox p {
     margin: 5%;
     font-weight: bold;
@@ -305,4 +308,251 @@ div.transbox p {
 
 .logoutShiftLine {
     color: wheat;
+}
+
+.card-private {
+    margin-bottom: 583px;
+}
+
+.container-private {
+    margin-top: 100px;
+    margin-bottom: 100px;
+    margin-left: 277px;
+    width: 57%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 0.25rem;
+}
+
+.container-review {
+    margin-top: 100px;
+    margin-bottom: 100px;
+    margin-left: 320px;
+    width: 50%;
+    /* height:100%; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 0.25rem;
+}
+
+#cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-getreviews {
+    margin: 10px;
+}
+
+#footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: DarkSalmon;
+    color: black;
+    text-align: center;
+    font-weight: 700;
+}
+
+.logoutShiftLine {
+    color: #236832;
+}
+
+.not-found {
+    margin-left: 121px;
+    margin-top: 81px;
+}
+
+
+/* **********************  FAQ*********************** */
+
+.new {
+    padding: 0;
+    margin: 0;
+    background: #131617;
+    overflow-x: hidden;
+}
+
+.main-section {
+    float: left;
+    width: 100%;
+    display: block;
+    background: #0A192F;
+    height: 100vh;
+}
+
+.container-faq {
+    float: left;
+    width: 80%;
+    margin: 2rem 10%;
+}
+
+.fullwidth-container {
+    display: block;
+    width: 80%;
+    margin: 2rem 10%
+}
+
+#faqs {}
+
+.line-heading {
+    font-family: sans-serif;
+    color: #ccd6f6;
+    font-weight: 600;
+    line-height: 1.1;
+    display: flex;
+    align-items: center;
+    width: 90%;
+    margin: 10px 0 40px 10%;
+    white-space: nowrap;
+    font-size: 26px;
+    text-shadow: 1px 1px 1px rgb(0, 0, 0);
+}
+
+.line-heading:after {
+    content: "";
+    display: block;
+    position: relative;
+    width: 300px;
+    height: 1px;
+    margin: 0 0 0 20px;
+    background: rgba(204, 214, 246, .2);
+    text-shadow: none;
+    transition: all .6s ease-in-out 0s
+}
+
+.line-heading:hover:after {
+    width: 180px;
+    background: rgba(204, 214, 246, .6);
+}
+
+h3.large-heading {
+    font-family: sans-serif;
+    margin: 0 0 0 10%;
+    font-size: 52px;
+    line-height: 1.1;
+    letter-spacing: -.045em;
+    color: #fff;
+    text-shadow: 1px 1px 1px rgb(0 0 0);
+}
+
+
+/** The Faq Section **/
+
+#faqSection div {
+    float: left;
+    display: inline-block;
+    width: 46%;
+    margin: 0 2%;
+    overflow: hidden;
+}
+
+#faqSection .collapsible {
+    background-color: #112240;
+    border: 1px solid hsla(0, 0%, 51.4%, .16);
+    border-radius: 7px;
+    box-shadow: 0 10px 30px -15px rgb(0 0 0);
+    transition: box-shadow .2s ease 0s;
+    color: #ccd6f6;
+    margin: 0 0 8px;
+    width: 100%;
+    padding: 12px;
+    font-family: sans-serif;
+    font-size: 15px;
+    text-align: left;
+}
+
+#faqSection .collapsible:hover {
+    box-shadow: 0 10px 60px -15px rgba(0, 0, 0, 1);
+}
+
+#faqSection .active,
+#faqSection .collapsible:hover {}
+
+#faqSection .collapsible:after {
+    content: "\002B";
+    font-weight: bold;
+    float: right;
+    margin-left: 5px
+}
+
+#faqSection .active:after {
+    content: "\2212"
+}
+
+#faqSection .faq-content {
+    overflow: hidden;
+    width: calc(100% - 8%);
+    padding: 5px 2%;
+    transition: all .25s ease-in-out 0s;
+    background: #0b1629;
+    border: 1px solid hsla(0, 0%, 51.4%, .16);
+    border-radius: 7px;
+    max-height: 0px;
+    visibility: hidden;
+}
+
+#faqSection .faq-content p {
+    font-family: sans-serif;
+    color: #c2c2c2;
+    line-height: 140%;
+    font-size: 14px;
+    margin: 0 0 12px;
+    text-shadow: 1px 1px 0 rgb(0 0 0 / 80%);
+    font-weight: 100;
+}
+
+#faqSection .faq-content a {
+    color: #00C58E;
+    font-weight: 600;
+    letter-spacing: .05rem;
+}
+
+#faqSection .faq-content ul {
+    border-left: 2px solid #00C58E
+}
+
+#faqSection .faq-content li {
+    color: #bad2e2;
+    font-size: .85rem;
+    line-height: 160%;
+    font-weight: 200;
+    margin: 8px 0 8px 2%;
+    list-style: none;
+    width: 90%;
+    font-family: sans-serif;
+    text-shadow: 1px 1px 0 rgb(0 0 0);
+}
+
+.myFooter {
+    float: left;
+    width: 100%;
+    display: block;
+    background: #0A192F;
+    text-align: center;
+    height: 10vh
+}
+
+.myFooter p {
+    color: #fff;
+    font-family: sans-serif;
+    text-shadow: 1px 1px 0 rgb(0 0 0);
+}
+
+.myFooter a {
+    color: #00C58E;
+    text-decoration: none
 }

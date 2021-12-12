@@ -14,8 +14,7 @@ router.get("/:id", async(req, res) => {
         const comment = await comments.getComment(req.params.id);
         res
             .status(200)
-            // .render("comments/comments", { commentText: comment.commentText });
-            .render("salons/salonprofile", { commentText: comment.commentText });
+            .render("comments/comments", { commentText: comment.commentText });
     } catch (e) {
         res.status(404).json({ message: "Comment not found!" });
     }
@@ -33,9 +32,9 @@ router.get("/", async(req, res) => {
 
 router.post("/add/:reviewId", async(req, res) => {
     //console.log(req.session.user.id);
-    console.log(req.params.reviewId);
+    //console.log(req.params.reviewId);
     //console.log(req.body,"from comment routes");
-    console.log(req.params.customerId, req.params.reviewId, req.params.salonId, "Parameters")
+    //console.log(req.params.customerId,req.params.reviewId,req.params.salonId,"Parameters")
     if (!req.session.AuthCookie) {
         res.redirect("/");
     }
@@ -59,13 +58,10 @@ router.post("/add/:reviewId", async(req, res) => {
             req.params.reviewId,
             commentVal
         );
-        console.log("addCommentOnReview", addCommentOnReview)
-        console.log("addCommentOnReview._id", addCommentOnReview._id)
         const getComment = await comments.getComment(addCommentOnReview._id)
         console.log("getComment", getComment.commentText)
         if (addCommentOnReview) {
-            console.log("ERROR");
-            res.render("comments/success", { userId: addCommentOnReview.user, text: getComment.commentText, message: "Sucessfully added comment" });
+            res.render("comments/success", { userId: addCommentOnReview.user, text: getComment.commentText, message: "Sucessfully added comment", salonId: getComment.salonID });
             //return res.json({addCommentOnReview});
         } else {
             console.log("Error from else");
