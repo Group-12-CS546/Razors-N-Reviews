@@ -4,20 +4,21 @@
     <div class="card-deck">
         <div class="col-sm-6">
             <div class="card" style="width: 18rem;">
-                <img class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title"><a href="/salons/{{this._id}}">{{this.name}}</a></h5>
-                    <p class="card-text">{{this.address}}</p>
-                    <p class="card-text" id="serviceid">Service: {{this.service}}</p>
-                    <p class="card-text">City: {{this.city}} &nbsp;&nbsp;&nbsp;&nbsp;Rating: {{this.rating}}</p>
-                </div>
+                {{!-- <div class="card-img-top"> --}}
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="/salons/{{this._id}}">{{this.name}}</a></h5>
+                        <p class="card-text">{{this.address}}</p>
+                        <p class="card-text" >Service: {{this.service}}</p>
+                        <p class="card-text">City: {{this.city}} &nbsp;&nbsp;&nbsp;&nbsp;Rating: {{this.rating}}</p>
+                    </div>
+                {{!-- </div> --}}
             </div>
         </div>
         <script src="../../public/javascript/filter.js"></script>
     </div>
     {{/each}}
     <br>
-    <br>  
+    <br>
     <br>
     <br>
 </main>

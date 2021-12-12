@@ -1,66 +1,15 @@
-{{!-- <div class="center padding">
-    <h3>Edit Salon</h3>
-    <form method="POST" action="/salons/{{this.salonId}}/edit">
-        <label>
-            <p>Name :</p>
-            <input id="name" name="name" placeholder="name" value="{{name}}"/>
-        </label>
-        <label>
-            <p> website:</p>
-            <input id="website" name="website" placeholder="website" value="{{website}}"/>
-        </label>
-        <label>
-            <p> service :</p>
-            <input id="service" name="service" placeholder="service" value="{{service}}"/>
-        </label>
-
-        <label>
-            <p> address :</p>
-            <input id="address" name="address" placeholder="address" value="{{address}}"/>
-        </label>
-
-        <label>
-            <p> city :</p>
-            <input id="city" name="city" type="city" placeholder="city" value="{{city}}"/>
-        </label>
-        <label>
-            <p> state:</p>
-            <input id="state" name="state" placeholder="state" value="{{state}}"/>
-        </label>
-
-        <label>
-            <p>zip :</p>
-            <input id="zip" name="zip" placeholder="zip" value="{{zip}}"/>
-        </label>
-        <label>
-            <p>longitude :</p>
-            <input id="number" name="longitude" placeholder="longitude" value="{{longitude}}"/>
-        </label>
-
-        <label>
-            <p> latitude :</p>
-            <input id="number" name="latitude" placeholder="latitude" value="{{latitude}}"/>
-        </label>
-        {{!-- <input type="submit" value="Edit Restaurant" class="btn" /> --}}
-        <button type="submit" id="btn-id">Edit Salon</button>
-    </form>
-</div> --}}
-
-
 <main>
     <div class="container">
         <h1>Edit a Salon</h1>
         <form id="salon-signup-form" class="center padding" action="/salons/{{this.salonId}}/edit" method="POST">
-            {{!-- First Name  --}}
             <div class="form-group">
                 <label for="name">Salon Name:</label>
                 <input type="text" class="form-control" id="name" name="name" value="{{name}}" placeholder="Enter Salon Name">
             </div>
-            {{!-- LastName --}}
             <div class="form-group">
                 <label for="website">Website:</label>
                 <input type="text" class="form-control" id="website" name="website" value="{{website}}"  placeholder="Enter your Website">
-                <small id="website" class="form-text text-muted">Enter the website in format start: http://www and end with .com</small>
+                <small class="form-text text-muted">Enter the website in format start: http://www and end with .com</small>
             </div>
             <div class="form-group">
                 <label for="service">Services:</label>
@@ -88,16 +37,15 @@
             <div class="form-group">
                 <label for="longitude">Longitude:</label>
                 <input type="text" class="form-control" id="longitude" name="longitude" value="{{longitude}}" placeholder="Enter  Longitude">
-                <small id="longitude" class="form-text text-muted">Enter the longitude in decimal format</small>
+                <small class="form-text text-muted">Enter the longitude in decimal format</small>
             </div>
 
             <div class="form-group">
                 <label for="latitude">Latitude:</label>
                 <input type="text" class="form-control" id="latitude" name="latitude" value="{{latitude}}" placeholder="Enter latitude">
-                <small id="latitude" class="form-text text-muted">Enter the longitude in decimal format</small>
+                <small class="form-text text-muted">Enter the longitude in decimal format</small>
             </div>
             <button type="submit" id="btn-id" class="btn btn-primary">Edit Salon</button>
-            {{!-- <button type="submit" id="btn-id">Submit</button> --}}
             <h1><a class="logoutShiftLine" href="/salons">Go Back To Salons</a></h1>
         </form>
 
@@ -108,10 +56,4 @@
 
 
     </div>
-
-
-    </div>
-
-
-
 </main>
