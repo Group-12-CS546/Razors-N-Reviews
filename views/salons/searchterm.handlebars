@@ -24,22 +24,10 @@
         {{/each}}
     </ul>
     {{else}}
-    <p class="not-found">We're sorry, but no results were found for {{this.data.name}}.</p>
+    <p class="not-found">We're sorry, but no results were found for {{this.data.name}}.Please search again</p>
     {{/if}}
 
 
-    {{#if hasErrors}}
-    {{#each errors}}
-    <li>
-        {{this}}
-    </li>
-    <div class="another">
-        <a href="/">Make another search</a>
-    </div>
-    {{/each}}
-    {{/if}}
-    <div class="another">
-        <a href="/">Make another search</a>
-    </div>
+    
 
 </main>

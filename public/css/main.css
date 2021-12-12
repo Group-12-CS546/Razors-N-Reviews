@@ -371,3 +371,19 @@ div.transbox p {
 .logoutShiftLine {
     color: #236832;
 }
+.bold-id{
+    font-weight: 700;
+}
+
+/* #review-pan{
+    margin-top: -1077px;
+    margin-bottom: 100px;
+    margin-right: 116px;
+    width: 32%;
+} */
+
+#search{
+    
+    width: 258px;
+
+}

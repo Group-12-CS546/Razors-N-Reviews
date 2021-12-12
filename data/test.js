@@ -1,6 +1,6 @@
 const { ObjectId } = require("mongodb");
 //const { customers } = require(".");
-const calculate = require("./calculate");
+// const calculate = require("./calculate");
 const mongoCollections = require("../config/mongoCollections");
 const salons =mongoCollections.salons;
 const comments = mongoCollections.comments;
