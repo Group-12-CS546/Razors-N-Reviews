@@ -3,8 +3,8 @@
   <div class="container-private">
     <div class="card card-private" style="width: 18rem;">
       <h3>Your Current User Details</h3>
-      <img src="/profilepic/{{id}}" onerror="this.src='/public/image/default-user.png'" class="card-img-top"
-        alt="Profile Picture" class="profilePic">
+      <img src="/profilepic/{{id}}" onerror="this.src='/public/image/default-user.png'" class="card-img-top profilePic"
+        alt="Profile Picture">
       <div class="card-body">
         <h5 class="card-title">{{firstname}} {{lastname}}</h5>
       </div>
@@ -57,13 +57,13 @@
           <label for="username">Username:</label>
           <input type="text" class="form-control" id="username" name="username" aria-describedby="username"
             placeholder="Enter your Username" value="{{username}}">
-          <small id="username" class="form-text text-muted">We'll never share your details with anyone else.</small>
+          <small  class="form-text text-muted">We'll never share your details with anyone else.</small>
         </div>
         {{!-- Password --}}
         <div class="form-group">
           <label for="password">Password:</label>
           <input type="password" class="form-control" id="password" name="password" placeholder="Enter your Password">
-          <small id="username" class="form-text text-muted">Write your original password or new password to
+          <small  class="form-text text-muted">Write your original password or new password to
             change.</small>
         </div>
 
@@ -150,8 +150,9 @@
 
 
 
-        <button type="submit" id="btn-id-private " class="btn-private btn btn-primary">Change Details</button>
+        <button type="submit" id="btn-id-private" class="btn-private btn btn-primary">Change Details</button>
       </form>
+        <a class="btn btn-primary" href="/logout">Logout</a>
     </div>
 
 
@@ -175,8 +176,8 @@
                   </div>
                    {{/each}}
               
+  <a class="btn btn-primary" href="/logout">Logout</a>
    </div>
 
-  <a href="/logout">Logout</a>
 
 </main>

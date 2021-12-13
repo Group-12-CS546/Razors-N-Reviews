@@ -4,66 +4,56 @@ const data = require('../data');
 const salonsData = data.salons;
 const reviewsData = data.reviews;
 const customers = data.customers;
+const xss = require('xss');
 
 router.get('/salons', async(req, res) => {
     try {
         const salonsList = await salonsData.getAll();
-        // res.status(200).json(salonsList)
-        console.log("salonsList***", salonsList)
-            // res.status(200).json(salonsList);
         res.status(200).render("salons/list", { salonsList });
     } catch (e) {
-        // res.status(404).json({ error: e });
-        res.status(200).render("salons/error", { error: e });
+        res.status(400).render("salons/error", { error: e });
     }
 });
 
 router.get('/salons/:salonId', async(req, res) => {
-    console.log("salon if to print*************************", req.params.salonId);
-    // if (!req.params.salonId) {
-    //     res.status(400).json({ error: "should provide valid salons Id" });
-    //     return;
-    // }
-    // if (typeof req.params.salonId != 'string') {
-    //     res.status(400).json({ error: 'Id should be in string' })
-    // }
+    let errorcode = false;
+    const errors = [];
+    if (!req.params.salonId) {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/error", { errorcode: errorcode, errors: errors, message: "should provide valid salon Id" });
+    }
+    if (typeof req.params.salonId != 'string') {
+        errorcode = true;
+        res.status(400);
+        return res.render("salons/error", { errorcode: errorcode, errors: errors, message: "should provide salon Id in string" });
+    }
     try {
         let salonsId = await salonsData.get(req.params.salonId);
-        console.log("salonsId", salonsId)
-            // res.status(200).json(salonsId);
         let getReviews = await reviewsData.getAllreviewsofSalon(req.params.salonId)
         console.log("getReviews", getReviews)
 
         res.status(200).render("salons/salonprofile", { salonId: salonsId._id, name: salonsId.name, website: salonsId.website, service: salonsId.service, address: salonsId.address, city: salonsId.city, state: salonsId.state, zip: salonsId.zip, rating: salonsId.rating, covidRating: salonsId.covidRating, longitude: salonsId.longitude, latitude: salonsId.latitude, getReviews: getReviews });
     } catch (e) {
-        console.log("e**", e)
-        res.status(404).json({ error: "not found**********" });
+        res.status(400).render("salons/error", { error: e });
     }
 });
 
 router.get("/manage", async(req, res) => {
     if (!req.session.AuthCookie) {
-        // res.status(401).redirect("/salons");
-        res.status(401).render("salons/error", { message: "Please login to post a salon!!" });
+        res.status(400).render("salons/error", { message: "Please login to post a salon!!" });
     }
     try {
         const salonsList = await salonsData.getAll();
-        // console.log("salonsList***", salonsList)
-        // const userLoggedIn = (req.session.AuthCookie) ? true : false;
-        // res.status(200).render("", { restaurants: restaurantList, userLoggedIn: true })
-        // res.status(200).render("salons/salonsignup", { message: "You have p", salonsList: salonsList });
         res.status(200).render("salons/salonsignup", { salonsList: salonsList });
     } catch (e) {
-        console.log(e);
-        // res.status(200).render("management", { restaurants: [], userLoggedIn: true })
+        res.status(400).render("salons/error", { error: e });
     }
-    // }
 });
 
 router.get("/manage", (req, res) => {
     console.log("req.session.AuthCookie*********", req.session.AuthCookie)
     if (!req.session.AuthCookie)
-    // res.render("users/login", { title: "Login", heading: "Login" });
         res.redirect("salons/salonsignup", { title: "Login", heading: "Login" });
     else
         res.redirect("/manage");
@@ -72,7 +62,17 @@ router.get("/manage", (req, res) => {
 
 router.post('/post', async(req, res) => {
     let salonInfo = req.body;
-    console.log("salonInfo*********", salonInfo)
+    salonInfo.name = xss(salonInfo.name)
+    salonInfo.website = xss(salonInfo.website)
+    salonInfo.service = xss(salonInfo.service)
+    salonInfo.service = xss(salonInfo.service)
+    salonInfo.address = xss(salonInfo.address)
+    salonInfo.city = xss(salonInfo.city)
+    salonInfo.state = xss(salonInfo.state)
+    salonInfo.zip = xss(salonInfo.zip)
+    salonInfo.longitude = xss(salonInfo.longitude)
+    salonInfo.latitude = xss(salonInfo.latitude)
+
     let errorcode = false;
     const errors = [];
     if (!req.session.AuthCookie) {
@@ -183,19 +183,16 @@ router.post('/post', async(req, res) => {
             if (strLength >= 5) {
                 console.log("valid url")
             } else {
-                // throw 'Entered url should have atleast 5 char'
                 errorcode = true;
                 res.status(400);
                 return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Entered url should have atleast 5 char" });
             }
         } else {
-            // throw 'Entered url should end with .com'
             errorcode = true;
             res.status(400);
             return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Entered url should end with .com" });
         }
     } else {
-        // throw 'Entered url should start with http://www.'
         errorcode = true;
         res.status(400);
         return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Entered url should start with http://www." });
@@ -215,33 +212,24 @@ router.post('/post', async(req, res) => {
             salonInfo.latitude
         );
         console.log("newSalon", newSalon)
-            // res.status(200).json(newSalon);
-            // res.status(200).json({ message: "You have successfully created new salon" });
-            // res.status(200).json({ message: "You have successfully created new salon" });
-            // res.redirect("/manage/message");
         res.status(200).render("salons/message", { message: "Salon created successfully" });
     } catch (e) {
-        res.status(404).json({ error: e });
-        res.status(404).render("salons/error", { message: "not created", error: e });
+        res.status(400).render("salons/error", { message: "not created", error: e });
     }
 });
 
 router.get('/salons/:salonId/delete', async(req, res) => {
-    console.log("*delete********", req.params.salonId)
     let errorcode = false;
     const errors = [];
     if (!req.session.AuthCookie) {
         return res.render("salons/error", { errorcode: errorcode, errors: errors, message: "You cant delete this salon as you are not loggedIn!" });
     }
     if (!req.params.salonId) {
-        // res.status(400).json({ error: "should provide valid salon Id to delete" });
-        // return;
         errorcode = true;
         res.status(400);
         return res.render("salons/error", { errorcode: errorcode, errors: errors, message: "should provide valid salon Id to delete" });
     }
     if (typeof req.params.salonId != 'string') {
-        // res.status(400).json({ message: 'Salon ID should be in string' })
         errorcode = true;
         res.status(400);
         return res.render("salons/error", { errorcode: errorcode, errors: errors, message: "Salon ID should be in string" });
@@ -261,13 +249,12 @@ router.get('/salons/:salonId/delete', async(req, res) => {
             var deleteSalon = await salonsData.remove(req.params.salonId);
             if (deleteSalon) {
                 return res.render("salons/delete", { message: "deleted" });
-                // res.status(200).json({ getSalonId: getSalonId._id, deleted: true });
             } else {
                 res.status(400).render("salons/error", { message: 'not deleted' });
             }
         }
     } catch (e) {
-        res.status(404).render("salons/error", { error: 'Salon not found' });
+        res.status(400).render("salons/error", { error: 'Salon not found' });
         return;
     }
 
@@ -276,6 +263,16 @@ router.get('/salons/:salonId/delete', async(req, res) => {
 router.post('/salons/:salonId/edit', async(req, res) => {
     const updatedData = req.body;
     console.log("updatedData", updatedData)
+    updatedData.name = xss(updatedData.name)
+    updatedData.website = xss(updatedData.website)
+    updatedData.service = xss(updatedData.service)
+    updatedData.service = xss(updatedData.service)
+    updatedData.address = xss(updatedData.address)
+    updatedData.city = xss(updatedData.city)
+    updatedData.state = xss(updatedData.state)
+    updatedData.zip = xss(updatedData.zip)
+    updatedData.longitude = xss(updatedData.longitude)
+    updatedData.latitude = xss(updatedData.latitude)
 
     let errorcode = false;
     const errors = [];
@@ -407,19 +404,16 @@ router.post('/salons/:salonId/edit', async(req, res) => {
             if (strLength >= 5) {
                 console.log("valid url")
             } else {
-                // throw 'Entered url should have atleast 5 char'
                 errorcode = true;
                 res.status(400);
                 return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Entered url should have atleast 5 char" });
             }
         } else {
-            // throw 'Entered url should end with .com'
             errorcode = true;
             res.status(400);
             return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Entered url should end with .com" });
         }
     } else {
-        // throw 'Entered url should start with http://www.'
         errorcode = true;
         res.status(400);
         return res.render("salons/salonsignup", { errorcode: errorcode, errors: errors, message: "Entered url should start with http://www." });
@@ -429,97 +423,55 @@ router.post('/salons/:salonId/edit', async(req, res) => {
     try {
         console.log(await salonsData.get(req.params.salonId));
     } catch (e) {
-        res.status(404).json({ error: 'salon not found222222222' });
+        res.status(400).json({ error: e });
         return;
     }
 
     try {
-        // const allSalons = await salonsData.getAll();
-        // allSalons.forEach(element => {
-        //     for (var i = 0; i < element.name.length; i++) {
-        //         if (element.name === updatedData.name) {
-        //             throw "Salon name already in use"
-        //         }
-        //     }
-        // });
         const updatedSalon = await salonsData.update(req.params.salonId, updatedData.name, updatedData.website, updatedData.service, updatedData.address, updatedData.city, updatedData.state, updatedData.zip, updatedData.longitude, updatedData.latitude);
-        // res.status(200).json(updatedSalon);
-        // res.render('salons/editsalon', { message: "Updated successfully", updatedSalon: updatedSalon });
         res.render('salons/message', { message: "Updated successfully", updatedSalon: updatedSalon });
-        // res.redirect("/manage");
     } catch (e) {
-        console.log(e)
-            // res.status(404).json({ error: e });
-        res.status(404).render("salons/error", { error: e });
+        res.status(400).render("salons/error", { error: e });
     }
 });
 
 
 router.get('/salons/:salonId/edit', async(req, res) => {
-    console.log("salon if to print*************************", req.params.salonId);
     let errorcode = false;
     const errors = [];
     if (!req.session.AuthCookie) {
-        res.status(401).redirect("/");
+        res.status(400).redirect("/");
     }
     if (!req.params.salonId) {
-        // res.status(400).json({ error: "should provide valid salons Id" });
-        // return;
         errorcode = true;
         res.status(400);
         return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "should provide valid salons Id" });
     }
     if (typeof req.params.salonId != 'string') {
-        // res.status(400).json({ error: 'Id should be in string' })
         errorcode = true;
         res.status(400);
         return res.render("salons/editsalon", { errorcode: errorcode, errors: errors, message: "Id should be in string" });
     }
     try {
         let salonsId = await salonsData.get(req.params.salonId);
-        console.log("salonsId", salonsId)
-            // res.status(200).json(salonsId);
         res.status(200).render("salons/editsalon", { salonId: salonsId._id, name: salonsId.name, website: salonsId.website, service: salonsId.service, address: salonsId.address, city: salonsId.city, state: salonsId.state, zip: salonsId.zip, rating: salonsId.rating, covidRating: salonsId.covidRating, longitude: salonsId.longitude, latitude: salonsId.latitude });
     } catch (e) {
-        console.log("e**", e)
-        res.status(404).json({ error: "not found**********" });
+        res.status(404).render("salons/error", { error: e });
     }
 });
 
 
 router.post('/search', async(req, res) => {
     try {
-        const demo = req.body;
-        console.log("demo***********", demo);
-        // if (demo.name == null || demo.name.length == 0) {
-        //     errorDescription = {
-        //         className: "No name supplied",
-        //         message: `No name was supplied`,
-        //         hasErrors: "Error",
-        //         title: "Salon Found"
-        //     }
-        //     res.status(400).render("salons/error", errorDescription);
-        //     return;
-        // }
-        // const searchURL = baseUrl + '?nameStartsWith=' + demo.title + '&ts=' + ts + '&apikey=' + publickey + '&hash=' + hash;
+        var demo = req.body;
+        demo.name = xss(demo.name)
 
         const data = await salonsData.getSalonViaSearch(demo.name);
         console.log("data", data)
-            // var demo1 = {}
-            // for (var i = 0; i < data.length; i++) {
-            //     demo1 = data[i]
-            // }
-            // for (var i of data) {
-            //     console.log({ i })
-            // }
-            // console.log("demo1*****", demo1);
-            // res.status(200).json(data);
         var demo1 = {}
         for (var i = 0; i < data.length; i++) {
             demo1[i] = data[i]
-            console.log("demo3333333333333", demo1[i])
         }
-        console.log("demo111111111", demo1)
         var test = Object.values(demo1)
         console.log(test)
         res.render('salons/searchterm', { data: test, demo });
@@ -531,7 +483,6 @@ router.post('/search', async(req, res) => {
             title: "Salon Found"
         }
         res.status(400).render("salons/error", errorDescription)
-            // res.status(404).json({ error: errorDescription });
     }
 });
 

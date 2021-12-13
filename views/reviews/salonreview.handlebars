@@ -1,22 +1,10 @@
-{{!-- <main>
-    <div class="card-full">
-        <p><a href="/salons">Go back to Salon list page</a></p> 
+<main>
+    <div class="card-full container">
+        <p><a href="/salons">Go back to Salon list page</a></p>
         <p>Reviews of the Salon {{this.name}} are:</p>
         <p class="card-text">reviewText: {{this.reviewText}}</p>
         <p class="card-text">rating: {{this.rating}}</p>
         <p>Published your reviews for {{this.name}}</p>
     </div>
-</main> --}}
-
-<main>
-    <div class="card container" id="cont">
-       <p><a href="/salons">Go back to Salon list page</a></p> 
-        <p>Reviews of the Salon {{this.name}} are:</p>
-        <p class="card-text bold-id">reviewText: {{this.reviewText}}</p>
-        <p class="card-text bold-id">rating: {{this.rating}}</p>
-        <p>Published your reviews for {{this.name}}</p>
-    <div>
-        <p>{{message}}</p>
-    </div>
-    </div>
+    <a class="btn btn-primary" href="/logout">Logout</a>
 </main>

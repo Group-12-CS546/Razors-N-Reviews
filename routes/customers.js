@@ -156,59 +156,61 @@ router.post("/login", async(req, res) => {
     if (req.body.username.length == 0) {
         errorcode = true;
         res.status(400);
-        return res.render("users/login", { errorcode: errorcode, errors: errors, message: "Username cannot be null or empty" });
+        return res.render("users/login", { errorcode: errorcode,  message: "Username cannot be null or empty" });
     }
 
     if (typeof req.body.username != 'string') {
         errorcode = true;
         res.status(400);
-        return res.render("users/login", { errorcode: errorcode, errors: errors, message: "Please enter username of type string" });
+        return res.render("users/login", { errorcode: errorcode, message: "Please enter username of type string" });
     }
 
     var regex = /^[a-zA-Z0-9.\-]{4,30}$/;
     if (!req.body.username.match(regex)) {
         errorcode = true;
         res.status(400);
-        return res.render("users/login", { errorcode: errorcode, errors: errors, message: "Only Alphanumeric username is allowed and username should be more than 4 characters " });
+        return res.render("users/login", { errorcode: errorcode, message: "Only Alphanumeric username is allowed and username should be more than 4 characters " });
     }
 
     if (req.body.password.length == 0) {
         errorcode = true;
         res.status(400);
-        return res.render("users/login", { errorcode: errorcode, errors: errors, message: "Password cannot be null or empty" });
+        return res.render("users/login", { errorcode: errorcode, message: "Password cannot be null or empty" });
     }
 
     if (typeof req.body.password != 'string') {
         errorcode = true;
         res.status(400);
-        return res.render("users/login", { errorcode: errorcode, hasErrors: hasErrors, errors: errors, message: "The entered password must be string only" });
+        return res.render("users/login", { errorcode: errorcode, errors: errors, message: "The entered password must be string only" });
     }
     var len;
     for (var i = 0, len = req.body.password.length; i < len; ++i) {
         if (req.body.password.charAt(i) === ' ') {
             errorcode = true;
             res.status(400);
-            return res.render("users/login", { errorcode: errorcode, hasErrors: hasErrors, errors: errors, message: "Username cannot have spaces!" });
+            return res.render("users/login", { errorcode: errorcode,  errors: errors, message: "Username cannot have spaces!" });
         }
     }
     if (req.body.password.length < 6) {
         errorcode = true;
         res.status(400);
-        return res.render("users/login", { errorcode: errorcode, hasErrors: hasErrors, errors: errors, message: "Password should be greater than 6 characters" });
+        return res.render("users/login", { errorcode: errorcode, message: "Password should be greater than 6 characters" });
     }
     if (req.body.username.trim().length == 0) {
         errorcode = true;
         res.status(400);
-        return res.render("users/login", { errorcode: errorcode, hasErrors: hasErrors, errors: errors, message: "Username cannot be only spaces" });
+        return res.render("users/login", { errorcode: errorcode, errors: errors, message: "Username cannot be only spaces" });
     }
     if (req.body.password.trim().length == 0) {
         errorcode = true;
         res.status(400);
-        return res.render("users/login", { errorcode: errorcode, hasErrors: hasErrors, errors: errors, message: "Password cannot be only spaces" });
+        return res.render("users/login", { errorcode: errorcode, errors: errors, message: "Password cannot be only spaces" });
     }
 
 
-    const userData = req.body;
+     userData = req.body;
+     userData.username=xss(userData.username);
+     userData.password=xss(userData.password);
     console.log("userData", userData)
     try {
         console.log(userData.username, userData.password)
@@ -271,16 +273,15 @@ router.post("/update", async(req, res) => {
     let hashedPassword;
     const user_info = req.body;
     console.log(req.body)
-    const firstname = user_info.firstname;
-    const lastname = user_info.lastname;
-    const email = user_info.email;
+    const firstname = xss(user_info.firstname);
+    const lastname = xss(user_info.lastname);
+    const email = xss(user_info.email);
     const username = req.session.customer.username;
-    const city = user_info.city;
-    const state = user_info.state;
-    const age = user_info.age;
-    const password = user_info.password;
-    const profilePicture = user_info.profilePicture;
-
+    const city =xss(user_info.city);
+    const state =xss(user_info.state);
+    const age = xss(user_info.age);
+    const password = xss(user_info.password);
+    const profilePicture = xss(user_info.profilePicture);
     if (password) {
         // hashedPassword = bcrypt.hashSync(password, 10);
         let plainTextPassword = password;
@@ -332,7 +333,8 @@ router.post("/update", async(req, res) => {
             isUpdated: true,
         })
     } catch (e) {
-        res.status(404).json({ message: "Could not update user!" });
+        errorcode= true;
+        res.status(404).render("users/private",{errorcode:errorcode, message: "Could not update user!" });
     }
 });
 
@@ -349,7 +351,27 @@ router.post("/signup", async(req, res) => {
     if (!req.body.lastname) {
         errorcode = true;
         res.status(400);
-        return res.render("users/signup", { errorcode: errorcode, errors: errors, message: "lastname is not supplied" });
+        return res.render("users/signup", { errorcode: errorcode, errors: errors, message: "Lastname is not supplied" });
+    }
+    if (!req.body.email) {
+        errorcode = true;
+        res.status(400);
+        return res.render("users/signup", { errorcode: errorcode, errors: errors, message: "Email is not supplied" });
+    }
+    if (!req.body.state) {
+        errorcode = true;
+        res.status(400);
+        return res.render("users/signup", { errorcode: errorcode, errors: errors, message: "State is not supplied" });
+    }
+    if (!req.body.city) {
+        errorcode = true;
+        res.status(400);
+        return res.render("users/signup", { errorcode: errorcode, errors: errors, message: "City is not supplied" });
+    }
+    if (!req.body.age) {
+        errorcode = true;
+        res.status(400);
+        return res.render("users/signup", { errorcode: errorcode, errors: errors, message: "Age is not supplied" });
     }
     if (!req.body.username) {
         errorcode = true;
@@ -411,9 +433,64 @@ router.post("/signup", async(req, res) => {
         res.status(400);
         res.render('users/signup', { errorcode: errorcode, errors: errors, hasErrors: true, message: "Password cannot have spaces" });
     }
+    if (req.body.age>150 ||req.body.age<=0) {
+        errorcode = true;
+        res.status(400);
+        res.render('users/signup', { errorcode: errorcode, errors: errors, hasErrors: true, message: "Age should be between 1 to 150" });
+    }
+    if (!req.body.age) {
+        errorcode = true;
+        res.status(400);
+        res.render('users/signup', { errorcode: errorcode, errors: errors, hasErrors: true, message: "Enter State" });
+    }
 
-    const userData = req.body;
+    if (!req.body.state) {
+        errorcode = true;
+        res.status(400);
+        res.render('users/signup', { errorcode: errorcode, errors: errors, hasErrors: true, message: "Enter State" });
+    }
+    if (!req.body.email) {
+        errorcode = true;
+        res.status(400);
+        res.render('users/signup', { errorcode: errorcode, errors: errors, hasErrors: true, message: " Email not provided" });
+    }
+    if (!req.body.username) {
+        errorcode = true;
+        res.status(400);
+        res.render('users/signup', { errorcode: errorcode, errors: errors, hasErrors: true, message: "Enter your username" });
+    }
+    if (req.body.username.length<4) {
+        errorcode = true;
+        res.status(400);
+        res.render('users/signup', { errorcode: errorcode, errors: errors, hasErrors: true, message: "Username length should be more than 3" });
+    }
+    if (!req.body.city) {
+        errorcode = true;
+        res.status(400);
+        res.render('users/signup', { errorcode: errorcode, errors: errors, hasErrors: true, message: "Username length should be more than 3" });
+    }
+    if (req.body.city.trim()==0) {
+        errorcode = true;
+        res.status(400);
+        res.render('users/signup', { errorcode: errorcode, errors: errors, hasErrors: true, message: "Empty City Provided" });
+    }
+
+
+
+
+    // const userData = req.body;
+    let userData = (req.body);
     console.log("userData", userData)
+
+    userData.firstname=xss(userData.firstname);
+    userData.lastname=xss(userData.lastname);
+    userData.email=xss(userData.email);
+    userData.username=xss(userData.username);
+    userData.password=xss(userData.password);
+    userData.profilePicture=xss(userData.profilePicture);
+    userData.state=xss(userData.state);
+    userData.city=xss(userData.city);
+    userData.age=xss(userData.age);
 
 
 

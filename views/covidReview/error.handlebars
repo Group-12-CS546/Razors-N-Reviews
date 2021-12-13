@@ -1,5 +1,11 @@
 <main>
+    <div class="container">
     <h2>Error</h2>
     <p><a href="/salons">Go back to Salon list page</a></p>
-    <p {{message}}</p>
+    {{!-- <p {{message}}</p> --}}
+    {{#if errorcode}}
+
+    <p class="error">{{message}}</p>
+    {{/if}}
+    </div>
 </main>

@@ -10,7 +10,7 @@
         <a class="nav-link" href="#"> <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">FAQ</a>
+        <a class="nav-link" href="../../public/html/faq.html">FAQ</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="../../public/html/about.html">About Us</a>
@@ -18,17 +18,21 @@
       <li class="nav-item">
         <a class="nav-link" href="/manage">Manage</a>
       </li>
-      <li class="nav-item">
+      {{!-- <li class="nav-item">
         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-      </li>
+      </li> --}}
     </ul>
 
     <form action="/search" method="POST" class="new-post-form">
-      <label>
+      {{!-- <label> --}}
         {{ data.name }}
-        <input id="search" type="text" name="name" placeholder="Search by Salon Name or Services" value="{{data.name}}" class="full-width-input" />
+        <label for="search">Search</label>
+        <input id="search" class="searchnew" type="text" name="name"
+          placeholder="Search by Salon Name or Filter by Services" value="{{data.name}}" class="full-width-input" />
+        <label for="navStyle">submit</label>
         <button type="submit" class="btn btn-primary" id="navStyle"><i class="fa fa-search"></i></button>
-      </label>
+
     </form>
   </div>
+
 </nav>
