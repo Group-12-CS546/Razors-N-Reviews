@@ -19,3 +19,9 @@ Then run 'npm run seed' to run the task of seeding the database.
 
 # GitHub Link
 https://github.com/Group-12-CS546/Razors-N-Reviews
+
+# Pitch Presentation Link:
+https://www.youtube.com/watch?v=MRZBhND-Mvg&t=29s
+
+# Demo Video
+https://www.youtube.com/watch?v=RXBUwxF5qaQ&t=1s
