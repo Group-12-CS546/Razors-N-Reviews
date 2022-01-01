@@ -22,7 +22,7 @@ https://github.com/Group-12-CS546/Razors-N-Reviews
 
 # Pitch Presentation Link
 https://www.youtube.com/watch?v=MRZBhND-Mvg&t=29s
-File: https://github.com/Group-12-CS546/Razors-N-Reviews/blob/master/Group_12_Razors_N_Reviews_Pitch_Presentation-3.pdf
+#File: https://github.com/Group-12-CS546/Razors-N-Reviews/blob/master/Group_12_Razors_N_Reviews_Pitch_Presentation-3.pdf
 
 # Demo Video
 https://www.youtube.com/watch?v=RXBUwxF5qaQ&t=1s
